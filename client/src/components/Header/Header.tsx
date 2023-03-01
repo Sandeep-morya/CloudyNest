@@ -7,10 +7,7 @@ type Props = {};
 
 const Header = (props: Props) => {
 	return (
-		<VStack
-			background={"white"}
-			borderBottom=".1rem solid"
-			borderBottomColor={"blackAlpha.300"}>
+		<VStack background={"white"}>
 			<Navbar />
 			<MenuTabs />
 		</VStack>

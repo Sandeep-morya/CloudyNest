@@ -11,6 +11,9 @@
 button:hover{
     color:teal ;
 }
+.tabData > *:nth-child(even){
+    background-color: rgba(0, 0, 0, 0.03);
+}
 
 
 
