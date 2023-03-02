@@ -1,10 +1,9 @@
-import Advertisments from "@/components/Content/Advertisments";
-import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
-import { Stack } from "@chakra-ui/react";
+﻿import Header from "@/components/Header/Header";
+import Navbar from "@/components/Header/Navbar";
+import { Box, Divider, Stack } from "@chakra-ui/react";
 import Head from "next/head";
 
-export default function Home() {
+export default function Auth() {
 	return (
 		<>
 			<Head>
@@ -17,11 +16,14 @@ export default function Home() {
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
 			</Head>
 			<main>
-				<Header />
-				<Stack>
-					<Advertisments />
+				<Stack bgColor={"white"} w={"100vw"} h="100vh">
+					<Navbar hideExtras={true} />
+					<Box
+						h="100%"
+						borderTop={"1px solid"}
+						w={"100%"}
+						bgColor="teal.50"></Box>
 				</Stack>
-				<Footer />
 			</main>
 		</>
 	);
