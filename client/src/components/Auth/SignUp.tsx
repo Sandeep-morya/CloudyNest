@@ -5,10 +5,20 @@
 	Image,
 	Input,
 	InputGroup,
+	InputLeftAddon,
 	InputRightElement,
 	Stack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import {
+	MdFace,
+	MdOutlineAlternateEmail,
+	MdLockOutline,
+	MdClose,
+	MdCheck,
+} from "react-icons/md";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
+import BannerHeading from "../Misc/BannerHeading";
 
 type Props = {};
 
@@ -24,49 +34,63 @@ const SignUp = (props: Props) => {
 	const [formData, setFormData] = useState(initalState);
 	const [isLoading, setIsLoading] = useState(false);
 	return (
-		<Stack spacing={"5"}>
+		<Stack spacing={"5"} w="90%">
 			{/* Name Field */}
 			<InputGroup size="md">
+				<InputLeftAddon>
+					<MdFace size={22} />
+				</InputLeftAddon>
 				<Input
+					focusBorderColor={"teal.500"}
 					pr="4.5rem"
 					type={"name"}
-					placeholder="Name"
+					placeholder="Username"
 					value={formData.name}
 					onChange={(e) => setFormData({ ...formData, name: e.target.value })}
 				/>
+				<InputRightElement>
+					{isError ? <MdClose color="red" size={22} /> : null}
+				</InputRightElement>
 			</InputGroup>
 			{/* Email Field */}
 			<InputGroup size="md">
+				<InputLeftAddon>
+					<MdOutlineAlternateEmail size={22} />
+				</InputLeftAddon>
 				<Input
+					focusBorderColor={"teal.500"}
 					pr="4.5rem"
 					type={"email"}
 					placeholder="Email"
 					value={formData.email}
 					onChange={(e) => setFormData({ ...formData, email: e.target.value })}
 				/>
-				{/* <InputRightElement children={<FaAt />} /> */}
 			</InputGroup>
 
 			{/* Password Filed */}
 			<InputGroup size="md">
+				<InputLeftAddon onClick={() => setShow(!show)}>
+					{!show ? <FaEyeSlash size="20" /> : <FaEye size="20" />}
+				</InputLeftAddon>
 				<Input
+					focusBorderColor={"teal.500"}
 					pr="4.5rem"
 					type={show ? "text" : "password"}
-					placeholder="Enter password"
+					placeholder="Password"
 					value={formData.password}
 					onChange={(e) =>
 						setFormData({ ...formData, password: e.target.value })
 					}
 				/>
-				{/* <InputRightElement
-					children={!show ? <FaEyeSlash /> : <FaEye />}
-					onClick={() => setShow(!show)}
-				/> */}
 			</InputGroup>
 
 			{/* Submit */}
 
-			<Button colorScheme={"cyan"} isLoading={isLoading} disabled={isError}>
+			<Button
+				_hover={{ color: "white" }}
+				colorScheme={"teal"}
+				isLoading={isLoading}
+				disabled={isError}>
 				Create a new Account
 			</Button>
 		</Stack>
