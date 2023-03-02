@@ -69,27 +69,27 @@ export default function Auth() {
 							{auth ? <Login /> : <SignUp />}
 							<BannerHeading size="md" title="or" />
 							{!auth ? (
-								<Text cursor={"pointer"}>
+								<Heading as="h2" size="sm" cursor={"pointer"}>
 									{"Already have an account ? "}
 									<Text
 										as="span"
-										fontWeight={"500"}
+										fontWeight={"600"}
 										color="teal"
 										onClick={() => setAuth(true)}>
 										{"Login"}
 									</Text>
-								</Text>
+								</Heading>
 							) : (
-								<Text cursor={"pointer"}>
+								<Heading as="h2" size="sm" cursor={"pointer"}>
 									{"Don't have an account ? "}
 									<Text
 										as="span"
-										fontWeight={"500"}
+										fontWeight={"600"}
 										color="teal"
 										onClick={() => setAuth(false)}>
 										{"SignUp"}
 									</Text>
-								</Text>
+								</Heading>
 							)}
 						</Stack>
 					</Box>

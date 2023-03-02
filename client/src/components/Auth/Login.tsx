@@ -1,5 +1,6 @@
 ﻿import {
 	Button,
+	Heading,
 	Input,
 	InputGroup,
 	InputLeftAddon,
@@ -25,6 +26,7 @@ const Login = (props: Props) => {
 	return (
 		<Stack spacing={"5"} w="90%">
 			{/* Name Field */}
+
 			<InputGroup size="md">
 				<InputLeftAddon>
 					<MdFace size={22} />
@@ -66,7 +68,7 @@ const Login = (props: Props) => {
 				colorScheme={"teal"}
 				isLoading={isLoading}
 				disabled={isError}>
-				Login
+				Login to Continue
 			</Button>
 		</Stack>
 	);
