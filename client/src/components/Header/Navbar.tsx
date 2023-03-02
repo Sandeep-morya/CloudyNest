@@ -43,6 +43,7 @@ const Navbar = ({ hideExtras }: Props) => {
 			 */}
 			<HStack w={"100%"}>
 				<Image
+					onClick={() => router.replace("/")}
 					width={180}
 					src="/CloudyNest-Logo_Title.png"
 					alt="CloudyNest-Logo_Title.png"
