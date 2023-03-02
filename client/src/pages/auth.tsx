@@ -44,7 +44,8 @@ export default function Auth() {
 						w={"100%"}
 						bgColor="teal.50"
 						display="flex"
-						p="3rem 0"
+						pt="3rem"
+						pb="6rem"
 						justifyContent={"center"}
 						alignItems="center">
 						<Stack
