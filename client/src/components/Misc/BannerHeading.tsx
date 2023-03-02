@@ -1,16 +1,23 @@
-﻿import { Box, Divider, Flex, Heading } from "@chakra-ui/react";
+﻿import { Box, Divider, Flex, Heading, ResponsiveValue } from "@chakra-ui/react";
 import React from "react";
 
-type Props = {};
+interface Props {
+	size:
+		| ResponsiveValue<
+				(string & {}) | "sm" | "md" | "lg" | "xl" | "2xl" | "xs" | "3xl" | "4xl"
+		  >
+		| undefined;
+	title: String;
+}
 
-const BannerHeading = (props: Props) => {
+const BannerHeading = ({ size, title }: Props) => {
 	return (
 		<Flex gap={"2rem"} alignItems="center">
-			<Box w="120px" bgColor="teal" h={"2px"}></Box>
-			<Heading as={"h1"} size="2xl">
-				Top Categories to choose from
+			<Box w="120px" bgColor="teal" h={"1px"}></Box>
+			<Heading as={"h1"} size={size}>
+				{title}
 			</Heading>
-			<Box w="120px" bgColor="teal" h={"2px"}></Box>
+			<Box w="120px" bgColor="teal" h={"1px"}></Box>
 		</Flex>
 	);
 };
