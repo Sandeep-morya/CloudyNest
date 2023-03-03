@@ -5,6 +5,8 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const authMiddleware = require("../middlewares/authMiddleware");
+const Product = require("../models/productModel");
+const Order = require("../models/orderModel");
 
 const router = express.Router();
 
@@ -17,16 +19,9 @@ router.use(authMiddleware);
 router.post(
 	"/register",
 	asyncHandler(async (req, res) => {
-		const { name, email, password, address } = req.body;
+		const hasedPassword = await bcrypt.hash(String(req.body.password), 5);
 
-		const hasedPassword = await bcrypt.hash(String(password), 5);
-
-		const seller = await new Seller({
-			name,
-			email,
-			password: hasedPassword,
-			address,
-		});
+		const seller = await new Seller({ ...req.body, password: hasedPassword });
 
 		const { _id } = await seller.save();
 
@@ -70,10 +65,31 @@ router.get(
 	}),
 );
 
+/* find products of seller */
+router.get(
+	"/products",
+	asyncHandler(async (req, res) => {
+		const { _id } = req.body;
+		const products =await Product.find({ seller: _id });
+		res.send(products);
+	}),
+);
+
+/* find orders of seller */
+
+router.get(
+	"/orders",
+	asyncHandler(async (req, res) => {
+		const { _id } = req.body;
+		const orders = await Order.find({ seller: _id });
+		res.send(orders);
+	}),
+);
+
 /* add additonal details */
 
 router.patch(
-	"/addMore",
+	"/addmore",
 	asyncHandler(async (req, res) => {
 		const { _id } = req.body;
 		const seller = await Seller.findOneAndUpdate({ _id }, req.body, {

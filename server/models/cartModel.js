@@ -10,9 +10,9 @@ const { String, Number, Boolean, ObjectId } = mongoose.Schema.Types;
  */
 
 const cartSchema = mongoose.Schema({
-	userID: { type: ObjectId, required: true },
+	_id: { type: ObjectId, required: true },
 	items: [{ type: ObjectId, ref: "product", default: [] }],
-    
+
 });
 
 const Cart = mongoose.model("cart", cartSchema);
