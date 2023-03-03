@@ -11,7 +11,23 @@ router.get("/", (req, res) => {
 router.post(
 	"/register",
 	asyncHandler(async (req, res) => {
-		res.send(req.body);
+		const { name, email, password } = req.body;
+		const user = await new User({ name, email, password });
+
+		const account = await user.save();
+		res.send({ error: false, account });
+	}),
+);
+
+/* Login */
+
+router.post(
+	"/login",
+	asyncHandler(async (req, res) => {
+		const { email, password } = req.body;
+		const user = await User.findOne({ email, password }).select("_id email");
+		if (!user) res.status.send({ error: true, message: "User not found" });
+		res.send({ error: false, user });
 	}),
 );
 
