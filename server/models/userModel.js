@@ -1,7 +1,7 @@
 ﻿const mongoose = require("mongoose");
 
 /* here i am using types provided by Mongoose */
-const { String, Boolean } = mongoose.Schema.Types;
+const { String, Boolean, ObjectId } = mongoose.Schema.Types;
 
 /*  User Model Fields
 	- name
@@ -19,12 +19,9 @@ const userSchema = mongoose.Schema(
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
 		address: [{ type: String, default: [] }],
-
 		/* Extras */
 		isPrime: { type: Boolean, default: false },
-		pendingOrders: [{ type: ObjectId, ref: "product", default: [] }],
-		completedOrders: [{ type: ObjectId, ref: "product", default: [] }],
-		cards: [{ type: String, default: [] }],
+
 	},
 	{ timestamps: true },
 );

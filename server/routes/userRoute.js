@@ -5,6 +5,8 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const authMiddleware = require("../middlewares/authMiddleware");
+const Cart = require("../models/cartModel");
+const Order = require("../models/orderModel");
 
 const router = express.Router();
 
@@ -23,6 +25,9 @@ router.post(
 		const user = await new User({ name, email, password: hasedPassword });
 
 		const { _id } = await user.save();
+
+		const cart = await new Cart({_id });
+		cart.save();
 
 		const token = jwt.sign({ id: _id }, process.env.SECERT, {
 			expiresIn: "7d",
@@ -57,16 +62,27 @@ router.get(
 	"/profile",
 	asyncHandler(async (req, res) => {
 		const { _id } = req.body;
-		const user = await User.findById({ _id });
+		const user = await User.findById({ _id }).select("-password");
 		if (!user) throw new Error("User Not Found");
 		res.send(user);
+	}),
+);
+
+/* find orders of User */
+
+router.get(
+	"/orders",
+	asyncHandler(async (req, res) => {
+		const { _id } = req.body;
+		const orders = await Order.find({ customer: _id });
+		res.send(orders);
 	}),
 );
 
 /* add additonal details */
 
 router.patch(
-	"/addMore",
+	"/addmore",
 	asyncHandler(async (req, res) => {
 		const { _id } = req.body;
 		const user = await User.findOneAndUpdate({ _id }, req.body, {
@@ -76,5 +92,7 @@ router.patch(
 		res.send(user);
 	}),
 );
+
+
 
 module.exports = router;

@@ -14,17 +14,15 @@ const { String, Number, Boolean, ObjectId } = mongoose.Schema.Types;
 
 const sellerSchema = mongoose.Schema(
 	{
+		image: { type: String, required: true },
 		name: { type: String, required: true },
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
 		address: { type: String, required: true },
 		gst: { type: String, required: true },
-		products: [{ type: ObjectId, ref: "product", default: [] }],
 		/* Extras */
-		selleditems: [{ type: ObjectId, ref: "product", default: [] }],
 
 		isPrime: { type: Boolean, default: false },
-		cards: [{ type: String, default: [] }],
 	},
 	{ timestamps: true },
 );
