@@ -21,6 +21,7 @@ const productSchema = mongoose.Schema({
 	price: { type: Number, required: true },
 	seller: { type: ObjectId, ref: "seller" },
 	tags: [{ type: String, required }],
+	discount: { type: Number, default: 0 },
 
 	/* Extras */
 	assured: { type: Boolean, default: false },

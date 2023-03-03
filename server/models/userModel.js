@@ -8,6 +8,7 @@ const { String, Boolean } = mongoose.Schema.Types;
 	- email
 	= password
 	- address
+	- isPrime
 	- pending
 	- completed
  */
@@ -18,7 +19,11 @@ const userSchema = mongoose.Schema(
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
 		address: [{ type: String, default: [] }],
+
+		/* Extras */
 		isPrime: { type: Boolean, default: false },
+		pendingOrders: [{ type: ObjectId, ref: "product", default: [] }],
+		completedOrders: [{ type: ObjectId, ref: "product", default: [] }],
 	},
 	{ timestamps: true },
 );
