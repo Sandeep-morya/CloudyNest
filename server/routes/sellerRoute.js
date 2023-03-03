@@ -1,6 +1,6 @@
 ﻿require("dotenv").config();
 const express = require("express");
-const User = require("../models/userModel");
+const Seller = require("../models/sellerModel");
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -8,7 +8,8 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-/* Middleware */
+/* middleware */
+
 router.use(authMiddleware);
 
 /* Register */
@@ -16,16 +17,21 @@ router.use(authMiddleware);
 router.post(
 	"/register",
 	asyncHandler(async (req, res) => {
-		const { name, email, password } = req.body;
+		const { name, email, password, address } = req.body;
 
 		const hasedPassword = await bcrypt.hash(String(password), 5);
 
-		const user = await new User({ name, email, password: hasedPassword });
+		const seller = await new Seller({
+			name,
+			email,
+			password: hasedPassword,
+			address,
+		});
 
-		const { _id } = await user.save();
+		const { _id } = await seller.save();
 
 		const token = jwt.sign({ id: _id }, process.env.SECERT, {
-			expiresIn: "7d",
+			expiresIn: "30d",
 		});
 		res.send({ error: false, token });
 	}),
@@ -37,29 +43,30 @@ router.post(
 	"/login",
 	asyncHandler(async (req, res) => {
 		const { email, password } = req.body;
-		const user = await User.findOne({ email });
-		if (!user) throw new Error("User not Found");
+		const seller = await Seller.findOne({ email });
+		if (!seller) throw new Error("Seller not Found");
 		/* else */
 
-		const auth = await bcrypt.compare(String(password), user.password);
+		const auth = await bcrypt.compare(String(password), seller.password);
 
-		if (!auth) throw new Error("User Authorization failed");
+		if (!auth) throw new Error("Seller Authorization failed");
 
-		const token = jwt.sign({ id: user._id }, process.env.SECERT, {
-			expiresIn: "7d",
+		const token = jwt.sign({ id: seller._id }, process.env.SECERT, {
+			expiresIn: "30d",
 		});
 		res.send({ error: false, token });
 	}),
 );
 
-/*  Find User Profile */
+/*  Find Seller Profile */
+
 router.get(
 	"/profile",
 	asyncHandler(async (req, res) => {
 		const { _id } = req.body;
-		const user = await User.findById({ _id });
-		if (!user) throw new Error("User Not Found");
-		res.send(user);
+		const seller = await Seller.findById({ _id }).select("-password");
+		if (!seller) throw new Error("Seller Not Found");
+		res.send(seller);
 	}),
 );
 
@@ -69,11 +76,11 @@ router.patch(
 	"/addMore",
 	asyncHandler(async (req, res) => {
 		const { _id } = req.body;
-		const user = await User.findOneAndUpdate({ _id }, req.body, {
+		const seller = await Seller.findOneAndUpdate({ _id }, req.body, {
 			returnOriginal: false,
 		}).select("-password");
-		if (!user) throw new Error("User Not Found");
-		res.send(user);
+		if (!seller) throw new Error("Seller Not Found");
+		res.send(seller);
 	}),
 );
 

@@ -1,17 +1,32 @@
 ﻿const mongoose = require("mongoose");
-const uniqueValidator = require("@ladjs/mongoose-unique-validator");
 
 /* here i am using types provided by Mongoose */
-const { String } = mongoose.Schema.Types;
+const { String, Boolean } = mongoose.Schema.Types;
 
-const userSchema = mongoose.Schema({
-	username: { type: String, required: true, unique: true },
-	email: { type: String, required: true, unique: true },
-	password: { type: String, required: true },
-	name: String,
-});
+/*  User Model Fields
+	- name
+	- email
+	= password
+	- address
+	- isPrime
+	- pending
+	- completed
+ */
 
-userSchema.plugin(uniqueValidator);
+const userSchema = mongoose.Schema(
+	{
+		name: { type: String, required: true },
+		email: { type: String, required: true, unique: true },
+		password: { type: String, required: true },
+		address: [{ type: String, default: [] }],
+
+		/* Extras */
+		isPrime: { type: Boolean, default: false },
+		pendingOrders: [{ type: ObjectId, ref: "product", default: [] }],
+		completedOrders: [{ type: ObjectId, ref: "product", default: [] }],
+	},
+	{ timestamps: true },
+);
 
 const User = mongoose.model("user", userSchema);
 
