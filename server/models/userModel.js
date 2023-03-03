@@ -24,6 +24,7 @@ const userSchema = mongoose.Schema(
 		isPrime: { type: Boolean, default: false },
 		pendingOrders: [{ type: ObjectId, ref: "product", default: [] }],
 		completedOrders: [{ type: ObjectId, ref: "product", default: [] }],
+		cards: [{ type: String, default: [] }],
 	},
 	{ timestamps: true },
 );

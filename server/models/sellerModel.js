@@ -24,6 +24,7 @@ const sellerSchema = mongoose.Schema(
 		selleditems: [{ type: ObjectId, ref: "product", default: [] }],
 
 		isPrime: { type: Boolean, default: false },
+		cards: [{ type: String, default: [] }],
 	},
 	{ timestamps: true },
 );
