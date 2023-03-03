@@ -2,24 +2,33 @@
 	Button,
 	Divider,
 	Flex,
+	Heading,
 	HStack,
 	Image,
 	Input,
 	InputGroup,
 	InputLeftElement,
 	Spacer,
+	Stack,
+	Text,
 	theme,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FiSearch, FiUser } from "react-icons/fi";
 import { GiSmartphone } from "react-icons/gi";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { BsBagCheck } from "react-icons/bs";
 import { Theme } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
-type Props = {};
+interface Props {
+	hideExtras: boolean;
+}
 
-const Navbar = (props: Props) => {
+const Navbar = ({ hideExtras }: Props) => {
+	const [hidden, setHidden] = useState(true);
 	const [serachBarText, setSearchBarText] = useState("");
+	const router = useRouter();
 	return (
 		<Flex
 			w="100%"
@@ -34,6 +43,7 @@ const Navbar = (props: Props) => {
 			 */}
 			<HStack w={"100%"}>
 				<Image
+					onClick={() => router.replace("/")}
 					width={180}
 					src="/CloudyNest-Logo_Title.png"
 					alt="CloudyNest-Logo_Title.png"
@@ -50,6 +60,7 @@ const Navbar = (props: Props) => {
 						focusBorderColor={"teal.500"}
 						size="lg"
 						type="text"
+						maxW={"500px"}
 						value={serachBarText}
 						onChange={({ target }) => setSearchBarText(target.value)}
 						placeholder="Type - tshirt jeans or any clothing"
@@ -62,7 +73,7 @@ const Navbar = (props: Props) => {
 			 *
 			 */}
 
-			<HStack>
+			<HStack position={"relative"}>
 				<Button variant={"none"} leftIcon={<GiSmartphone size={22} />}>
 					Download App
 				</Button>
@@ -70,15 +81,55 @@ const Navbar = (props: Props) => {
 				<Divider height={"30px"} orientation="vertical" />
 				<Button variant={"none"}>Become a Supplier</Button>
 
-				<Divider height={"30px"} orientation="vertical" />
-				<Button variant={"none"} leftIcon={<FiUser size={20} />}>
+				<Divider hidden={hideExtras} height={"30px"} orientation="vertical" />
+				<Button
+					hidden={hideExtras}
+					onClick={() => setHidden(!hidden)}
+					onMouseOver={() => setHidden(false)}
+					variant={"none"}
+					leftIcon={<FiUser size={20} />}>
 					Profile
 				</Button>
 
-				<Divider height={"30px"} orientation="vertical" />
-				<Button variant={"none"} leftIcon={<MdOutlineShoppingCart size={22} />}>
+				<Divider hidden={hideExtras} height={"30px"} orientation="vertical" />
+				<Button
+					hidden={hideExtras}
+					variant={"none"}
+					leftIcon={<MdOutlineShoppingCart size={22} />}>
 					Cart
 				</Button>
+
+				{/* This Box is will be present under profile section */}
+				<Stack
+					position="absolute"
+					onMouseLeave={() => setHidden(true)}
+					top="3.5rem"
+					right="3rem"
+					background={"white"}
+					zIndex="2"
+					hidden={hidden}
+					p=".8rem"
+					boxShadow="0 0 5px #111"
+					borderRadius={"0.3rem"}>
+					<Heading as="h3" size="md">
+						Hello User
+					</Heading>
+					<Text fontSize={".8rem"}>To access your Meesho account</Text>
+					<Button
+						variant="solid"
+						colorScheme={"teal"}
+						onClick={() => router.push("/auth")}
+						_hover={{
+							background: "teal",
+							color: "white",
+						}}>
+						Sign Up
+					</Button>
+					<Divider />
+					<Button variant="ghost" leftIcon={<BsBagCheck />}>
+						My Orders
+					</Button>
+				</Stack>
 			</HStack>
 		</Flex>
 	);

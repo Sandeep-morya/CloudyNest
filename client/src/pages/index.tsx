@@ -1,5 +1,7 @@
+import Advertisments from "@/components/Content/Advertisments";
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
+import { Stack } from "@chakra-ui/react";
 import Head from "next/head";
 
 export default function Home() {
@@ -16,7 +18,9 @@ export default function Home() {
 			</Head>
 			<main>
 				<Header />
-				Welcome from Nextjs App
+				<Stack>
+					<Advertisments />
+				</Stack>
 				<Footer />
 			</main>
 		</>
