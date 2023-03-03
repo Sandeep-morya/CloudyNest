@@ -1,11 +1,12 @@
 ﻿require("dotenv").config();
 require("./config/connection")();
 
-/* server setup file */
+/* imports */
 const express = require("express");
 const cors = require("cors");
 const userRouter = require("./routes/userRoute");
 
+/* 😂 more variables */
 const app = express();
 
 /* Middleware */
