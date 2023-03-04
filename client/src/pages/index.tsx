@@ -1,7 +1,9 @@
 import Advertisments from "@/components/Content/Advertisments";
+import Category from "@/components/Content/Category";
+import Products from "@/components/Content/Products";
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
-import { Stack } from "@chakra-ui/react";
+import { Flex, Heading, Stack } from "@chakra-ui/react";
 import Head from "next/head";
 
 export default function Home() {
@@ -18,10 +20,17 @@ export default function Home() {
 			</Head>
 			<main>
 				<Header />
-				<Stack>
-					<Advertisments />
+				<Stack spacing={5} w={"75%"} m="auto">
+					{/* <Advertisments /> */}
+					<Heading size="xl" as="h2">
+						Products for You
+					</Heading>
+					<Flex justifyContent={"space-between"}>
+						<Category />
+						<Products />
+					</Flex>
 				</Stack>
-				<Footer />
+				{/* <Footer /> */}
 			</main>
 		</>
 	);

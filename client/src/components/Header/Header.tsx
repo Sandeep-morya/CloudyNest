@@ -7,7 +7,7 @@ type Props = {};
 
 const Header = (props: Props) => {
 	return (
-		<VStack background={"white"} position="sticky" top={0}>
+		<VStack background={"white"} position="sticky" top={0} zIndex="1">
 			<Navbar hideExtras={false} />
 			<MenuTabs />
 		</VStack>

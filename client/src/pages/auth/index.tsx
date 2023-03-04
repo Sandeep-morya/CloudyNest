@@ -1,8 +1,8 @@
 ﻿import Login from "@/components/Auth/Login";
 import SignUp from "@/components/Auth/SignUp";
-import Header from "@/components/Header/Header";
 import Navbar from "@/components/Header/Navbar";
 import BannerHeading from "@/components/Misc/BannerHeading";
+import { Suspense } from "react";
 import {
 	Badge,
 	Box,
@@ -30,6 +30,7 @@ export default function Auth() {
 			</Head>
 			<main>
 				<Stack bgColor={"white"} w={"100vw"} spacing={0}>
+
 					<Box
 						position="sticky"
 						top={0}
