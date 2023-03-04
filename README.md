@@ -1,38 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CloudyNest
+### An online shopping Website
 
-## Getting Started
+[Live URL](https://cloudynest.vercel.app/)
 
-First, run the development server:
+` Server API Links`
+----> USER <---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+-[POST]- 	http://localhost:7717/user/register/  		//register-api
+-[POST]- 	http://localhost:7717/user/login/  			//login-api
+-[GET]- 	http://localhost:7717/user/profile/  		//user-details-api
+-[GET]- 	http://localhost:7717/user/orders/  		//user-orders-api
+-[PATCH]- 	http://localhost:7717/user/addmore/  		//user-details-change-api
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+---> SELLER <---
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+-[POST]- 	http://localhost:7717/seller/register/  	//register-api
+-[POST]- 	http://localhost:7717/seller/login/  		//login-api
+-[GET]- 	http://localhost:7717/seller/profile/  		//seller-details-api
+-[GET]- 	http://localhost:7717/seller/orders/  		//seller-orders-api
+-[GET]- 	http://localhost:7717/seller/products/  	//seller-products-api
+-[PATCH]- 	http://localhost:7717/seller/addmore/  		//seller-details-change-api
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+---> PRODUCT <---
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+-[GET]- 	http://localhost:7717/product/all/  		//get-all-products-api
+-[POST]- 	http://localhost:7717/product/add/  		//add-a-product-api
+-[PATCH]- 	http://localhost:7717/product/:id/			//update-product-api
+-[DELETE]- 	http://localhost:7717/product/:id/			//delete-product-api
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---> CART <---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+-[GET]- 	http://localhost:7717/cart/  				//get-all-cart-items-api
+-[PATCH]- 	http://localhost:7717/cart/					//add-to-cart-api
+-[DELETE]- 	http://localhost:7717/cart/					//delete-cart-item-api
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---> ORDER <---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+-[POST]- 	http://localhost:7717/orders/  				//book-a-order-api
+-[PATCH]- 	http://localhost:7717/orders/:id/			//update-the-order-api
+
