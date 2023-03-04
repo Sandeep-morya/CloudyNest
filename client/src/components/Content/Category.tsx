@@ -59,7 +59,7 @@ const Category = () => {
 				<Spacer />
 
 				{/* #1 */}
-				<Accordion allowMultiple allowToggle>
+				<Accordion allowMultiple>
 					<ACategroy />
 					<AGender />
 					<AColor />
