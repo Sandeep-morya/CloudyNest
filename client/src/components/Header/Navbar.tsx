@@ -58,7 +58,8 @@ const Navbar = ({ hideExtras }: Props) => {
 					</InputLeftElement>
 					<Input
 						focusBorderColor={"teal.500"}
-						size="lg"
+						size="md"
+						h="3rem"
 						type="text"
 						maxW={"500px"}
 						value={serachBarText}
