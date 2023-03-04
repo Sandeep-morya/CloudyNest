@@ -11,7 +11,7 @@ router.use(genIdMiddleware);
 /* get Cart Items */
 
 router.get(
-	"/",
+	"/all",
 	asyncHandler(async (req, res) => {
 		const products = await Product.find();
 		res.send(products);
