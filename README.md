@@ -30,15 +30,15 @@
 
 - [GET]- 	http://localhost:7717/product/all/  		//get-all-products-api
 - [POST]- 	http://localhost:7717/product/add/  		//add-a-product-api
--  [PATCH]- 	http://localhost:7717/product/:id/			//update-product-api
-- [DELETE]- 	http://localhost:7717/product/:id/			//delete-product-api
+- [PATCH]- 	http://localhost:7717/product/:id/			//update-product-api
+- [DELETE]- http://localhost:7717/product/:id/			//delete-product-api
 
 ---> CART <---
 
 
 - [GET]- 	http://localhost:7717/cart/  				//get-all-cart-items-api
 - [PATCH]- 	http://localhost:7717/cart/					//add-to-cart-api
-- [DELETE]- 	http://localhost:7717/cart/					//delete-cart-item-api
+- [DELETE]- http://localhost:7717/cart/					//delete-cart-item-api
 
 ---> ORDER <---
 
