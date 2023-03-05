@@ -21,11 +21,11 @@ export default function Home() {
 			<main>
 				<Header />
 				<Stack spacing={5} w={"75%"} m="auto">
-					{/* <Advertisments /> */}
+					<Advertisments />
 					<Heading size="xl" as="h2">
 						Products for You
 					</Heading>
-					<Flex justifyContent={"space-between"}>
+					<Flex justifyContent={"space-between"} alignItems="flex-start">
 						<Category />
 						<Products />
 					</Flex>

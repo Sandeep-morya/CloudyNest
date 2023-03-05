@@ -5,7 +5,7 @@ interface Props {
 	delay?: number;
 }
 
-const useDebounce = ({ value, delay = 500 }: Props) => {
+const useDebounce = ({ value, delay = 1000 }: Props) => {
 	const [debouncedValue, setDebouncedValue] = useState(value);
 
 	useEffect(() => {

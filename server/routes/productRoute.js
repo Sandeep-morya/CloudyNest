@@ -8,13 +8,24 @@ const router = express.Router();
 /* Middlewares */
 router.use(genIdMiddleware);
 
-/* get Cart Items */
+/* get all Products*/
 
 router.get(
 	"/all",
 	asyncHandler(async (req, res) => {
 		const products = await Product.find();
 		res.send(products);
+	}),
+);
+
+/* get a particalar item */
+
+router.get(
+	"/:id",
+	asyncHandler(async (req, res) => {
+		const _id = req.params.id;
+		const product = await Product.findById({ _id });
+		res.send(product);
 	}),
 );
 
