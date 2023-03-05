@@ -60,7 +60,7 @@ const ProductCard = (props: Props) => {
 				<Flex alignItems="center" justifyContent={"space-between"}>
 					<HStack
 						fontSize={"sm"}
-						bgColor="green"
+						bgColor="green.400"
 						color="white"
 						p="0.2rem 0.5rem"
 						borderRadius={"2rem"}>

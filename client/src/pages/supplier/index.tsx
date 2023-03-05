@@ -26,9 +26,9 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState } from "react";
-import SellerNav from "@/components/Content/SellerNav";
-import { FaAt, FaCamera, FaEye, FaEyeSlash, FaPen } from "react-icons/fa";
-import SellerLogin from "@/components/Content/SellerLogin";
+import SellerNav from "@/components/Seller/SellerNav";
+import { FaAt, FaCamera, FaEye, FaEyeSlash} from "react-icons/fa";
+import SellerLogin from "@/components/Seller/SellerLogin";
 
 const initalState = {
 	f_name: "",
