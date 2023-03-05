@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const authMiddleware = require("../middlewares/authMiddleware");
 const Cart = require("../models/cartModel");
 const Order = require("../models/orderModel");
+const Favourite = require("../models/favouriteModel");
 
 const router = express.Router();
 
@@ -26,8 +27,17 @@ router.post(
 
 		const { _id } = await user.save();
 
-		const cart = await new Cart({_id });
+		/* Activating cart Features for user */
+
+		const cart = await new Cart({ _id });
 		cart.save();
+
+
+		/* Activating favuirtes Features for user */
+
+		const favourite = await new Favourite({ _id });
+		favourite.save();
+
 
 		const token = jwt.sign({ id: _id }, process.env.SECERT, {
 			expiresIn: "7d",

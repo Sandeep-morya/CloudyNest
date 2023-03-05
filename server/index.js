@@ -10,6 +10,8 @@ const userRouter = require("./routes/userRoute");
 const sellerRouter = require("./routes/sellerRoute");
 const cartRouter = require("./routes/cartRoute");
 const productRouter = require("./routes/productRoute");
+const orderRouter = require("./routes/orderRoute");
+const favouriteRouter = require("./routes/favouriteRoute");
 
 /* 😂 more variables */
 const app = express();
@@ -22,12 +24,13 @@ app.use(express.json());
 app.use("/user", userRouter);
 app.use("/seller", sellerRouter);
 app.use("/cart", cartRouter);
-app.use("/product",productRouter)
+app.use("/product", productRouter);
+app.use("/orders", orderRouter);
+app.use("/favourites", favouriteRouter);
 
 app.listen(process.env.PORT, () =>
 	console.log("server in running on " + process.env.PORT),
 );
-
 
 /* All API Links
 
@@ -64,6 +67,13 @@ app.listen(process.env.PORT, () =>
 -[GET]- 	http://localhost:7717/cart/  				//get-all-cart-items-api
 -[PATCH]- 	http://localhost:7717/cart/					//add-to-cart-api
 -[DELETE]- 	http://localhost:7717/cart/					//delete-cart-item-api
+
+---> FAVOURITES <---
+
+
+-[GET]- 	http://localhost:7717/favourites/  				//get-all-favourites-items-api
+-[PATCH]- 	http://localhost:7717/favourites/					//add-to-favourites-api
+-[DELETE]- 	http://localhost:7717/favourites/					//delete-favourites-item-api
 
 ---> ORDER <---
 
