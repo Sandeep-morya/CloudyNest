@@ -14,33 +14,15 @@ const MenuTabs = () => {
 				p={{ md: "0", xl: "0", "2xl": "0 15rem" }}
 				position="relative">
 				<TabList display="flex" justifyContent={"space-between"} p="0.5rem">
-					<Tab fontWeight={"500"} onMouseOver={() => setTabIndex(0)}>
-						Women Ethnic
-					</Tab>
-					<Tab fontWeight={"500"} onMouseOver={() => setTabIndex(1)}>
-						Women Western
-					</Tab>
-					<Tab fontWeight={"500"} onMouseOver={() => setTabIndex(2)}>
-						Mens
-					</Tab>
-					<Tab fontWeight={"500"} onMouseOver={() => setTabIndex(3)}>
-						Kids
-					</Tab>
-					<Tab fontWeight={"500"} onMouseOver={() => setTabIndex(4)}>
-						Home & Kitchen
-					</Tab>
-					<Tab fontWeight={"500"} onMouseOver={() => setTabIndex(5)}>
-						Beauty & Health
-					</Tab>
-					<Tab fontWeight={"500"} onMouseOver={() => setTabIndex(6)}>
-						Jewellery & Accessories
-					</Tab>
-					<Tab fontWeight={"500"} onMouseOver={() => setTabIndex(7)}>
-						Bags & Footwear
-					</Tab>
-					<Tab fontWeight={"500"} onMouseOver={() => setTabIndex(8)}>
-						Electronics
-					</Tab>
+					<Tab onMouseOver={() => setTabIndex(0)}>Women Ethnic</Tab>
+					<Tab onMouseOver={() => setTabIndex(1)}>Women Western</Tab>
+					<Tab onMouseOver={() => setTabIndex(2)}>Mens</Tab>
+					<Tab onMouseOver={() => setTabIndex(3)}>Kids</Tab>
+					<Tab onMouseOver={() => setTabIndex(4)}>Home & Kitchen</Tab>
+					<Tab onMouseOver={() => setTabIndex(5)}>Beauty & Health</Tab>
+					<Tab onMouseOver={() => setTabIndex(6)}>Jewellery & Accessories</Tab>
+					<Tab onMouseOver={() => setTabIndex(7)}>Bags & Footwear</Tab>
+					<Tab onMouseOver={() => setTabIndex(8)}>Electronics</Tab>
 				</TabList>
 				<TabPanels
 					bgColor={"white"}

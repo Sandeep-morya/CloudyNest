@@ -10,6 +10,7 @@ interface Props {
 const TabData = ({ data }: Props) => {
 	return (
 		<Flex
+			zIndex={5}
 			className="tabData"
 			border="0.1rem solid"
 			borderColor={"blackAlpha.300"}>

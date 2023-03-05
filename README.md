@@ -40,6 +40,14 @@
 - [PATCH]- 	http://localhost:PORT/cart/					//add-to-cart-api
 - [DELETE]- http://localhost:PORT/cart/					//delete-cart-item-api
 
+
+---> FAVOURITE <---
+
+
+- [GET]- 	http://localhost:PORT/favourites/  			//get-all-favourites-items-api
+- [PATCH]- 	http://localhost:PORT/favourites/			//add-to-favourites-api
+- [DELETE]- http://localhost:PORT/favourites/			//delete-favourites-item-api
+
 ---> ORDER <---
 
 - [POST]- 	http://localhost:PORT/orders/  				//book-a-order-api

@@ -58,7 +58,8 @@ const Navbar = ({ hideExtras }: Props) => {
 					</InputLeftElement>
 					<Input
 						focusBorderColor={"teal.500"}
-						size="lg"
+						size="md"
+						h="3rem"
 						type="text"
 						maxW={"500px"}
 						value={serachBarText}
@@ -79,7 +80,7 @@ const Navbar = ({ hideExtras }: Props) => {
 				</Button>
 
 				<Divider height={"30px"} orientation="vertical" />
-				<Button variant={"none"}>Become a Supplier</Button>
+				<Button variant={"none"} onClick={()=>router.push("/seller")}>Become a Supplier</Button>
 
 				<Divider hidden={hideExtras} height={"30px"} orientation="vertical" />
 				<Button

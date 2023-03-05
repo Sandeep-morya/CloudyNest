@@ -33,6 +33,12 @@ const productSchema = mongoose.Schema(
 		assured: { type: Boolean, default: false },
 		rating: { type: Number, default: 7 },
 		features: [{ type: String, default: [] }],
+
+		/* helper */
+		for: { type: String, default: "every" }, //mens/children/girls/oldies/every
+		for_gender: { type: String, default: "every" }, //male/female/trans/every
+		for_age: { type: String, default: "0-100" }, // 0-2,3-5, 5-8 etc..
+		size: { type: String, default: "unknown" }, // all types of sizes
 	},
 	{ timestamps: true },
 );
