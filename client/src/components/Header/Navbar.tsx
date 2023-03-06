@@ -80,7 +80,7 @@ const Navbar = ({ hideExtras }: Props) => {
 				</Button>
 
 				<Divider height={"30px"} orientation="vertical" />
-				<Button variant={"none"} onClick={()=>router.push("/seller")}>Become a Supplier</Button>
+				<Button variant={"none"} onClick={()=>router.push("/supplier")}>Become a Supplier</Button>
 
 				<Divider hidden={hideExtras} height={"30px"} orientation="vertical" />
 				<Button
