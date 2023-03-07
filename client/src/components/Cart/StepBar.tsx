@@ -1,21 +1,26 @@
-﻿import { Box } from '@chakra-ui/react';
-import React from 'react'
+﻿import React from "react";
 
 type Props = {
 	state: number;
 	activateOn: number;
+	color?: string;
 };
 
-const StepBar = ({ state, activateOn }: Props) => {
+const StepBar = ({ color = "teal", state, activateOn }: Props) => {
 	return (
-		<Box bgColor="gray.200">
-			<Box
-				h="5px"
-				w={state > activateOn ? `100%` : 0}
-				bgColor={"teal"}
-				transition={"all 0.5s"}></Box>
-		</Box>
+		<div
+			style={{
+				backgroundColor: "rgba(0,0,0,0.2)",
+			}}>
+			<div
+				style={{
+					height: "0.3rem",
+					width: state > activateOn ? `100%` : 0,
+					backgroundColor: color,
+					transition: "width 0.5s",
+				}}></div>
+		</div>
 	);
 };
 
-export default StepBar
+export default StepBar;
