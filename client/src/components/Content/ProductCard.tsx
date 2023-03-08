@@ -22,8 +22,7 @@ const ProductCard = (props: Props) => {
 			bgColor={"white"}
 			overflow="hidden"
 			spacing={0}
-			boxShadow="0px 8px 24px rgba(0,0,0,0.3)"
-			>
+			boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px">
 			<Box position={"relative"} className="product_card_image_div">
 				<Image
 					w="100%"
