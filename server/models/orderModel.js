@@ -15,8 +15,9 @@ const orderSchema = mongoose.Schema(
 		item: { type: ObjectId, ref: "product" },
 		customer: { type: ObjectId, ref: "user" },
 		seller: { type: ObjectId, ref: "seller" },
+		quantity:{type:Number, default:1},
 		delivery_address: { type: String },
-
+		amount:{type:Number, required:true},
 		/* stage 2 */
 		current_location: { type: String, default: "" },
 		track_id: { type: Number },

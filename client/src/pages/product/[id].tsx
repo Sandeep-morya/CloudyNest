@@ -20,7 +20,7 @@ import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
 import SellerCard from "@/components/Seller/SellerCard";
 
-export default function SingleProduct() {
+export default function SingleProduct(){
 	return (
 		<>
 			<Head>

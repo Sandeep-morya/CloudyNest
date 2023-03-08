@@ -11,7 +11,6 @@ const Advertisments = (props: Props) => {
 			<BannerHeading size={"2xl"} title="Top Categories to choose from" />
 			<Image w={"80%"} src="/ads/ad2.png" alt="ad2" />
 			<Image w={"80%"} src="/ads/ad3.png" alt="ad3" />
-			<Image w={"80%"} src="/ads/ad4.png" alt="ad4" />
 		</VStack>
 	);
 };

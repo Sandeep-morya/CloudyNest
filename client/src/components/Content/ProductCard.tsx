@@ -69,14 +69,14 @@ const ProductCard = (props: Props) => {
 					</HStack>
 					<Text>Free Delivery</Text>
 				</Flex>
-				<Button
+				{/* <Button
 					_hover={{
 						color: "white",
 						background: "teal",
 					}}
 					colorScheme={"teal"}>
 					Start Selling
-				</Button>
+				</Button> */}
 			</Stack>
 		</Stack>
 	);

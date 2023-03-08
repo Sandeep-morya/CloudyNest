@@ -5,10 +5,11 @@ import React, { Dispatch, SetStateAction } from "react";
 
 interface Props {
 	showLogin: boolean;
+	hideExtras: boolean;
 	setShowLogin: Dispatch<SetStateAction<boolean>>;
 }
 
-const SellerNav = ({showLogin, setShowLogin }: Props) => {
+const SellerNav = ({hideExtras,showLogin, setShowLogin }: Props) => {
 	const router = useRouter();
 	return (
 		<Flex
@@ -32,7 +33,7 @@ const SellerNav = ({showLogin, setShowLogin }: Props) => {
 				<Link href={"#"}>Grow Bussiness</Link>
 			</Flex>
 
-			<HStack>
+			<HStack hidden={hideExtras}>
 				<Button
 					onClick={() => setShowLogin((e) => !e)}
 					colorScheme={"teal"}
