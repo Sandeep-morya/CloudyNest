@@ -79,10 +79,23 @@ const Navbar = ({ hideExtras }: Props) => {
 					Download App
 				</Button>
 
-				<Divider height={"30px"} orientation="vertical" />
-				<Button variant={"none"} onClick={()=>router.push("/supplier")}>Become a Supplier</Button>
+				<Divider
+					height={"30px"}
+					orientation="vertical"
+					borderWidth={".1rem"}
+					borderColor={"rgba(0,0,0,0.2)"}
+				/>
+				<Button variant={"none"} onClick={() => router.push("/supplier")}>
+					Become a Supplier
+				</Button>
 
-				<Divider hidden={hideExtras} height={"30px"} orientation="vertical" />
+				<Divider
+					hidden={hideExtras}
+					height={"30px"}
+					orientation="vertical"
+					borderWidth={".1rem"}
+					borderColor={"rgba(0,0,0,0.2)"}
+				/>
 				<Button
 					hidden={hideExtras}
 					onClick={() => setHidden(!hidden)}
@@ -92,7 +105,13 @@ const Navbar = ({ hideExtras }: Props) => {
 					Profile
 				</Button>
 
-				<Divider hidden={hideExtras} height={"30px"} orientation="vertical" />
+				<Divider
+					hidden={hideExtras}
+					height={"30px"}
+					orientation="vertical"
+					borderWidth={".1rem"}
+					borderColor={"rgba(0,0,0,0.2)"}
+				/>
 				<Button
 					hidden={hideExtras}
 					variant={"none"}

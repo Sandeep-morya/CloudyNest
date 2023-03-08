@@ -5,42 +5,41 @@ import { MdSummarize } from "react-icons/md";
 import StepIcon from "./StepIcon";
 import StepBar from "./StepBar";
 
-const ProgressSteps = ({ state }: { state: number }) => {
+interface Props {
+	state: number;
+	css?: React.CSSProperties;
+}
+
+const ProgressSteps = ({ state, css }: Props) => {
 	return (
 		<div
 			style={{
-				width: "100%",
-				paddingBottom: "1.5rem",
+				...css,
+				paddingBottom:"1rem",
 				display: "grid",
 				gridTemplateColumns: "0.5fr 10fr 0.5fr 10fr 0.5fr 10fr 0.5fr",
 				justifyContent: "center",
 				alignItems: "center",
 			}}>
-			<StepIcon
-				title="Cart"
-				selected
-				activateOn={0}
-				state={state}
-				Icon={<FaShoppingBag />}
-			/>
-			<StepBar activateOn={0} state={state} />
+			<StepIcon title="Cart" selected state={state} Icon={<FaShoppingBag />} />
+			<StepBar activateWhenGreaterThan={0} state={state} />
 			<StepIcon
 				title="Address"
-				activateOn={0}
+				activateWhenGreaterThan={0}
 				state={state}
 				Icon={<FaAddressCard />}
 			/>
-			<StepBar activateOn={35} state={state} />
+			<StepBar activateWhenGreaterThan={35} state={state} />
 			<StepIcon
 				title="Payment"
-				activateOn={35}
+				activateWhenGreaterThan={35}
 				state={state}
 				Icon={<RiSecurePaymentFill />}
 			/>
-			<StepBar activateOn={70} state={state} />
+			<StepBar activateWhenGreaterThan={70} state={state} />
 			<StepIcon
 				title="Summary"
-				activateOn={70}
+				activateWhenGreaterThan={70}
 				state={state}
 				Icon={<MdSummarize />}
 			/>

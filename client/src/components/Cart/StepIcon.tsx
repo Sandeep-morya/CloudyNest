@@ -2,7 +2,7 @@
 
 type Props = {
 	state: number;
-	activateOn: number;
+	activateWhenGreaterThan?: number;
 	Icon: React.ReactNode;
 	selected?: boolean;
 	title?: string;
@@ -11,14 +11,14 @@ type Props = {
 
 const StepIcon = ({
 	selected = false,
-	color = "teal",
+	color = "#24A3B5",
 	title,
 	state,
-	activateOn,
+	activateWhenGreaterThan = 0,
 	Icon,
 }: Props) => {
 	const getColor = (color: string, option = "gray") =>
-		selected ? color : state > activateOn ? color : option;
+		selected ? color : state > activateWhenGreaterThan ? color : option;
 
 	return (
 		<div style={{ position: "relative" }}>

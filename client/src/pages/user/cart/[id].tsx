@@ -25,11 +25,13 @@ import {
 	VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FaAt, FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { useRouter } from "next/router";
 import ProgressSteps from "@/components/Cart/ProgressSteps";
+import Cart from "@/components/Cart/Cart";
+import CartNav from "@/components/Cart/CartNav";
 
 const initalState = {
 	f_name: "",
@@ -45,7 +47,7 @@ const initalState = {
 };
 
 export default function SingleUserCart() {
-	const [state,setState] = useState(0)
+	const [state, setState] = useState(0);
 	const [showLogin, setShowLogin] = useState(false);
 	const [show, setShow] = useState(false);
 	const [formData, setFormData] = useState(initalState);
@@ -53,15 +55,16 @@ export default function SingleUserCart() {
 	const [isError, setIsError] = useState(false);
 	const router = useRouter();
 
-	useEffect(()=>{
-		if(state>70){
-			setState(100)
-		}
-		if(state<30){
-			setState(0)
-		}
-	},[state])
+	const [cartAmount,setCartAmount] = useState(0)
 
+	useEffect(() => {
+		if (state > 70) {
+			setState(100);
+		}
+		if (state < 30) {
+			setState(0);
+		}
+	}, [state]);
 
 	return (
 		<>
@@ -85,24 +88,58 @@ export default function SingleUserCart() {
 						pb="1rem"
 						zIndex={5}
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
-						<Navbar hideExtras={true} />
+						<CartNav {...{state}}/>
 					</Box>
 
-					{/* Cart */}
 					<Stack
-						w={"75%"}
-						spacing={0}
-						border="1px solid red"
+						w={"100%"}
+						spacing={5}
+						bgColor={"blackAlpha.100"}
+						p={{ md: "2rem 0", xl: "2rem 0", "2xl": "2rem 15rem" }}
 						alignItems={"center"}>
-						<ProgressSteps {...{ state }} />
-						<Button
-							disabled={state >= 100}
-							onClick={() => setState(state + 34)}>
-							Next
-						</Button>
-						<Button disabled={state >= 0} onClick={() => setState(state - 34)}>
-							Prev
-						</Button>
+
+
+						<Flex w="100%" justifyContent={"space-between"} gap="2rem" >
+							{/* Cart  */}
+							<Box flex="1">
+								<Cart />
+							</Box>
+							<Divider
+								height="auto"
+								marginTop={"3.5rem"}
+								orientation="vertical"
+								borderWidth={".1rem"}
+								borderColor={"rgba(0,0,0,0.1)"}
+							/>
+
+							<Stack flex="1">
+								<Heading as="h3" size="md" color="blackAlpha.600">
+									Price Details
+								</Heading>
+							</Stack>
+						</Flex>
+
+						<Flex
+							w="100%"
+							pt="2rem"
+							alignItems={"center"}
+							justifyContent="space-between">
+							<Button
+								colorScheme={"teal"}
+								_hover={{ color: "white", backgroundColor: "teal" }}
+								disabled={state >= 0}
+								onClick={() => setState(state - 34)}>
+								Previous
+							</Button>
+
+							<Button
+								colorScheme={"teal"}
+								disabled={state >= 100}
+								_hover={{ color: "white", backgroundColor: "teal" }}
+								onClick={() => setState(state + 34)}>
+								Next
+							</Button>
+						</Flex>
 					</Stack>
 				</Stack>
 			</main>

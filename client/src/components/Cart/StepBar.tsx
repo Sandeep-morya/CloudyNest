@@ -2,11 +2,15 @@
 
 type Props = {
 	state: number;
-	activateOn: number;
+	activateWhenGreaterThan: number;
 	color?: string;
 };
 
-const StepBar = ({ color = "teal", state, activateOn }: Props) => {
+const StepBar = ({
+	color = "#30A3B5",
+	state,
+	activateWhenGreaterThan,
+}: Props) => {
 	return (
 		<div
 			style={{
@@ -15,9 +19,10 @@ const StepBar = ({ color = "teal", state, activateOn }: Props) => {
 			<div
 				style={{
 					height: "0.3rem",
-					width: state > activateOn ? `100%` : 0,
+
+					width: state > activateWhenGreaterThan ? `100%` : 0,
 					backgroundColor: color,
-					transition: "width 0.5s",
+					transition: "width 0.2s",
 				}}></div>
 		</div>
 	);
