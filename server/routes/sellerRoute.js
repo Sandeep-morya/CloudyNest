@@ -18,7 +18,12 @@ router.use(authMiddleware);
 
 router.post(
 	"/register",
-	asyncHandler(async (req, res) => {
+	async (req, res) => {
+		const email = req.body.email;
+		const sellerExists = await Seller.findOne({ email });
+		if (sellerExists){
+			res.send("User already Registered")
+		}
 		const hasedPassword = await bcrypt.hash(String(req.body.password), 5);
 
 		const seller = await new Seller({ ...req.body, password: hasedPassword });
@@ -29,7 +34,7 @@ router.post(
 			expiresIn: "30d",
 		});
 		res.send({ error: false, token });
-	}),
+	},
 );
 
 /* Login */

@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Cart/ProgressSteps.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/Cart/ProgressSteps.tsx", "src/functions/validateInput.ts"],
   "exclude": ["node_modules"]
 }

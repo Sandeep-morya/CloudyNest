@@ -25,20 +25,18 @@ const productSchema = mongoose.Schema(
 		images: [{ type: String, required: true }],
 		price: { type: Number, required: true },
 		tags: [{ type: String, required: true }],
+
 		quantity: { type: Number, default: 1 },
 		discount: { type: Number, default: 0 },
 		seller: { type: ObjectId, ref: "seller" },
+		rating: { type: Number, default: 3 },
 
 		/* Extras */
 		assured: { type: Boolean, default: false },
-		rating: { type: Number, default: 7 },
-		features: [{ type: String, default: [] }],
-
-		/* helper */
-		for: { type: String, default: "every" }, //mens/children/girls/oldies/every
+		is_for: { type: String, default: "every" }, //mens/children/girls/oldies/every
 		for_gender: { type: String, default: "every" }, //male/female/trans/every
 		for_age: { type: String, default: "0-100" }, // 0-2,3-5, 5-8 etc..
-		size: { type: String, default: "unknown" }, // all types of sizes
+		sizes: [{ type: String, default:[] }], // all types of sizes
 	},
 	{ timestamps: true },
 );
