@@ -1,7 +1,6 @@
 ﻿export default function validateMobile(mobile:string) {
-    mobile=mobile.trim();
-    if(mobile===""){
-        return "This field is requried"
+    if(mobile.trim()===""){
+        return "Providing your contact number is compulsary"
     }
     if(mobile.match(/^[6-9]\d{9}$/)){
         return mobile;

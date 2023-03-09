@@ -2,7 +2,15 @@
 import SignUp from "@/components/Auth/SignUp";
 import Navbar from "@/components/Header/Navbar";
 import BannerHeading from "@/components/Misc/BannerHeading";
-import { ChangeEvent, ChangeEventHandler, Suspense } from "react";
+import {
+	ChangeEvent,
+	ChangeEventHandler,
+	Dispatch,
+	ReactNode,
+	SetStateAction,
+	Suspense,
+	useEffect,
+} from "react";
 import {
 	Badge,
 	Box,
@@ -22,6 +30,7 @@ import {
 	InputRightElement,
 	Stack,
 	Text,
+	useToast,
 	VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
@@ -33,6 +42,11 @@ import axios from "axios";
 import validateEmail from "@/functions/validataEmail";
 import validatePassword from "@/functions/validatePassword";
 import validateMobile from "@/functions/validateMobile";
+import validateNames from "@/functions/validateNames";
+import validateInput from "@/functions/validateInput";
+import validateGstNo from "@/functions/validateGstNumeber";
+import validateAddress from "@/functions/validateAddress";
+import { SellerType } from "@/Types";
 
 const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
 const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
@@ -42,7 +56,9 @@ const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 export default function Seller() {
 	const [showLogin, setShowLogin] = useState(false);
 	const [show, setShow] = useState(false);
+	const toast = useToast();
 
+	/* Form states */
 	const [fname, setFname] = useState("");
 	const [lname, setLname] = useState("");
 	const [email, setEmail] = useState("");
@@ -51,14 +67,22 @@ export default function Seller() {
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [address, setAddress] = useState("");
 	const [gst_no, setGst_no] = useState("");
-	const [image, setImage] = useState(
+	const [imageSrc, setImageSrc] = useState(
 		"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
 	);
-	const [checked, setChecked] = useState(false);
-
+	const [checked, setChecked] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 
+	/* Form error states */
+	/* Form states */
+	const [fnameError, setFnameError] = useState("");
+	const [emailError, setEmailError] = useState("");
+	const [mobileError, setMobileError] = useState("");
+	const [passwordError, setPasswordError] = useState("");
+	const [addressError, setAddressError] = useState("");
+	const [gst_noError, setGst_noError] = useState("");
+	const [sellerDetails, setSellerDetails] = useState({} as SellerType);
 	/* Objective of this function
 	 * - Uplaod Image on Cloudnary
 	 * - Update formData state
@@ -77,7 +101,7 @@ export default function Seller() {
 			formData.append("upload_preset", uplaod_preset);
 			formData.append("cloud_name", cloud_name);
 			const { data } = await axios.post(upload_url, formData);
-			setImage(data.url);
+			setImageSrc(data.url);
 			setIsLoading(false);
 		} catch (error) {
 			setIsError(true);
@@ -86,16 +110,85 @@ export default function Seller() {
 		// console.log(data);
 	}
 
+	/* Mangae Errors */
+	function validateError(
+		validation_result: string,
+		actual_one: string,
+		dispatch: Dispatch<SetStateAction<string>>,
+	) {
+		if (validation_result != actual_one) {
+			dispatch(validation_result);
+			setIsError(true);
+		} else {
+			dispatch("");
+		}
+		return actual_one;
+	}
+	function handleFormValidation() {
+		const v_name = validateError(
+			validateNames(fname, lname),
+			fname + " " + lname,
+			setFnameError,
+		);
+		const v_email = validateError(validateEmail(email), email, setEmailError);
+		const v_password = validateError(
+			validatePassword(password, confirmPassword),
+			password,
+			setPasswordError,
+		);
+		const v_mobile = validateError(
+			validateMobile(mobile),
+			mobile,
+			setMobileError,
+		);
+
+		const v_address = validateError(
+			validateAddress(address),
+			address,
+			setAddressError,
+		);
+		const v_gst = validateError(validateGstNo(gst_no), gst_no, setGst_noError);
+
+		if (!isError) {
+			setSellerDetails({
+				image: imageSrc,
+				gst: v_gst.trim(),
+				name: v_name.trim(),
+				email: v_email.trim(),
+				mobile: v_mobile.trim(),
+				address: v_address.trim(),
+				password: v_password.trim(),
+			});
+			handleFormSubmit()
+		}
+	}
+	/* Form Submit */
 	async function handleFormSubmit() {
-		// const {data} = await axios.post(base_url,formData)
-		const v_email = validateEmail(email);
-		const v_password = validatePassword(password,confirmPassword)
-		const v_mobile = validateMobile(mobile)
+		if (!isError) {
+			setIsLoading(true);
+			try {
+				const data = await axios.post(
+					base_url + "/seller/register",
+					sellerDetails,
+				);
+				console.log(data);
+				setIsLoading(false);
+			} catch (error) {
+				toast({
+					title: "Internal Server Error",
+					position: "top",
+					status:"error",
+					isClosable: true,
+				});
+				setIsLoading(false);
+			}
+		}
+	}
 
-		console.log(v_email)
-		console.log(v_password);
-		console.log(v_mobile)
-
+	/* RemoveErrors */
+	function washError(dispatch: Dispatch<SetStateAction<string>>) {
+		dispatch("");
+		setIsError(false)
 	}
 
 	return (
@@ -166,20 +259,25 @@ export default function Seller() {
 										{/* Name Field */}
 										<Flex gap="1rem" justifyContent={"space-between"}>
 											{/* First name */}
-											<FormControl isRequired>
+											<FormControl isInvalid={fnameError != ""} isRequired>
 												<FormLabel>First name</FormLabel>
 												<Input
 													placeholder="First name"
+													focusBorderColor="teal.500"
 													type="text"
 													value={fname}
+													onKeyDown={() => washError(setFnameError)}
 													onChange={(e) => setFname(e.target.value)}
 												/>
+
+												<FormErrorMessage>{fnameError}</FormErrorMessage>
 											</FormControl>
 											{/* last name */}
 											<FormControl>
 												<FormLabel>Last name</FormLabel>
 												<Input
 													placeholder="Last name"
+													focusBorderColor="teal.500"
 													type="text"
 													value={lname}
 													onChange={(e) => setLname(e.target.value)}
@@ -189,105 +287,107 @@ export default function Seller() {
 
 										<Flex gap="1rem" justifyContent={"space-between"}>
 											{/* Email */}
-											<FormControl isInvalid={isError} isRequired>
+											<FormControl isInvalid={emailError != ""} isRequired>
 												<FormLabel>Email</FormLabel>
 												<Input
 													type="email"
 													value={email}
+													onKeyDown={() => washError(setEmailError)}
+													focusBorderColor="teal.500"
 													onChange={(e) => setEmail(e.target.value)}
 												/>
-												{!isError ? (
+												{emailError === "" ? (
 													<FormHelperText>
 														Enter the email youd like to receive the newsletter
 														on.
 													</FormHelperText>
 												) : (
-													<FormErrorMessage>
-														Email is required.
-													</FormErrorMessage>
+													<FormErrorMessage>{emailError}</FormErrorMessage>
 												)}
 											</FormControl>
 											{/* Mobile Number */}
-											<FormControl isInvalid={isError} isRequired>
+											<FormControl isInvalid={mobileError != ""} isRequired>
 												<FormLabel>Mobile Number</FormLabel>
 												<Input
 													type="number"
 													value={mobile}
+													focusBorderColor="teal.500"
+													onKeyDown={() => washError(setMobileError)}
 													onChange={(e) => setMobile(e.target.value)}
 												/>
-												{isError && (
-													<FormErrorMessage>Pasworing warning</FormErrorMessage>
-												)}
+
+												<FormErrorMessage>{mobileError}</FormErrorMessage>
 											</FormControl>
 										</Flex>
 
 										<Flex gap="1rem" justifyContent={"space-between"}>
 											{/* Password */}
-											<FormControl isInvalid={isError} isRequired>
+											<FormControl isInvalid={passwordError != ""} isRequired>
 												<FormLabel>Password</FormLabel>
 												<InputGroup>
 													<Input
 														type={show ? "text" : "password"}
 														value={password}
+														onKeyDown={() => washError(setPasswordError)}
+														focusBorderColor="teal.500"
 														onChange={(e) => setPassword(e.target.value)}
 													/>
 													<InputRightElement onClick={() => setShow(!show)}>
 														{show ? <FaEye /> : <FaEyeSlash />}
 													</InputRightElement>
 												</InputGroup>
-												{!isError ? (
+												{!passwordError ? (
 													<FormHelperText>
-														Enter a strong Password of a length of 8 characters.
+														Enter a strong Password of at least 8 characters.
 													</FormHelperText>
 												) : (
-													<FormErrorMessage>Pasworing warning</FormErrorMessage>
+													<FormErrorMessage>{passwordError}</FormErrorMessage>
 												)}
 											</FormControl>
 
 											{/* confirm Password */}
-											<FormControl isInvalid={isError} isRequired>
+											<FormControl isRequired>
 												<FormLabel>Confirm Password</FormLabel>
 												<InputGroup>
 													<Input
 														type={show ? "text" : "password"}
 														value={confirmPassword}
+														focusBorderColor="teal.500"
 														onChange={(e) => setConfirmPassword(e.target.value)}
 													/>
 													<InputRightElement onClick={() => setShow(!show)}>
 														{show ? <FaEye /> : <FaEyeSlash />}
 													</InputRightElement>
 												</InputGroup>
-												{isError && (
-													<FormErrorMessage>Pasworing warning</FormErrorMessage>
-												)}
 											</FormControl>
 										</Flex>
 
 										{/* address */}
-										<FormControl isInvalid={isError} isRequired>
+										<FormControl isInvalid={addressError != ""} isRequired>
 											<FormLabel>Home Address</FormLabel>
 											<Input
 												type="address"
 												value={address}
+												onKeyDown={() => washError(setAddressError)}
+												focusBorderColor="teal.500"
 												onChange={(e) => setAddress(e.target.value)}
 											/>
 
-											{isError && (
-												<FormErrorMessage>Pasworing warning</FormErrorMessage>
-											)}
+											<FormErrorMessage>{addressError}</FormErrorMessage>
 										</FormControl>
 
 										{/* gst_no */}
-										<FormControl isInvalid={isError} isRequired>
+										<FormControl isInvalid={gst_noError != ""} isRequired>
 											<FormLabel>GST Number</FormLabel>
 											<Input
 												type="text"
 												value={gst_no}
+												onKeyDown={() => washError(setGst_noError)}
+												focusBorderColor="teal.500"
 												onChange={(e) => setGst_no(e.target.value)}
 											/>
-											{isError && (
-												<FormErrorMessage>Pasworing warning</FormErrorMessage>
-											)}
+
+											<FormErrorMessage>{gst_noError}</FormErrorMessage>
 										</FormControl>
 										<VStack
 											p="1rem"
@@ -306,7 +406,7 @@ export default function Seller() {
 													w="100%"
 													h="100%"
 													objectFit={"cover"}
-													src={image}
+													src={imageSrc}
 													alt="ds"
 													filter="drop-shadow(0 0 2px gray)"
 												/>
@@ -322,19 +422,24 @@ export default function Seller() {
 										</VStack>
 
 										{/* Agreement */}
-										<Checkbox
-											size="md"
-											colorScheme="teal"
-											checked={checked}
-											onChange={() => setChecked(!checked)}>
-											Agree terms & conditions
-										</Checkbox>
-
+										<FormControl isInvalid={checked === false}>
+											<Checkbox
+												size="md"
+												colorScheme="teal"
+												checked={checked}
+												defaultChecked={true}
+												onChange={() => setChecked(!checked)}>
+												Agree terms & conditions
+											</Checkbox>
+											<FormErrorMessage>
+												Please Check This box to accept the terms & conditions
+											</FormErrorMessage>
+										</FormControl>
 										{/* Submit */}
 										<Button
 											isLoading={isLoading}
 											colorScheme={"teal"}
-											onClick={handleFormSubmit}
+											onClick={handleFormValidation}
 											_hover={{
 												background: "teal.100",
 											}}>

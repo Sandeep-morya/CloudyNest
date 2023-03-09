@@ -1,11 +1,9 @@
 ﻿export default function validatePassword(
 	first: string,
-	second?: string,
+	second: string,
 ): string {
-	second = second ? second : first;
-	first = first.trim();
-	second = second.trim();
-	if (first === "") {
+	
+	if (first.trim() === "") {
 		return "You can't leave it empty.";
 	}
 	if (first != second) {
