@@ -27,6 +27,8 @@ import {
 import Head from "next/head";
 import React, { useState } from "react";
 
+
+
 type Props = {};
 
 const format = (val: string) => val + ` %`;

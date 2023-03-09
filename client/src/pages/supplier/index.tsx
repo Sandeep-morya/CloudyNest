@@ -1,8 +1,9 @@
-﻿import Login from "@/components/Auth/Login";
+﻿
+import Login from "@/components/Auth/Login";
 import SignUp from "@/components/Auth/SignUp";
 import Navbar from "@/components/Header/Navbar";
 import BannerHeading from "@/components/Misc/BannerHeading";
-import { ChangeEventHandler, Suspense } from "react";
+import { ChangeEvent, ChangeEventHandler, Suspense } from "react";
 import {
 	Badge,
 	Box,
@@ -27,8 +28,9 @@ import {
 import Head from "next/head";
 import { useState } from "react";
 import SellerNav from "@/components/Seller/SellerNav";
-import { FaAt, FaCamera, FaEye, FaEyeSlash} from "react-icons/fa";
+import { FaAt, FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
 import SellerLogin from "@/components/Seller/SellerLogin";
+import axios from "axios";
 
 const initalState = {
 	f_name: "",
@@ -43,6 +45,10 @@ const initalState = {
 		"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
 };
 
+const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL;
+const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET;
+const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME;
+
 export default function Seller() {
 	const [showLogin, setShowLogin] = useState(false);
 	const [show, setShow] = useState(false);
@@ -50,7 +56,20 @@ export default function Seller() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 
-	async function handleFileChange() {}
+	async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+		const imageData = new FormData();
+
+		/* e.target.files can be null also so we are returning the user */
+		if (!e.target.files || e.target.files.length === 0) {
+			return;
+		}
+		imageData.append("file", e.target.files[0]);
+		imageData.append("upload_preset", uplaod_preset as string);
+		imageData.append("cloud_name",cloud_name  as string)
+		const { data } = await axios.post(upload_url as string,imageData);
+		setFormData({ ...formData, image : data.url});
+		// console.log(data);
+	}
 
 	return (
 		<>
@@ -131,11 +150,12 @@ export default function Seller() {
 										<Image
 											w="100%"
 											h="100%"
+											objectFit={"cover"}
 											src={formData.image}
 											alt="ds"
 											filter="drop-shadow(0 0 2px gray)"
 										/>
-										{/*  */}
+										{/* image uplaod */}
 										<input
 											className="input_file"
 											type="file"
