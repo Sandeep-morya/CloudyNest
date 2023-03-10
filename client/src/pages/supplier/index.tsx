@@ -183,7 +183,7 @@ export default function Seller() {
 				toastAlert("success", "Congrats! Your are successfully registered");
 				const code = jwt.decode(data.token);
 				if (code) {
-					localStorage.setItem("token",data.token as string)
+					localStorage.setItem("cloudynest_jwt_token",data.token as string)
 					router.replace("/supplier/dashboard/" + code);
 				}
 			}
@@ -208,7 +208,7 @@ export default function Seller() {
 	}
 
 	useEffect(() => {
-		const token = localStorage.getItem("token");
+		const token = localStorage.getItem("cloudynest_jwt_token");
 		if (!token) {
 			setShowLogin(true);
 		} else {
