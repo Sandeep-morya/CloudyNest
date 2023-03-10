@@ -27,8 +27,6 @@ import {
 import Head from "next/head";
 import React, { useState } from "react";
 
-
-
 type Props = {};
 
 const format = (val: string) => val + ` %`;
@@ -354,15 +352,15 @@ const AddProduct = (props: Props) => {
 
 							{/* Description */}
 
-								<FormControl isRequired>
-									<FormLabel>Description</FormLabel>
-									<Textarea
-										value={description}
-										p="0.2rem 1rem"
-										h="15rem"
-										focusBorderColor="teal.500"
-										onChange={(e) => setDescription(e.target.value)}
-										placeholder={`Write the Product Description Like this 👇👇👇
+							<FormControl isRequired>
+								<FormLabel>Description</FormLabel>
+								<Textarea
+									value={description}
+									p="0.2rem 1rem"
+									h="15rem"
+									focusBorderColor="teal.500"
+									onChange={(e) => setDescription(e.target.value)}
+									placeholder={`Write the Product Description Like this 👇👇👇
 
 Name : Best Selling Round Neck Half Sleeves t-shirt for mens ( Pack of 1 )
 Fabric : Cotton
@@ -373,16 +371,14 @@ Sizes : M (Chest Size : 38 in, Length Size: 26.5 in)
 L (Chest Size : 40 in, Length Size: 27.5 in)
 XL (Chest Size : 42 in, Length Size: 28.5 in)
 Country of Origin : India`}
-									/>
-								</FormControl>
-
+								/>
+							</FormControl>
 
 							<Button
 								_hover={{ backgroundColor: "teal", color: "white" }}
 								mt={4}
 								colorScheme="teal"
 								isLoading={false}
-
 								variant={"solid"}
 								size="lg"
 								type="submit">

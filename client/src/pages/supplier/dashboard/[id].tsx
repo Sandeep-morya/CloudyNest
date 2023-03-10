@@ -2,7 +2,7 @@
 import SignUp from "@/components/Auth/SignUp";
 import Navbar from "@/components/Header/Navbar";
 import BannerHeading from "@/components/Misc/BannerHeading";
-import { ChangeEventHandler, Suspense } from "react";
+import { ChangeEventHandler, Suspense, useEffect } from "react";
 import {
 	Badge,
 	Box,
@@ -31,26 +31,28 @@ import SellerNav from "@/components/Seller/SellerNav";
 import { FaAt, FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
 import SellerLogin from "@/components/Seller/SellerLogin";
 import Dashboard from "@/components/Seller/Dashboard";
+import { GetServerSideProps } from "next";
+import axios, { AxiosResponse } from "axios";
+import { sellerProfileType, SellerType } from "@/Types";
+import ProfileCard from "@/components/Misc/ProfileCard";
+import { useRouter } from "next/router";
 
-const initalState = {
-	f_name: "",
-	l_name: "",
-	email: "",
-	password: "",
-	c_password: "",
-	address: "",
-	gst_no: "",
-	checked: true,
-	image:
-		"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
-};
+interface Props {
+	// auth: boolean;
+	// token: string;
+	data: SellerType;
+}
 
-export default function Seller() {
+export default function Seller({ data }: Props) {
 	const [showLogin, setShowLogin] = useState(false);
 	const [show, setShow] = useState(false);
-	const [formData, setFormData] = useState(initalState);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
+	const router = useRouter();
+
+	/* console.log("auth",auth);
+console.log("token",token);
+console.log("data",data); */
 
 	async function handleFileChange() {}
 
@@ -77,14 +79,41 @@ export default function Seller() {
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
 						<SellerNav hideExtras={true} {...{ showLogin, setShowLogin }} />
 					</Box>
-					<Flex
+					<Stack
+						w="100%"
+						p={{ md: "0", xl: "0", "2xl": "2rem 15rem" }}
 						justifyContent={"center"}
-						alignItems="center"
-						>
-						<Dashboard />
-					</Flex>
+						alignItems="center">
+						<ProfileCard data={data} />
+						<Button
+							onClick={() =>
+								router.push("/supplier/add_product/" + router.query.id)
+							}>
+							Add Product
+						</Button>
+					</Stack>
 				</Stack>
 			</main>
 		</>
 	);
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	try {
+		const { data }: AxiosResponse<sellerProfileType, any> = await axios.get(
+			`${process.env.BASE_URL}/seller/profile`,
+			{ headers: { Authorization: context.params?.id } },
+		);
+
+		return {
+			props: { data },
+		};
+	} catch {
+		return {
+			redirect: {
+				destination: "/",
+				permanent: false,
+			},
+		};
+	}
+};
