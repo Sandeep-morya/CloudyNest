@@ -81,7 +81,7 @@ console.log("data",data); */
 					</Box>
 					<Stack
 						w="100%"
-						p={{ md: "2rem 0", xl: "2rem 0", "2xl": "2rem 15rem" }}
+						p={{ md: "0", xl: "0", "2xl": "2rem 15rem" }}
 						justifyContent={"center"}
 						alignItems="center">
 						<ProfileCard data={data} />
