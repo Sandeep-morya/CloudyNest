@@ -1,4 +1,5 @@
-﻿import Login from "@/components/Auth/Login";
+﻿// "use client"
+import Login from "@/components/Auth/Login";
 import SignUp from "@/components/Auth/SignUp";
 import Navbar from "@/components/Header/Navbar";
 import BannerHeading from "@/components/Misc/BannerHeading";
