@@ -4,11 +4,9 @@ import Navbar from "@/components/Header/Navbar";
 import BannerHeading from "@/components/Misc/BannerHeading";
 import {
 	ChangeEvent,
-	ChangeEventHandler,
 	Dispatch,
 	ReactNode,
 	SetStateAction,
-	Suspense,
 	useEffect,
 } from "react";
 import {
@@ -43,10 +41,12 @@ import validateEmail from "@/functions/validataEmail";
 import validatePassword from "@/functions/validatePassword";
 import validateMobile from "@/functions/validateMobile";
 import validateNames from "@/functions/validateNames";
-import validateInput from "@/functions/validateInput";
 import validateGstNo from "@/functions/validateGstNumeber";
 import validateAddress from "@/functions/validateAddress";
 import { SellerType } from "@/Types";
+import useToastAlert from "@/hooks/useToastalert";
+import { useRouter } from "next/router";
+import jwt from "jsonwebtoken"
 
 const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
 const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
@@ -56,7 +56,11 @@ const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 export default function Seller() {
 	const [showLogin, setShowLogin] = useState(false);
 	const [show, setShow] = useState(false);
-	const toast = useToast();
+	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
+
+	const toastAlert = useToastAlert()
+	const router = useRouter()
 
 	/* Form states */
 	const [fname, setFname] = useState("");
@@ -71,9 +75,6 @@ export default function Seller() {
 		"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
 	);
 	const [checked, setChecked] = useState(true);
-	const [isLoading, setIsLoading] = useState(false);
-	const [isError, setIsError] = useState(false);
-
 	/* Form error states */
 	/* Form states */
 	const [fnameError, setFnameError] = useState("");
@@ -119,10 +120,11 @@ export default function Seller() {
 		if (validation_result != actual_one) {
 			dispatch(validation_result);
 			setIsError(true);
+			return false;
 		} else {
 			dispatch("");
+			return true;
 		}
-		return actual_one;
 	}
 	function handleFormValidation() {
 		const v_name = validateError(
@@ -149,47 +151,99 @@ export default function Seller() {
 		);
 		const v_gst = validateError(validateGstNo(gst_no), gst_no, setGst_noError);
 
-		if (!isError) {
-			setSellerDetails({
-				image: imageSrc,
-				gst: v_gst.trim(),
-				name: v_name.trim(),
-				email: v_email.trim(),
-				mobile: v_mobile.trim(),
-				address: v_address.trim(),
-				password: v_password.trim(),
-			});
-			handleFormSubmit()
+		if (v_email && v_name && v_mobile && v_password && v_address && v_gst && checked) {
+			handleFormSubmit();
+		}else{
+			toastAlert("error","Review form: Some is filled correctly")
 		}
+
 	}
 	/* Form Submit */
 	async function handleFormSubmit() {
-		if (!isError) {
-			setIsLoading(true);
-			try {
-				const data = await axios.post(
-					base_url + "/seller/register",
-					sellerDetails,
-				);
-				console.log(data);
-				setIsLoading(false);
-			} catch (error) {
-				toast({
-					title: "Internal Server Error",
-					position: "top",
-					status:"error",
-					isClosable: true,
-				});
-				setIsLoading(false);
+		setIsLoading(true);
+		try {
+			const {data} = await axios.post(
+				base_url + "/seller/register",
+				sellerDetails,
+			);
+			if (data === "Email ID already Registered") {
+				toastAlert("warning",data);
+				setEmailError(data);
+			} else if (data === "Mobile Numeber already Registered") {
+				toastAlert("warning",data);
+				setMobileError("Mobile Numeber already Registered");
+			} else {
+				// toast({
+				// 	title: ``,
+				// 	position: "top",
+				// 	status: "success",
+				// 	isClosable: true,
+				// 	duration: 2000,
+				// });
+				toastAlert("success", "Congrats! Your are successfully registered");
+				const code = jwt.decode(data.token);
+				if (code) {
+					localStorage.setItem("token",data.token as string)
+					router.replace("/supplier/dashboard/" + code);
+				}
 			}
+			 setIsLoading(false);
+		} catch (error) {
+			// toast({
+			// 	title: `interanl server Error`,
+			// 	position: "top",
+			// 	status: "error",
+			// 	isClosable: true,
+			// 	duration: 2000,
+			// });
+			toastAlert("error", "interanl server Error");
+			setIsLoading(false);
 		}
 	}
 
 	/* RemoveErrors */
 	function washError(dispatch: Dispatch<SetStateAction<string>>) {
 		dispatch("");
-		setIsError(false)
+		setIsError(false);
 	}
+
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (!token) {
+			setShowLogin(true);
+		} else {
+			const code = jwt.decode(token);
+			if (code) {
+				router.replace("/supplier/dashboard/" + code);
+			}
+		}
+	}, [router]);
+
+	useEffect(() => {
+		if (!isError) {
+			setSellerDetails({
+				image: imageSrc,
+				gst: gst_no,
+				name: fname + " " + lname,
+				email: email.trim(),
+				mobile: mobile.trim(),
+				address: address.trim(),
+				password: password.trim(),
+			});
+		}
+	}, [
+		isError,
+		fname,
+		lname,
+		imageSrc,
+		gst_no,
+		email,
+		mobile,
+		address,
+		password,
+	]);
+
+
 
 	return (
 		<>
@@ -215,7 +269,7 @@ export default function Seller() {
 						<SellerNav hideExtras={false} {...{ showLogin, setShowLogin }} />
 					</Box>
 					{/* Login */}
-					<form>
+					<form autoComplete="off">
 						{showLogin ? (
 							<Stack
 								h="100%"
