@@ -269,7 +269,7 @@ export default function Seller() {
 						<SellerNav hideExtras={false} {...{ showLogin, setShowLogin }} />
 					</Box>
 					{/* Login */}
-					<form autoComplete="off">
+					<form>
 						{showLogin ? (
 							<Stack
 								h="100%"

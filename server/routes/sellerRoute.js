@@ -59,9 +59,7 @@ router.post(
 
 		if (!auth) throw new Error("Seller Authorization failed");
 
-		const token = jwt.sign({ id: seller._id }, process.env.SECERT, {
-			expiresIn: "30d",
-		});
+		const token = jwt.sign(_id.toString(), process.env.SECERT);
 		res.send({ error: false, token });
 	}),
 );
