@@ -23,16 +23,15 @@ router.post(
 		const emailExists = await Seller.findOne({ email });
 		if (emailExists) {
 			res.send("Email ID already Registered");
-			return
+			return;
 		}
 
-		const mobile = req.body.mobile
+		const mobile = req.body.mobile;
 		const mobileExists = await Seller.findOne({ mobile });
 		if (mobileExists) {
 			res.send("Mobile Numeber already Registered");
 			return;
 		}
-
 
 		const hasedPassword = await bcrypt.hash(String(req.body.password), 5);
 
@@ -40,7 +39,7 @@ router.post(
 
 		const { _id } = await seller.save();
 
-		const token = jwt.sign( _id.toString() , process.env.SECERT);
+		const token = jwt.sign(_id.toString(), process.env.SECERT);
 		res.send({ error: false, token });
 	}),
 );
@@ -52,14 +51,21 @@ router.post(
 	asyncHandler(async (req, res) => {
 		const { email, password } = req.body;
 		const seller = await Seller.findOne({ email });
-		if (!seller) throw new Error("Seller not Found");
+		if (!seller) {
+			res.send("Above Email is not registered with us");
+			return;
+
+		}
 		/* else */
 
 		const auth = await bcrypt.compare(String(password), seller.password);
 
-		if (!auth) throw new Error("Seller Authorization failed");
+		if (!auth) {
+			res.send("Oopss.. you have enterd a wrong password");
+			return;
+		}
 
-		const token = jwt.sign(_id.toString(), process.env.SECERT);
+		const token = jwt.sign(seller._id.toString(), process.env.SECERT);
 		res.send({ error: false, token });
 	}),
 );
@@ -69,7 +75,7 @@ router.post(
 router.get(
 	"/profile",
 	asyncHandler(async (req, res) => {
-		const { _id } = req.body;
+		const {_id } = req.body;
 		const seller = await Seller.findById({ _id }).select("-password");
 		if (!seller) throw new Error("Seller Not Found");
 		res.send(seller);
@@ -78,10 +84,10 @@ router.get(
 
 /* find products of seller */
 router.get(
-	"/products",
+	"/products/:id",
 	asyncHandler(async (req, res) => {
 		const { _id } = req.body;
-		const products =await Product.find({ seller: _id });
+		const products = await Product.find({ seller: _id });
 		res.send(products);
 	}),
 );

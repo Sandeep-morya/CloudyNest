@@ -1,12 +1,12 @@
 ﻿export default function validatePassword(
 	first: string,
-	second: string,
+	second?: string,
 ): string {
-	
+
 	if (first.trim() === "") {
 		return "You can't leave it empty.";
 	}
-	if (first != second) {
+	if (second && first != second) {
 		return "Password and Confirm Password is required to be same.";
 	}
 	if (first.length < 8) {

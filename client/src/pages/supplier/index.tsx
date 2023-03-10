@@ -8,6 +8,7 @@ import {
 	Dispatch,
 	ReactNode,
 	SetStateAction,
+	useCallback,
 	useEffect,
 } from "react";
 import {
@@ -47,7 +48,8 @@ import validateAddress from "@/functions/validateAddress";
 import { SellerType } from "@/Types";
 import useToastAlert from "@/hooks/useToastalert";
 import { useRouter } from "next/router";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import useThrottle from "@/hooks/useThrottle";
 
 const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
 const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
@@ -55,13 +57,14 @@ const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function Seller() {
-	const [showLogin, setShowLogin] = useState(false);
+	const [showLogin, setShowLogin] = useState(true);
 	const [show, setShow] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 
-	const toastAlert = useToastAlert()
-	const router = useRouter()
+	const toastAlert = useToastAlert();
+	const router = useRouter();
+	const throttle = useThrottle();
 
 	/* Form states */
 	const [fname, setFname] = useState("");
@@ -152,26 +155,33 @@ export default function Seller() {
 		);
 		const v_gst = validateError(validateGstNo(gst_no), gst_no, setGst_noError);
 
-		if (v_email && v_name && v_mobile && v_password && v_address && v_gst && checked) {
-			handleFormSubmit();
-		}else{
-			toastAlert("error","Review form: Some is filled correctly")
+		if (
+			v_email &&
+			v_name &&
+			v_mobile &&
+			v_password &&
+			v_address &&
+			v_gst &&
+			checked
+		) {
+			throttle(handleFormSubmit, 2000);
+		} else {
+			toastAlert("error", "Review form: Some is filled correctly");
 		}
-
 	}
 	/* Form Submit */
 	async function handleFormSubmit() {
 		setIsLoading(true);
 		try {
-			const {data} = await axios.post(
+			const { data } = await axios.post(
 				base_url + "/seller/register",
 				sellerDetails,
 			);
 			if (data === "Email ID already Registered") {
-				toastAlert("warning",data);
+				toastAlert("warning", data);
 				setEmailError(data);
 			} else if (data === "Mobile Numeber already Registered") {
-				toastAlert("warning",data);
+				toastAlert("warning", data);
 				setMobileError("Mobile Numeber already Registered");
 			} else {
 				// toast({
@@ -182,21 +192,11 @@ export default function Seller() {
 				// 	duration: 2000,
 				// });
 				toastAlert("success", "Congrats! Your are successfully registered");
-				const code = jwt.decode(data.token);
-				if (code) {
-					localStorage.setItem("cloudynest_jwt_token",data.token as string)
-					router.replace("/supplier/dashboard/" + code);
-				}
+				localStorage.setItem("cloudynest_jwt_token", data.token as string);
+				router.replace("/supplier/dashboard/" + data.token);
 			}
-			 setIsLoading(false);
+			setIsLoading(false);
 		} catch (error) {
-			// toast({
-			// 	title: `interanl server Error`,
-			// 	position: "top",
-			// 	status: "error",
-			// 	isClosable: true,
-			// 	duration: 2000,
-			// });
 			toastAlert("error", "interanl server Error");
 			setIsLoading(false);
 		}
@@ -210,13 +210,8 @@ export default function Seller() {
 
 	useEffect(() => {
 		const token = localStorage.getItem("cloudynest_jwt_token");
-		if (!token) {
-			setShowLogin(true);
-		} else {
-			const code = jwt.decode(token);
-			if (code) {
-				router.replace("/supplier/dashboard/" + code);
-			}
+		if (token) {
+			router.replace("/supplier/dashboard/" + token);
 		}
 	}, [router]);
 
@@ -243,8 +238,6 @@ export default function Seller() {
 		address,
 		password,
 	]);
-
-
 
 	return (
 		<>
@@ -494,7 +487,9 @@ export default function Seller() {
 										<Button
 											isLoading={isLoading}
 											colorScheme={"teal"}
-											onClick={handleFormValidation}
+											onClick={() => {
+												throttle(handleFormValidation, 1000);
+											}}
 											_hover={{
 												background: "teal.100",
 											}}>
