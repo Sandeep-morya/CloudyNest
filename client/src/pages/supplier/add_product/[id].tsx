@@ -347,7 +347,7 @@ const AddProduct = ({ data }: Props) => {
 							<Center color={"#24A3B5"} pb="1rem">
 								<BannerHeading
 									size="lg"
-									title={"Hey!, Fill This Form to add a new product"}
+									title={"Hey!, Fill this form to add a new product"}
 								/>
 							</Center>
 
