@@ -33,6 +33,7 @@ import { useRouter } from "next/router";
 import { productType } from "@/Types";
 import { ValueOf } from "next/dist/shared/lib/constants";
 import validateInputString from "@/functions/validateInputString";
+import useCookies from "react-cookie/cjs/useCookies";
 
 type Props = {};
 
@@ -47,6 +48,7 @@ const parse = (val: string) => val.replace(/^\$/, "");
 
 // :: Component ::
 const AddProduct = (props: Props) => {
+	const [cookies, setCookie] = useCookies(["token"]);
 	const [showLogin, setShowLogin] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);

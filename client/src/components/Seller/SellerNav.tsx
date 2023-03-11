@@ -1,4 +1,5 @@
-﻿import { Button, Flex, HStack, Image, Spacer, Text } from "@chakra-ui/react";
+﻿import useLogout from "@/hooks/useLogout";
+import { Button, Flex, HStack, Image, Spacer, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction } from "react";
@@ -9,8 +10,11 @@ interface Props {
 	setShowLogin: Dispatch<SetStateAction<boolean>>;
 }
 
-const SellerNav = ({hideExtras,showLogin, setShowLogin }: Props) => {
+const SellerNav = ({ hideExtras, showLogin, setShowLogin }: Props) => {
+	const logout = useLogout();
+
 	const router = useRouter();
+
 	return (
 		<Flex
 			w="100%"
@@ -33,8 +37,9 @@ const SellerNav = ({hideExtras,showLogin, setShowLogin }: Props) => {
 				<Link href={"#"}>Grow Bussiness</Link>
 			</Flex>
 
-			<HStack hidden={hideExtras}>
+			<HStack>
 				<Button
+					hidden={hideExtras}
 					onClick={() => setShowLogin((e) => !e)}
 					colorScheme={"teal"}
 					variant="outline">
@@ -44,11 +49,13 @@ const SellerNav = ({hideExtras,showLogin, setShowLogin }: Props) => {
 				<Spacer />
 
 				<Button
+					hidden={!hideExtras}
 					_hover={{
 						background: "teal.100",
 					}}
+					onClick={logout}
 					colorScheme={"teal"}>
-					Start Selling
+					Logout
 				</Button>
 			</HStack>
 		</Flex>

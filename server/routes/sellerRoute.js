@@ -54,7 +54,6 @@ router.post(
 		if (!seller) {
 			res.send("Above Email is not registered with us");
 			return;
-
 		}
 		/* else */
 
@@ -75,7 +74,7 @@ router.post(
 router.get(
 	"/profile",
 	asyncHandler(async (req, res) => {
-		const {_id } = req.body;
+		const { _id } = req.body;
 		const seller = await Seller.findById({ _id }).select("-password");
 		if (!seller) throw new Error("Seller Not Found");
 		res.send(seller);

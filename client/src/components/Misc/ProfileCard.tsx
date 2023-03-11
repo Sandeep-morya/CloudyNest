@@ -4,6 +4,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import axios, { AxiosResponse } from "axios";
 import useToastAlert from "@/hooks/useToastalert";
+import { useCookies } from "react-cookie";
 
 type Props = {
 	data: SellerType;
@@ -15,6 +16,7 @@ const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const ProfileCard = ({ data }: Props) => {
+	const [cookies] = useCookies(["cloudynest_jwt_token"]);
 	const [imageSrc, setImageSrc] = useState(data.image);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
@@ -42,6 +44,7 @@ const ProfileCard = ({ data }: Props) => {
 			setIsLoading(false);
 			toastAlert("error", "failed in uploading image");
 		} // console.log(data);
+		setIsLoading(false);
 	}
 
 	// :: Doing patch opreation on database to upadate the image url ::
@@ -52,7 +55,7 @@ const ProfileCard = ({ data }: Props) => {
 				{ image },
 				{
 					headers: {
-						Authorization: localStorage.getItem("cloudynest_jwt_token"),
+						Authorization: cookies.cloudynest_jwt_token,
 					},
 				},
 			);
