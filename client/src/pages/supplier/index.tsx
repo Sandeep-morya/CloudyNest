@@ -267,7 +267,9 @@ export default function Seller() {
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
 						<SellerNav hideExtras={false} {...{ showLogin, setShowLogin }} />
 					</Box>
+
 					{/* Login */}
+
 					<form>
 						{showLogin ? (
 							<Stack
@@ -358,6 +360,8 @@ export default function Seller() {
 													<FormErrorMessage>{emailError}</FormErrorMessage>
 												)}
 											</FormControl>
+
+											
 											{/* Mobile Number */}
 											<FormControl isInvalid={mobileError != ""} isRequired>
 												<FormLabel>Mobile Number</FormLabel>
@@ -517,6 +521,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 		const status = jwt.verify(token as string, process.env.SECERT as string);
 		return {
 			redirect: {
+
 				destination: "/supplier/dashboard/" + token + status,
 				permanent: true,
 			},

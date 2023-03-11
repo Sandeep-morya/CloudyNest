@@ -61,7 +61,7 @@ const parse = (val: string) => val.replace(/^\$/, "");
 
 // :: Component ::
 const AddProduct = ({ data }: Props) => {
-	const [cookies, setCookie] = useCookies(["token"]);
+	const [cookies, setCookie] = useCookies(["cloudynest_jwt_token"]);
 	const [showLogin, setShowLogin] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -116,6 +116,7 @@ const AddProduct = ({ data }: Props) => {
 			formData.append("cloud_name", cloud_name);
 			const { data } = await axios.post(upload_url, formData);
 			setThumbnail(data.url);
+			setImages([...images,data.url])
 			setIsLoading(false);
 		} catch (error) {
 			setIsError(true);
@@ -201,7 +202,7 @@ const AddProduct = ({ data }: Props) => {
 		})();
 
 		const v_images = (() => {
-			if (images.length < 1) {
+			if (images.length < 2) {
 				setImagesError("Upload Multiple Images, atleast one or your choice !");
 				setIsError(true);
 				return false;
@@ -227,7 +228,7 @@ const AddProduct = ({ data }: Props) => {
 			toastAlert("error", "Review form: Some is filled correctly");
 		}
 	}
-
+console.log(productDetails)
 	/* Mangae Errors */
 	function validateError(
 		validation_result: string,
@@ -250,7 +251,20 @@ const AddProduct = ({ data }: Props) => {
 	}
 
 	async function handleFormSubmit() {
-		console.log(productDetails);
+		setIsLoading(true);
+		try {
+			const data = await axios.post(base_url + "/product/add", productDetails, {
+				headers: { Authorization: cookies.cloudynest_jwt_token },
+			});
+			console.log(data)
+			toastAlert("success","Product added successfully")
+			setIsLoading(false);
+
+		} catch {
+			setIsError(true);
+			setIsLoading(false);
+			toastAlert("error","500 internal server error")
+		}
 	}
 	useEffect(() => {
 		if (!isError) {
@@ -294,6 +308,7 @@ const AddProduct = ({ data }: Props) => {
 		sizes,
 		isError,
 	]);
+
 	return (
 		<>
 			<Head>
@@ -389,7 +404,7 @@ const AddProduct = ({ data }: Props) => {
 							{/* Price, Quantity, Discount, Rating*/}
 							<SimpleGrid columns={4} gap="1rem">
 								{/* Price */}
-								<FormControl isRequired isInvalid={priceError != ""}>
+								<FormControl isInvalid={priceError != ""}>
 									<FormLabel>Product Price</FormLabel>
 									<NumberInput
 										focusBorderColor="teal.500"

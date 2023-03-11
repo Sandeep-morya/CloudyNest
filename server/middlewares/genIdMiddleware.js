@@ -6,7 +6,7 @@ function genIdMiddleware(req, res, next) {
 	try {
 		if (!token) throw new Error("Please Provide the Token in Headers");
 		const decoded = jwt.verify(token, process.env.SECERT);
-		req.body.generatedID = decoded.id;
+		req.body.generatedID = decoded;
 		next();
 	} catch (error) {
 		res.status(405).send(error);
