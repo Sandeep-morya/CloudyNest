@@ -25,17 +25,33 @@ import {
 	Textarea,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import axios, { AxiosResponse } from "axios";
+import useToastAlert from "@/hooks/useToastalert";
+import jwt from "jsonwebtoken";
+import { useRouter } from "next/router";
+import { productType } from "@/Types";
+import { ValueOf } from "next/dist/shared/lib/constants";
+import validateInputString from "@/functions/validateInputString";
 
 type Props = {};
+
+const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
+const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
+const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
+const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const format = (val: string) => val + ` %`;
 const formatInRupee = (val: string) => `₹ ` + val;
 const parse = (val: string) => val.replace(/^\$/, "");
 
+// :: Component ::
 const AddProduct = (props: Props) => {
 	const [showLogin, setShowLogin] = useState(false);
 	const [isError, setIsError] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const toastAlert = useToastAlert();
+	const router = useRouter();
 
 	const [seller, setSeller] = useState("");
 
@@ -43,7 +59,7 @@ const AddProduct = (props: Props) => {
 	const [brand, setBrand] = useState("");
 
 	const [images, setImages] = useState([] as string[]);
-	const [size, setSize] = useState("");
+	const [sizes, setSizes] = useState("");
 
 	const [price, setPrice] = useState(0);
 	const [quantity, setQuantity] = useState(1);
@@ -59,8 +75,108 @@ const AddProduct = (props: Props) => {
 
 	const [tags, setTags] = useState("");
 
-	/* handleImagesUpload */
-	function handleImagesUpload() {}
+	// :: Upload thumbnail ::
+	async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+		setIsLoading(true);
+
+		const formData = new FormData();
+
+		// :: e.target.files can be null also so we are returning the user ::
+		if (!e.target.files || e.target.files.length === 0) {
+			return;
+		}
+		try {
+			formData.append("file", e.target.files[0]);
+			formData.append("upload_preset", uplaod_preset);
+			formData.append("cloud_name", cloud_name);
+			const { data } = await axios.post(upload_url, formData);
+			setThumbnail(data.url);
+			setIsLoading(false);
+		} catch (error) {
+			setIsError(true);
+			setIsLoading(false);
+			toastAlert("error", "failed in uploading image");
+		} // console.log(data);
+	}
+
+	// :: upload mulitple images ::
+	async function uploadMulitpleImages(e: ChangeEvent<HTMLInputElement>) {
+		setIsLoading(true);
+
+		// :: e.target.files can be null also so we are returning the user ::
+		if (!e.target.files || e.target.files.length === 0) {
+			return;
+		}
+
+		// e.target.files.forEach(file=>formData.append("file", file))
+
+		const uploads = [];
+		for (let i = 0; i < e.target.files.length; i++) {
+			setIsLoading(true);
+			const formData = new FormData();
+			formData.append("file", e.target.files[i]);
+			formData.append("upload_preset", uplaod_preset);
+			formData.append("cloud_name", cloud_name);
+			try {
+				const { data } = await axios.post(upload_url, formData);
+				uploads.push(data.url);
+				setIsLoading(false);
+			} catch (error) {
+				setIsLoading(false);
+				setIsError(true);
+				toastAlert("error", "failed in uploading image");
+				return;
+			}
+		}
+		setImages(uploads);
+	}
+
+	function validateInputs() {
+		const v_title = validateInputString(title);
+		const v_brand = validateInputString(brand);
+		const v_price = price < 1 ? false : true;
+		const v_sizes = sizes.includes(",");
+		const v_tags = validateInputString(tags);
+	}
+
+	async function handleFormSubmit() {
+		const productDetails = {
+			title,
+			brand,
+			description,
+			thumbnail,
+			images,
+			price,
+			tags: tags.split(",").map((e) => e.trim()),
+			quantity,
+			discount,
+			seller,
+			rating,
+			is_for,
+			for_gender,
+			for_age,
+			sizes: sizes.split(",").map((e) => e.trim()),
+		};
+
+		for (let key in productDetails) {
+			const val: any = productDetails[key as keyof Object];
+			if (val) {
+			}
+		}
+		// console.log(productDetails);
+	}
+
+	useEffect(() => {
+		const token = localStorage.getItem("cloudynest_jwt_token");
+		const decoded = jwt.decode(token as string);
+		console.log(decoded);
+		if (decoded) {
+			setSeller(decoded as string);
+		} else {
+			console.log("not authorized");
+			router.replace("/");
+		}
+	}, [router]);
 
 	return (
 		<>
@@ -194,12 +310,12 @@ const AddProduct = (props: Props) => {
 
 								{/* Rating */}
 								<FormControl isRequired>
-									<FormLabel>{"Rate the quality (1-5)"}</FormLabel>
+									<FormLabel>{"Rate the quality (2-5)"}</FormLabel>
 									<NumberInput
 										value={rating}
 										focusBorderColor="teal.500"
 										onChange={(e) => setRating(+e)}
-										min={0}
+										min={2}
 										max={5}
 										step={0.5}>
 										<NumberInputField />
@@ -224,7 +340,7 @@ const AddProduct = (props: Props) => {
 										<option value="male">Male</option>
 										<option value="female">Female</option>
 										<option value="trans">Transgender</option>
-										<option value="other">Other</option>
+										<option value="not sure">Not sure</option>
 									</Select>
 								</FormControl>
 
@@ -241,7 +357,7 @@ const AddProduct = (props: Props) => {
 										<option value="kids">Kids</option>
 										<option value="teens">Teenagers</option>
 										<option value="senior">Senior Citizens</option>
-										<option value="other">Other</option>
+										<option value="not_sure">Not sure</option>
 									</Select>
 								</FormControl>
 
@@ -264,6 +380,7 @@ const AddProduct = (props: Props) => {
 										<option value="12-14">12 To 14 Years Old</option>
 										<option value="15-17">15 To 18 Years Old</option>
 										<option value="18-100">18 And Above</option>
+										<option value="not_sure">Not sure</option>
 									</Select>
 								</FormControl>
 							</SimpleGrid>
@@ -279,7 +396,7 @@ const AddProduct = (props: Props) => {
 									<Input
 										type={"file"}
 										focusBorderColor="teal.500"
-										onChange={handleImagesUpload}
+										onChange={handleFileChange}
 										accept="image/*"
 										multiple={false}
 									/>
@@ -294,7 +411,7 @@ const AddProduct = (props: Props) => {
 										type={"file"}
 										focusBorderColor="teal.500"
 										placeholder="Fill if it has any eg: M or 34 or free"
-										onChange={handleImagesUpload}
+										onChange={uploadMulitpleImages}
 										accept="image/*"
 										multiple
 									/>
@@ -310,18 +427,20 @@ const AddProduct = (props: Props) => {
 									<FormLabel>{"All Sizes (optional)"}</FormLabel>
 									<Input
 										type="text"
-										value={size}
+										value={sizes}
 										focusBorderColor="teal.500"
-										placeholder="example : m l xl 2xl 3xl"
-										onChange={(e) => setSize(e.target.value)}
+										placeholder="example : m,l,xl,2xl,3xl,free"
+										onChange={(e) => setSizes(e.target.value)}
 									/>
 									{!isError ? (
 										<FormHelperText>
-											Write all sizes, Provide between each other size
+											{
+												"Write all sizes, If it does not have size, then you can leave it"
+											}
 										</FormHelperText>
 									) : (
 										<FormErrorMessage>
-											Please write in Correct Format
+											{"Provide comma(,) between each size"}
 										</FormErrorMessage>
 									)}
 								</FormControl>
@@ -332,19 +451,21 @@ const AddProduct = (props: Props) => {
 										type="text"
 										value={tags}
 										focusBorderColor="teal.500"
-										placeholder={`example : "tshirt boys color brand"`}
+										placeholder={`#tag1,#tag2,#tag3`}
 										onChange={(e) => setTags(e.target.value)}
 									/>
 									{!isError ? (
 										<FormHelperText>
-											{`Specify some keywords for categorization and eazy search,
+											{`Specify some keywords for categorization and easy search,
 												.For Example if it a shirt for boys
 												then you can write
-												"tshirt boys color brand"`}
+												"#tshirt,#boys,#color etc..."`}
 										</FormHelperText>
 									) : (
 										<FormErrorMessage>
-											Please write in Correct Format
+											{
+												"Provide comma(,) between each tag, with hash(#) at the start of each tag "
+											}
 										</FormErrorMessage>
 									)}
 								</FormControl>
@@ -377,10 +498,12 @@ Country of Origin : India`}
 							<Button
 								_hover={{ backgroundColor: "teal", color: "white" }}
 								mt={4}
-								colorScheme="teal"
-								isLoading={false}
+								bgColor={"teal.400"}
+								color="white"
+								isLoading={isLoading}
 								variant={"solid"}
 								size="lg"
+								onClick={validateInputs}
 								type="submit">
 								Add this product
 							</Button>

@@ -79,8 +79,8 @@ export default function Seller() {
 		"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
 	);
 	const [checked, setChecked] = useState(true);
+	
 	/* Form error states */
-	/* Form states */
 	const [fnameError, setFnameError] = useState("");
 	const [emailError, setEmailError] = useState("");
 	const [mobileError, setMobileError] = useState("");
@@ -88,6 +88,8 @@ export default function Seller() {
 	const [addressError, setAddressError] = useState("");
 	const [gst_noError, setGst_noError] = useState("");
 	const [sellerDetails, setSellerDetails] = useState({} as SellerType);
+
+
 	/* Objective of this function
 	 * - Uplaod Image on Cloudnary
 	 * - Update formData state

@@ -104,7 +104,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 			`${process.env.BASE_URL}/seller/profile`,
 			{ headers: { Authorization: context.params?.id } },
 		);
-
 		return {
 			props: { data },
 		};
