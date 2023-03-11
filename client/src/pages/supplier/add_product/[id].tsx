@@ -4,6 +4,7 @@ import {
 	Box,
 	Button,
 	Center,
+	Checkbox,
 	Divider,
 	Flex,
 	FormControl,
@@ -11,6 +12,7 @@ import {
 	FormHelperText,
 	FormLabel,
 	Heading,
+	Image,
 	Input,
 	InputGroup,
 	NumberDecrementStepper,
@@ -36,13 +38,17 @@ import axios, { AxiosResponse } from "axios";
 import useToastAlert from "@/hooks/useToastalert";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
-import { productType, sellerProfileType } from "@/Types";
+import { productType, sellerProfileType, SellerType } from "@/Types";
 import validateInputString from "@/functions/validateInputString";
 import useCookies from "react-cookie/cjs/useCookies";
 import { GetServerSideProps } from "next";
 import useThrottle from "@/hooks/useThrottle";
+import validateRangeInput from "@/functions/validateRangeInput";
+import validateInputArray from "@/functions/validateInputArray";
 
-type Props = {};
+type Props = {
+	data: SellerType;
+};
 
 const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
 const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
@@ -54,7 +60,7 @@ const formatInRupee = (val: string) => `₹ ` + val;
 const parse = (val: string) => val.replace(/^\$/, "");
 
 // :: Component ::
-const AddProduct = (props: Props) => {
+const AddProduct = ({ data }: Props) => {
 	const [cookies, setCookie] = useCookies(["token"]);
 	const [showLogin, setShowLogin] = useState(false);
 	const [isError, setIsError] = useState(false);
@@ -75,7 +81,8 @@ const AddProduct = (props: Props) => {
 	const [sizesError, setSizesError] = useState("");
 
 	const [price, setPrice] = useState(0);
-	const [priceError, setPriceError] = useState(0);
+	const [priceError, setPriceError] = useState("");
+
 	const [quantity, setQuantity] = useState(1);
 	const [rating, setRating] = useState(3);
 	const [discount, setDiscount] = useState(0);
@@ -85,11 +92,13 @@ const AddProduct = (props: Props) => {
 	const [for_age, setFor_age] = useState("every");
 
 	const [description, setDescription] = useState("");
+	const [descriptionError, setDescriptionError] = useState("");
 	const [thumbnail, setThumbnail] = useState("");
 	const [thumbnailError, setThumbnailError] = useState("");
 
 	const [tags, setTags] = useState("");
 	const [tagsError, setTagsError] = useState("");
+	const [checked, setChecked] = useState(true);
 
 	// :: Upload thumbnail ::
 	async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
@@ -147,7 +156,77 @@ const AddProduct = (props: Props) => {
 		setImages(uploads);
 	}
 
-	function handleFormValidation() {}
+	function handleFormValidation() {
+		const v_title = validateError(
+			validateInputString(title),
+			title,
+			setTitleError,
+		);
+		const v_brand = validateError(
+			validateInputString(brand),
+			brand,
+			setBrandError,
+		);
+		const v_thumbnail = validateError(
+			validateInputString(thumbnail),
+			thumbnail,
+			setThumbnailError,
+		);
+		const v_description = validateError(
+			validateInputString(description),
+			description,
+			setDescriptionError,
+		);
+
+		const v_sizes = validateError(
+			validateInputArray(sizes, false),
+			sizes,
+			setSizesError,
+		);
+		const v_tag = validateError(
+			validateInputArray(tags, true, "#"),
+			tags,
+			setTagsError,
+		);
+
+		const v_price = (() => {
+			if (price < 5) {
+				setPriceError("Price is Too less");
+				setIsError(true);
+				return false;
+			} else {
+				setPriceError("");
+				return true;
+			}
+		})();
+
+		const v_images = (() => {
+			if (images.length < 1) {
+				setImagesError("Upload Multiple Images, atleast one or your choice !");
+				setIsError(true);
+				return false;
+			} else {
+				setImagesError("");
+				return true;
+			}
+		})();
+
+		if (
+			v_title &&
+			v_price &&
+			v_brand &&
+			v_thumbnail &&
+			v_description &&
+			v_sizes &&
+			v_images &&
+			v_tag &&
+			checked
+		) {
+			throttle(handleFormSubmit, 2000);
+		} else {
+			toastAlert("error", "Review form: Some is filled correctly");
+		}
+	}
 
 	/* Mangae Errors */
 	function validateError(
@@ -171,31 +250,50 @@ const AddProduct = (props: Props) => {
 	}
 
 	async function handleFormSubmit() {
-		const productDetails = {
-			title,
-			brand,
-			description,
-			thumbnail,
-			images,
-			price,
-			tags: tags.split(",").map((e) => e.trim()),
-			quantity,
-			discount,
-			rating,
-			is_for,
-			for_gender,
-			for_age,
-			sizes: sizes.split(",").map((e) => e.trim()),
-		};
-
-		for (let key in productDetails) {
-			const val: any = productDetails[key as keyof Object];
-			if (val) {
-			}
-		}
-		// console.log(productDetails);
+		console.log(productDetails);
 	}
-
+	useEffect(() => {
+		if (!isError) {
+			setProductails({
+				title: title.trim(),
+				brand: brand.trim(),
+				description: description.trim(),
+				thumbnail,
+				images,
+				price,
+				tags: tags
+					.trim()
+					.split(",")
+					.map((e) => e.trim()),
+				quantity,
+				discount,
+				rating,
+				is_for,
+				for_gender,
+				for_age,
+				sizes: sizes
+					.trim()
+					.split(",")
+					.map((e) => e.trim()),
+			});
+		}
+	}, [
+		title,
+		brand,
+		description,
+		discount,
+		for_age,
+		for_gender,
+		is_for,
+		images,
+		thumbnail,
+		price,
+		quantity,
+		rating,
+		tags,
+		sizes,
+		isError,
+	]);
 	return (
 		<>
 			<Head>
@@ -221,8 +319,19 @@ const AddProduct = (props: Props) => {
 					</Box>
 
 					<Stack
-						p={{ md: "2rem 0", xl: "2rem 0", "2xl": "2rem 15rem" }}
+						p={{ md: "1rem", xl: "1rem", "2xl": "2rem 15rem" }}
 						bgColor={"blackAlpha.100"}>
+						<Center>
+							<Image
+								style={{ aspectRatio: "1" }}
+								objectFit="cover"
+								h="6rem"
+								filter="drop-shadow(0 0 5px rgba(0,0,0,0.5))"
+								borderRadius={"50%"}
+								src={data.image}
+								alt={data.name}
+							/>
+						</Center>
 						<form
 							style={{
 								display: "grid",
@@ -238,7 +347,7 @@ const AddProduct = (props: Props) => {
 							<Center color={"#24A3B5"} pb="1rem">
 								<BannerHeading
 									size="lg"
-									title={"Fill This Form For Adding the Product"}
+									title={"Hey!, Fill This Form to add a new product"}
 								/>
 							</Center>
 
@@ -247,7 +356,7 @@ const AddProduct = (props: Props) => {
 								gap="1rem"
 								flexDirection={"row"}
 								justifyContent="space-between"
-								alignItems="center">
+								alignItems="flex-start">
 								{/* Title */}
 								<FormControl flex="2" isRequired isInvalid={titleError != ""}>
 									<FormLabel>Product Title</FormLabel>
@@ -280,11 +389,12 @@ const AddProduct = (props: Props) => {
 							{/* Price, Quantity, Discount, Rating*/}
 							<SimpleGrid columns={4} gap="1rem">
 								{/* Price */}
-								<FormControl isRequired isInvalid={priceError != 0}>
+								<FormControl isRequired isInvalid={priceError != ""}>
 									<FormLabel>Product Price</FormLabel>
 									<NumberInput
 										focusBorderColor="teal.500"
 										value={formatInRupee(String(price))}
+										onKeyDown={() => washError(setPriceError)}
 										onChange={(e) => setPrice(+parse(e))}
 										min={0}
 										step={100}>
@@ -412,32 +522,35 @@ const AddProduct = (props: Props) => {
 							<Flex
 								gap="1rem"
 								justifyContent={"space-between"}
-								alignItems="center">
-								<FormControl isRequired>
+								alignItems="flex-start">
+								<FormControl isRequired isInvalid={thumbnailError != ""}>
 									<FormLabel>{"Thumbnail (Best Image)"}</FormLabel>
 
 									<Input
 										type={"file"}
 										focusBorderColor="teal.500"
+										onMouseDown={() => washError(setThumbnailError)}
 										onChange={handleFileChange}
 										accept="image/*"
 										multiple={false}
 									/>
+									<FormErrorMessage>{thumbnailError}</FormErrorMessage>
 								</FormControl>
 
-								<FormControl isRequired>
+								<FormControl isRequired isInvalid={imagesError != ""}>
 									<FormLabel>
-										{"All Images (Upload more than 1 images)"}{" "}
+										{"All Images (Upload multiple images)"}{" "}
 									</FormLabel>
 
 									<Input
 										type={"file"}
 										focusBorderColor="teal.500"
-										placeholder="Fill if it has any eg: M or 34 or free"
+										onMouseOver={() => washError(setImagesError)}
 										onChange={uploadMulitpleImages}
 										accept="image/*"
 										multiple
 									/>
+									<FormErrorMessage>{imagesError}</FormErrorMessage>
 								</FormControl>
 							</Flex>
 
@@ -446,11 +559,12 @@ const AddProduct = (props: Props) => {
 								justifyContent={"space-between"}
 								alignItems="flex-start">
 								{/* Size */}
-								<FormControl isInvalid={isError}>
+								<FormControl isInvalid={sizesError != ""}>
 									<FormLabel>{"All Sizes (optional)"}</FormLabel>
 									<Input
 										type="text"
 										value={sizes}
+										onKeyDown={() => washError(setSizesError)}
 										focusBorderColor="teal.500"
 										placeholder="example : m,l,xl,2xl,3xl,free"
 										onChange={(e) => setSizes(e.target.value)}
@@ -462,18 +576,17 @@ const AddProduct = (props: Props) => {
 											}
 										</FormHelperText>
 									) : (
-										<FormErrorMessage>
-											{"Provide comma(,) between each size"}
-										</FormErrorMessage>
+										<FormErrorMessage>{sizesError}</FormErrorMessage>
 									)}
 								</FormControl>
 
-								<FormControl isInvalid={isError} isRequired>
+								<FormControl isInvalid={tagsError != ""} isRequired>
 									<FormLabel>{"Tags (search keywords)"}</FormLabel>
 									<Input
 										type="text"
 										value={tags}
 										focusBorderColor="teal.500"
+										onKeyDown={() => washError(setTagsError)}
 										placeholder={`#tag1,#tag2,#tag3`}
 										onChange={(e) => setTags(e.target.value)}
 									/>
@@ -485,24 +598,21 @@ const AddProduct = (props: Props) => {
 												"#tshirt,#boys,#color etc..."`}
 										</FormHelperText>
 									) : (
-										<FormErrorMessage>
-											{
-												"Provide comma(,) between each tag, with hash(#) at the start of each tag "
-											}
-										</FormErrorMessage>
+										<FormErrorMessage>{tagsError}</FormErrorMessage>
 									)}
 								</FormControl>
 							</Flex>
 
 							{/* Description */}
 
-							<FormControl isRequired>
+							<FormControl isRequired isInvalid={descriptionError != ""}>
 								<FormLabel>Description</FormLabel>
 								<Textarea
 									value={description}
 									p="0.2rem 1rem"
 									h="15rem"
 									focusBorderColor="teal.500"
+									onKeyDown={() => washError(setDescriptionError)}
 									onChange={(e) => setDescription(e.target.value)}
 									placeholder={`Write the Product Description Like this 👇👇👇
 
@@ -516,7 +626,24 @@ L (Chest Size : 40 in, Length Size: 27.5 in)
 XL (Chest Size : 42 in, Length Size: 28.5 in)
 Country of Origin : India`}
 								/>
+								<FormErrorMessage>{descriptionError}</FormErrorMessage>
 							</FormControl>
+
+							{/* Agreement */}
+							<FormControl isInvalid={checked === false}>
+								<Checkbox
+									size="md"
+									colorScheme="teal"
+									checked={checked}
+									defaultChecked={true}
+									onChange={() => setChecked(!checked)}>
+									Check this if you are sure to uplaod product
+								</Checkbox>
+								<FormErrorMessage>
+									Please Check This box to process
+								</FormErrorMessage>
+							</FormControl>
+							{/* Submit */}
 
 							<Button
 								_hover={{ backgroundColor: "teal", color: "white" }}
@@ -526,7 +653,9 @@ Country of Origin : India`}
 								isLoading={isLoading}
 								variant={"solid"}
 								size="lg"
-								onClick={handleFormValidation}
+								onClick={() => {
+									throttle(handleFormValidation, 1000);
+								}}
 								type="submit">
 								Add this product
 							</Button>

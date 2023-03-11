@@ -20,7 +20,7 @@ const SellerNav = ({ hideExtras, showLogin, setShowLogin }: Props) => {
 			w="100%"
 			justifyContent="space-between"
 			alignItems="center"
-			p={{ md: "0", xl: "0", "2xl": "0 15rem" }}
+			p={{ md: "0 2rem", xl: "0 2rem", "2xl": "0 15rem" }}
 			gap="5rem"
 			marginTop="0.5rem">
 			<Image
