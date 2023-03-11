@@ -25,15 +25,22 @@ import {
 	Textarea,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {
+	ChangeEvent,
+	Dispatch,
+	SetStateAction,
+	useEffect,
+	useState,
+} from "react";
 import axios, { AxiosResponse } from "axios";
 import useToastAlert from "@/hooks/useToastalert";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
-import { productType } from "@/Types";
-import { ValueOf } from "next/dist/shared/lib/constants";
+import { productType, sellerProfileType } from "@/Types";
 import validateInputString from "@/functions/validateInputString";
 import useCookies from "react-cookie/cjs/useCookies";
+import { GetServerSideProps } from "next";
+import useThrottle from "@/hooks/useThrottle";
 
 type Props = {};
 
@@ -52,18 +59,23 @@ const AddProduct = (props: Props) => {
 	const [showLogin, setShowLogin] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [productDetails, setProductails] = useState({} as productType);
 	const toastAlert = useToastAlert();
 	const router = useRouter();
-
-	const [seller, setSeller] = useState("");
+	const throttle = useThrottle();
 
 	const [title, setTitle] = useState("");
+	const [titleError, setTitleError] = useState("");
 	const [brand, setBrand] = useState("");
+	const [brandError, setBrandError] = useState("");
 
 	const [images, setImages] = useState([] as string[]);
+	const [imagesError, setImagesError] = useState("");
 	const [sizes, setSizes] = useState("");
+	const [sizesError, setSizesError] = useState("");
 
 	const [price, setPrice] = useState(0);
+	const [priceError, setPriceError] = useState(0);
 	const [quantity, setQuantity] = useState(1);
 	const [rating, setRating] = useState(3);
 	const [discount, setDiscount] = useState(0);
@@ -74,8 +86,10 @@ const AddProduct = (props: Props) => {
 
 	const [description, setDescription] = useState("");
 	const [thumbnail, setThumbnail] = useState("");
+	const [thumbnailError, setThumbnailError] = useState("");
 
 	const [tags, setTags] = useState("");
+	const [tagsError, setTagsError] = useState("");
 
 	// :: Upload thumbnail ::
 	async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
@@ -133,12 +147,27 @@ const AddProduct = (props: Props) => {
 		setImages(uploads);
 	}
 
-	function validateInputs() {
-		const v_title = validateInputString(title);
-		const v_brand = validateInputString(brand);
-		const v_price = price < 1 ? false : true;
-		const v_sizes = sizes.includes(",");
-		const v_tags = validateInputString(tags);
+	function handleFormValidation() {}
+
+	/* Mangae Errors */
+	function validateError(
+		validation_result: string,
+		actual_one: string,
+		dispatch: Dispatch<SetStateAction<string>>,
+	) {
+		if (validation_result != actual_one) {
+			dispatch(validation_result);
+			setIsError(true);
+			return false;
+		} else {
+			dispatch("");
+			return true;
+		}
+	}
+	/* RemoveErrors */
+	function washError(dispatch: Dispatch<SetStateAction<string>>) {
+		dispatch("");
+		setIsError(false);
 	}
 
 	async function handleFormSubmit() {
@@ -152,7 +181,6 @@ const AddProduct = (props: Props) => {
 			tags: tags.split(",").map((e) => e.trim()),
 			quantity,
 			discount,
-			seller,
 			rating,
 			is_for,
 			for_gender,
@@ -167,18 +195,6 @@ const AddProduct = (props: Props) => {
 		}
 		// console.log(productDetails);
 	}
-
-	useEffect(() => {
-		const token = localStorage.getItem("cloudynest_jwt_token");
-		const decoded = jwt.decode(token as string);
-		console.log(decoded);
-		if (decoded) {
-			setSeller(decoded as string);
-		} else {
-			console.log("not authorized");
-			router.replace("/");
-		}
-	}, [router]);
 
 	return (
 		<>
@@ -233,7 +249,7 @@ const AddProduct = (props: Props) => {
 								justifyContent="space-between"
 								alignItems="center">
 								{/* Title */}
-								<FormControl flex="2" isRequired>
+								<FormControl flex="2" isRequired isInvalid={titleError != ""}>
 									<FormLabel>Product Title</FormLabel>
 									<Input
 										type="text"
@@ -242,10 +258,11 @@ const AddProduct = (props: Props) => {
 										value={title}
 										onChange={(e) => setTitle(e.target.value)}
 									/>
+									<FormErrorMessage>{titleError}</FormErrorMessage>
 								</FormControl>
 
 								{/* Brand */}
-								<FormControl flex="1" isRequired>
+								<FormControl flex="1" isRequired isInvalid={brandError != ""}>
 									<FormLabel>Brand Name</FormLabel>
 									<Input
 										type="text"
@@ -254,11 +271,12 @@ const AddProduct = (props: Props) => {
 										value={brand}
 										onChange={(e) => setBrand(e.target.value)}
 									/>
+									<FormErrorMessage>{brandError}</FormErrorMessage>
 								</FormControl>
 							</Flex>
 
 							{/* Price, Quantity, Discount, Rating*/}
-							<SimpleGrid columns={4} gap="1rem">
+							<SimpleGrid columns={4} gap="1rem" isInvalid={priceError != 0}>
 								{/* Price */}
 								<FormControl isRequired>
 									<FormLabel>Product Price</FormLabel>
@@ -274,6 +292,7 @@ const AddProduct = (props: Props) => {
 											<NumberDecrementStepper />
 										</NumberInputStepper>
 									</NumberInput>
+									<FormErrorMessage>{brandError}</FormErrorMessage>
 								</FormControl>
 
 								{/* Quantity */}
@@ -505,7 +524,7 @@ Country of Origin : India`}
 								isLoading={isLoading}
 								variant={"solid"}
 								size="lg"
-								onClick={validateInputs}
+								onClick={handleFormValidation}
 								type="submit">
 								Add this product
 							</Button>
@@ -518,3 +537,22 @@ Country of Origin : India`}
 };
 
 export default AddProduct;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	try {
+		const { data }: AxiosResponse<sellerProfileType, any> = await axios.get(
+			`${process.env.BASE_URL}/seller/profile`,
+			{ headers: { Authorization: context.req.cookies.cloudynest_jwt_token } },
+		);
+		return {
+			props: { data },
+		};
+	} catch {
+		return {
+			redirect: {
+				destination: "/supplier",
+				permanent: false,
+			},
+		};
+	}
+};

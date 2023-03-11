@@ -75,7 +75,7 @@ const ProfileCard = ({ data }: Props) => {
 					w="100%"
 					h="100%"
 					objectFit={"cover"}
-					src="https://picsum.photos/seed/picsum/1920/300"
+					src="https://picsum.photos/1920/300"
 					alt={"lorem"}
 				/>
 				<Box

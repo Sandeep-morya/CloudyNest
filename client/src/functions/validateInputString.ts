@@ -1,7 +1,7 @@
 ﻿export default function validateInputString(str: string) {
 	if (str.trim() === "") {
-		return false;
+		return "This Filed is required";
 	}
 
-	return true;
+	return "";
 }
