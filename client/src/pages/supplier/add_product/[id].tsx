@@ -256,6 +256,7 @@ const AddProduct = (props: Props) => {
 										focusBorderColor="teal.500"
 										placeholder="Enter a title for Product"
 										value={title}
+										onKeyDown={() => washError(setTitleError)}
 										onChange={(e) => setTitle(e.target.value)}
 									/>
 									<FormErrorMessage>{titleError}</FormErrorMessage>
@@ -269,6 +270,7 @@ const AddProduct = (props: Props) => {
 										focusBorderColor="teal.500"
 										placeholder="Enter brand Name of your Product"
 										value={brand}
+										onKeyDown={() => washError(setBrandError)}
 										onChange={(e) => setBrand(e.target.value)}
 									/>
 									<FormErrorMessage>{brandError}</FormErrorMessage>
@@ -276,9 +278,9 @@ const AddProduct = (props: Props) => {
 							</Flex>
 
 							{/* Price, Quantity, Discount, Rating*/}
-							<SimpleGrid columns={4} gap="1rem" isInvalid={priceError != 0}>
+							<SimpleGrid columns={4} gap="1rem">
 								{/* Price */}
-								<FormControl isRequired>
+								<FormControl isRequired isInvalid={priceError != 0}>
 									<FormLabel>Product Price</FormLabel>
 									<NumberInput
 										focusBorderColor="teal.500"
@@ -292,7 +294,7 @@ const AddProduct = (props: Props) => {
 											<NumberDecrementStepper />
 										</NumberInputStepper>
 									</NumberInput>
-									<FormErrorMessage>{brandError}</FormErrorMessage>
+									<FormErrorMessage>{priceError}</FormErrorMessage>
 								</FormControl>
 
 								{/* Quantity */}
