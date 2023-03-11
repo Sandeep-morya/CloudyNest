@@ -50,6 +50,8 @@ import useToastAlert from "@/hooks/useToastalert";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
 import useThrottle from "@/hooks/useThrottle";
+import useCookies from "react-cookie/cjs/useCookies";
+import { GetServerSideProps } from "next";
 
 const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
 const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
@@ -57,6 +59,7 @@ const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function Seller() {
+	const [cookies, setCookie] = useCookies(["cloudynest_jwt_token"]);
 	const [showLogin, setShowLogin] = useState(true);
 	const [show, setShow] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -79,8 +82,8 @@ export default function Seller() {
 		"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
 	);
 	const [checked, setChecked] = useState(true);
+
 	/* Form error states */
-	/* Form states */
 	const [fnameError, setFnameError] = useState("");
 	const [emailError, setEmailError] = useState("");
 	const [mobileError, setMobileError] = useState("");
@@ -88,6 +91,7 @@ export default function Seller() {
 	const [addressError, setAddressError] = useState("");
 	const [gst_noError, setGst_noError] = useState("");
 	const [sellerDetails, setSellerDetails] = useState({} as SellerType);
+
 	/* Objective of this function
 	 * - Uplaod Image on Cloudnary
 	 * - Update formData state
@@ -192,7 +196,8 @@ export default function Seller() {
 				// 	duration: 2000,
 				// });
 				toastAlert("success", "Congrats! Your are successfully registered");
-				localStorage.setItem("cloudynest_jwt_token", data.token as string);
+				// localStorage.setItem("cloudynest_jwt_token", data.token as string);
+				setCookie("cloudynest_jwt_token", data.token);
 				router.replace("/supplier/dashboard/" + data.token);
 			}
 			setIsLoading(false);
@@ -208,12 +213,12 @@ export default function Seller() {
 		setIsError(false);
 	}
 
-	useEffect(() => {
-		const token = localStorage.getItem("cloudynest_jwt_token");
-		if (token) {
-			router.replace("/supplier/dashboard/" + token);
-		}
-	}, [router]);
+	// useEffect(() => {
+	// 	const token = localStorage.getItem("cloudynest_jwt_token");
+	// 	if (token) {
+	// 		router.replace("/supplier/dashboard/" + token);
+	// 	}
+	// }, [router]);
 
 	useEffect(() => {
 		if (!isError) {
@@ -262,7 +267,9 @@ export default function Seller() {
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
 						<SellerNav hideExtras={false} {...{ showLogin, setShowLogin }} />
 					</Box>
+
 					{/* Login */}
+
 					<form>
 						{showLogin ? (
 							<Stack
@@ -353,6 +360,8 @@ export default function Seller() {
 													<FormErrorMessage>{emailError}</FormErrorMessage>
 												)}
 											</FormControl>
+
+											
 											{/* Mobile Number */}
 											<FormControl isInvalid={mobileError != ""} isRequired>
 												<FormLabel>Mobile Number</FormLabel>
@@ -505,3 +514,21 @@ export default function Seller() {
 		</>
 	);
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const token = context.req.cookies.cloudynest_jwt_token;
+	try {
+		const status = jwt.verify(token as string, process.env.SECERT as string);
+		return {
+			redirect: {
+
+				destination: "/supplier/dashboard/" + token + status,
+				permanent: true,
+			},
+		};
+	} catch (error) {
+		return {
+			props: {},
+		};
+	}
+};

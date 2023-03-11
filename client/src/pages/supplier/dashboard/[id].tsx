@@ -102,16 +102,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	try {
 		const { data }: AxiosResponse<sellerProfileType, any> = await axios.get(
 			`${process.env.BASE_URL}/seller/profile`,
-			{ headers: { Authorization: context.params?.id } },
+			{ headers: { Authorization: context.req.cookies.cloudynest_jwt_token } },
 		);
-
 		return {
 			props: { data },
 		};
 	} catch {
 		return {
 			redirect: {
-				destination: "/",
+				destination: "/supplier",
 				permanent: false,
 			},
 		};

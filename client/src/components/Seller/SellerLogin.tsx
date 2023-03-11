@@ -23,12 +23,15 @@ import BannerHeading from "../Misc/BannerHeading";
 import jwt from "jsonwebtoken";
 import axios from "axios";
 import { useRouter } from "next/router";
+import useCookies from "react-cookie/cjs/useCookies";
+import { GetServerSideProps } from "next";
 
 type Props = {};
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const SellerLogin = (props: Props) => {
+	const [cookies, setCookie] = useCookies(["cloudynest_jwt_token"]);
 	const [show, setShow] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [email, setEmail] = useState("");
@@ -91,8 +94,8 @@ const SellerLogin = (props: Props) => {
 				toastAlert("warning", data);
 				setPasswordError(data);
 			} else {
-				toastAlert("success", "Congrats! Your are successfully registered");
-				localStorage.setItem("cloudynest_jwt_token", data.token as string);
+				toastAlert("success", "Congrats! Your are successfully Login");
+				setCookie("cloudynest_jwt_token", data.token);
 				router.replace("/supplier/dashboard/" + data.token);
 			}
 			setIsLoading(false);

@@ -10,8 +10,7 @@ const useThrottle = () => {
             func()
             lastTime.current = Date.now()
 		}
-
-
+		
 	};
 };
 
