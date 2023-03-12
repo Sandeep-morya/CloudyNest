@@ -3,10 +3,32 @@ import Category from "@/components/Content/Category";
 import Products from "@/components/Content/Products";
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
+import { FinalProductType } from "@/Types";
 import { Flex, Heading, Stack } from "@chakra-ui/react";
+import axios from "axios";
 import Head from "next/head";
+import { useEffect, useState } from "react";
+
+const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
+const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
+const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
+const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function Home() {
+	const [productList, setProductList] = useState([] as FinalProductType[]);
+
+	async function getProducts() {
+		try {
+			const { data } = await axios.get(`${base_url}/product/all`);
+			setProductList(data);
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	useEffect(() => {
+		getProducts();
+	}, []);
 	return (
 		<>
 			<Head>
@@ -27,7 +49,7 @@ export default function Home() {
 					</Heading>
 					<Flex justifyContent={"space-between"} alignItems="flex-start">
 						<Category />
-						<Products />
+						<Products products={productList} />
 					</Flex>
 				</Stack>
 				{/* <Footer /> */}

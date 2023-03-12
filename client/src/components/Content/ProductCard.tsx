@@ -1,4 +1,6 @@
-﻿import {
+﻿import originalPriceBeforeDiscount from "@/functions/originalPriceBeforeDiscount";
+import { FinalProductType } from "@/Types";
+import {
 	Badge,
 	Box,
 	Button,
@@ -10,50 +12,65 @@
 	Stack,
 	Text,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
 
-type Props = {};
+type Props = {
+	product: FinalProductType;
+};
 
-const ProductCard = (props: Props) => {
+const ProductCard = ({ product }: Props) => {
+	const router = useRouter();
 	return (
 		<Stack
 			borderRadius="0.3rem"
 			bgColor={"white"}
 			overflow="hidden"
 			spacing={0}
+			onClick={() => router.push(`/product/${product._id}`)}
 			boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px">
-			<Box position={"relative"} className="product_card_image_div">
-				<Image
-					w="100%"
-					h="100%"
-					src="https://images.meesho.com/images/products/162170012/trtzs_400.webp"
-					alt="t-shirt"
-				/>
+			<Box
+				w="100%"
+				h="18rem"
+				position={"relative"}
+				cursor="pointer"
+				className="product_card_image_div">
+				<Image w="100%" h="100%" src={product.thumbnail} alt={product.title} />
 
 				<FaHeart className="heart_icon" color="white" />
 			</Box>
 
 			<Stack p="0.5rem" spacing="3">
-				<Flex alignItems="baseline" justifyContent={"space-between"}>
-					<Text>Urban T-shirt</Text>
-					<Badge borderRadius={"0.5rem"} colorScheme="teal">
-						Success
-					</Badge>
-				</Flex>
+				<Badge borderRadius={"0.5rem"} maxW={"max-content"} colorScheme="teal">
+					{product.brand}
+				</Badge>
+				<Text h="3rem">{product.title}</Text>
+
 				<Divider />
 				<Flex alignItems="center" justifyContent={"space-between"}>
 					<HStack alignItems="baseline">
-						<Heading fontSize={"1.2rem"}>₹ 150</Heading>
-						<Text color="blackAlpha.700">onwards</Text>
+						<Heading fontSize={"1.2rem"}>₹{product.price}</Heading>
+						<Text color="blackAlpha.700">
+							{product.discount < 1 ? (
+								"onwards"
+							) : (
+								<Text fontSize={"0.9rem"} as="s">
+									₹
+									{originalPriceBeforeDiscount(product.price, product.discount)}
+								</Text>
+							)}
+						</Text>
 					</HStack>
-					<Image
-						filter={"drop-shadow(0 0 2px rgba(0,0,0,0.5))"}
-						w={5}
-						h={5}
-						src="/CloudyNest-Logo-Image.png"
-						alt="recommeded"
-					/>
+					{product.assured && (
+						<Image
+							filter={"drop-shadow(0 0 2px rgba(0,0,0,0.5))"}
+							w={5}
+							h={5}
+							src="/CloudyNest-Logo-Image.png"
+							alt="recommeded"
+						/>
+					)}
 				</Flex>
 				<Divider />
 				<Flex alignItems="center" justifyContent={"space-between"}>
@@ -63,7 +80,7 @@ const ProductCard = (props: Props) => {
 						color="white"
 						p="0.2rem 0.5rem"
 						borderRadius={"2rem"}>
-						<Box>4.0</Box>
+						<Box>{product.rating}</Box>
 						<FaStar />
 					</HStack>
 					<Text>Free Delivery</Text>
