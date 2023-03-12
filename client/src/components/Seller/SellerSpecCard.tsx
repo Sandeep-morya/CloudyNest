@@ -20,10 +20,10 @@ const SellerSpecCard = ({ count, title, Icon }: Props) => {
 			outline={"1px dashed teal"}>
 			<Icon size="25" color="teal" />
 			<Heading as="h2" size="sm" color={"teal"}>
-				2000+
+				{count}
 			</Heading>
 			<Heading as="h2" size="sm" color={"teal"}>
-				Reviews
+				{title}
 			</Heading>
 			<Spacer />
 			<Spacer />
