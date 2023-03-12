@@ -28,23 +28,46 @@ export interface sellerProfileType {
 }
 
 export interface productType {
-	title?: string
-	brand?: string
-	description?: string
-	thumbnail?: string
-	images?: string[]
+	title?: string;
+	brand?: string;
+	description?: string;
+	thumbnail?: string;
+	images?: string[];
 	price?: number;
-	tags?: string[]
+	tags?: string[];
 
-	quantity?:number;
-	discount?:number;
+	quantity?: number;
+	discount?: number;
 	seller?: string;
-	rating?: number
+	rating?: number;
 
 	/* Extras */
 	assured?: boolean;
-	is_for?: string
-	for_gender?: string
-	for_age?: string
-	sizes?: string [];
+	is_for?: string;
+	for_gender?: string;
+	for_age?: string;
+	sizes?: string[];
+}
+
+export interface FinalProductType {
+	_id: string;
+	title: string;
+	brand: string;
+	description: string;
+	thumbnail: string;
+	images: string[];
+	price: number;
+	tags: string[];
+	quantity: number;
+	discount: number;
+	seller: string;
+	rating: number;
+	assured: false;
+	is_for: string;
+	for_gender: string;
+	for_age: string;
+	sizes: string[];
+	__v: number;
+	createdAt: string;
+	updatedAt: string;
 }

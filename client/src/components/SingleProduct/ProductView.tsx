@@ -1,19 +1,14 @@
 ﻿import useDebounce from "@/hooks/useDebounce";
 import useToggle from "@/hooks/useToggle";
+import { FinalProductType } from "@/Types";
 import { Box, Flex, Image, Stack } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-type Props = {};
+type Props = {
+	images: string[];
+};
 
-const images = [
-	"https://images.meesho.com/images/products/102841746/yfikp_512.webp",
-	"https://images.meesho.com/images/products/102841746/4dtzp_512.webp",
-	"https://images.meesho.com/images/products/102841749/rxwhv_512.webp",
-	"https://images.meesho.com/images/products/102841747/gxtl8_512.webp",
-	"https://images.meesho.com/images/products/102841747/poriu_512.webp",
-];
-
-const ProductView = (props: Props) => {
+const ProductView = ({ images }: Props) => {
 	const [src, setSrc] = useState(images[0]);
 	const [fullView, setFullView] = useState(true);
 	return (

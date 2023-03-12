@@ -2,6 +2,7 @@
 const asyncHandler = require("express-async-handler");
 const genIdMiddleware = require("../middlewares/genIdMiddleware");
 const Product = require("../models/productModel");
+const Seller = require("../models/sellerModel");
 
 const router = express.Router();
 
@@ -25,6 +26,16 @@ router.get(
 	asyncHandler(async (req, res) => {
 		const _id = req.params.id;
 		const product = await Product.findById({ _id });
+		res.send(product);
+	}),
+);
+router.get(
+	"/seller/:id",
+	asyncHandler(async (req, res) => {
+		const _id = req.params.id;
+		const product = await Seller.findOne({ _id }).select(
+			"image name email address createdAt",
+		);
 		res.send(product);
 	}),
 );

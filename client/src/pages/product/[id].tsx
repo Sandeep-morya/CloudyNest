@@ -19,8 +19,15 @@ import { MdOutlineShoppingCart, MdKeyboardArrowRight } from "react-icons/md";
 import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
 import SellerCard from "@/components/Seller/SellerCard";
+import { GetServerSideProps } from "next";
+import { FinalProductType } from "@/Types";
+import axios, { AxiosResponse } from "axios";
+import originalPriceBeforeDiscount from "@/functions/originalPriceBeforeDiscount";
 
-export default function SingleProduct(){
+interface Props {
+	product: FinalProductType;
+}
+export default function SingleProduct({ product }: Props) {
 	return (
 		<>
 			<Head>
@@ -43,7 +50,7 @@ export default function SingleProduct(){
 					gap={"2rem"}>
 					{/* Visual Side */}
 					<Stack spacing={5}>
-						<ProductView />
+						<ProductView images={product.images} />
 
 						<Flex justifyContent={"flex-end"} gap="2rem">
 							<Button
@@ -86,15 +93,26 @@ export default function SingleProduct(){
 							spacing={"3"}>
 							{/* Title */}
 							<Heading as="h2" size="md" color={"blackAlpha.700"}>
-								Cotton Black Short Sleeves Printed Tshirts_low_ASP
+								{product.title}
 							</Heading>
 
 							{/* Price & Discount */}
-							<Flex>
+							<Flex alignItems={"baseline"} gap="1rem">
 								<Heading as="h1" size="xl">
-									₹ 187
+									₹ {product.price}
 								</Heading>
 								{/* if Discount logic */}
+								{product.discount < 1 ? (
+									"onwards"
+								) : (
+									<Text fontSize={"0.9rem"} as="s">
+										₹
+										{originalPriceBeforeDiscount(
+											product.price,
+											product.discount,
+										)}
+									</Text>
+								)}
 							</Flex>
 
 							{/* Rating and Views */}
@@ -105,72 +123,45 @@ export default function SingleProduct(){
 									color="white"
 									p="0.5rem 1rem"
 									borderRadius={"2rem"}>
-									<Box>4.0</Box>
+									<Box>{product.rating}</Box>
 									<FaStar />
 								</HStack>
 								<Text>Free Delivery</Text>
 							</Flex>
 						</Stack>
 						{/* Size related */}
-						<Stack
-							boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
-							p="1rem"
-							bgColor={"white"}
-							borderRadius="0.3rem"
-							spacing={"1rem"}>
-							<Heading as="h2" size="md" color={"blackAlpha.900"}>
-								Choose your Perfect size
-							</Heading>
-							<Spacer />
-							<Flex gap="1rem" maxW="max-content">
-								<Flex
-									justifyContent="center"
-									alignItems={"center"}
-									border="0.1rem solid teal"
-									borderRadius={"1rem"}
-									color="teal"
-									w={"3rem"}
-									fontWeight="600"
-									h="2rem">
-									M
+						{product.sizes.length > 0 && (
+							<Stack
+								boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
+								p="1rem"
+								bgColor={"white"}
+								borderRadius="0.3rem"
+								spacing={"1rem"}>
+								<Heading as="h2" size="md" color={"blackAlpha.900"}>
+									Choose your Perfect size
+								</Heading>
+								<Spacer />
+								<Flex gap="1rem" maxW="max-content">
+									{product.sizes.map((e, i) => (
+										<Flex
+											key={e + i}
+											justifyContent="center"
+											alignItems={"center"}
+											border="0.1rem solid teal"
+											borderRadius={"1rem"}
+											color="teal"
+											w={"3rem"}
+											fontWeight="600"
+											h="2rem">
+											M
+										</Flex>
+									))}
 								</Flex>
-								<Flex
-									justifyContent="center"
-									alignItems={"center"}
-									border="0.1rem solid teal"
-									borderRadius={"1rem"}
-									color="teal"
-									w={"3rem"}
-									fontWeight="600"
-									h="2rem">
-									L
-								</Flex>
-								<Flex
-									justifyContent="center"
-									alignItems={"center"}
-									border="0.1rem solid teal"
-									borderRadius={"1rem"}
-									color="teal"
-									w={"3rem"}
-									fontWeight="600"
-									h="2rem">
-									XL
-								</Flex>
-								<Flex
-									justifyContent="center"
-									alignItems={"center"}
-									border="0.1rem solid teal"
-									borderRadius={"1rem"}
-									color="teal"
-									w={"3rem"}
-									fontWeight="600"
-									h="2rem">
-									2XL
-								</Flex>
-							</Flex>
-							<Spacer />
-							<Spacer />
-						</Stack>
+								<Spacer />
+								<Spacer />
+							</Stack>
+						)}
+
 						{/* Description */}
 						<Stack
 							boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
@@ -181,19 +172,7 @@ export default function SingleProduct(){
 							<Heading as="h2" size="md" color={"blackAlpha.900"}>
 								Product Details
 							</Heading>
-							<Text>
-								Name : Best Selling Round Neck Half Sleeves t-shirt for mens (
-								Pack of 1 )<br /> Fabric : Cotton
-								<br />
-								Sleeve Length : Short Sleeves <br />
-								Pattern : Printed <br />
-								Net Quantity (N) : 1 <br />
-								Sizes : M (Chest Size : 38 in, Length Size: 26.5 in) <br />L
-								(Chest Size : 40 in, Length Size: 27.5 in) <br />
-								XL (Chest Size : 42 in, Length Size: 28.5 in) <br />
-								Country of Origin : India <br />
-								<br />
-							</Text>
+							<Text>{product.description}</Text>
 						</Stack>
 						{/* Seller Info */}
 						<Stack
@@ -205,11 +184,7 @@ export default function SingleProduct(){
 							<Heading as="h2" size="md" color={"blackAlpha.900"}>
 								Sold By
 							</Heading>
-							<SellerCard />
-							<Flex gap="1rem">
-								<Text textDecoration={"underline"}>Supplier Address :- </Text>
-								<Text>#104, Jaspal colony, Ludhiana Punjab 141007</Text>
-							</Flex>
+							<SellerCard seller_id={product.seller} />
 						</Stack>
 					</Stack>
 				</Flex>
@@ -218,3 +193,21 @@ export default function SingleProduct(){
 		</>
 	);
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	try {
+		const { data }: AxiosResponse<FinalProductType, any> = await axios.get(
+			`${process.env.BASE_URL}/product/${context.query.id}`,
+		);
+		return {
+			props: { product: data },
+		};
+	} catch {
+		return {
+			redirect: {
+				destination: "/",
+				permanent: false,
+			},
+		};
+	}
+};

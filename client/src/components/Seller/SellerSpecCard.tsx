@@ -1,19 +1,21 @@
-﻿import { Heading, Spacer, Stack } from '@chakra-ui/react';
-import React from 'react'
-import { IconType } from 'react-icons';
+﻿import { Flex, Heading, Spacer, Stack } from "@chakra-ui/react";
+import React from "react";
+import { IconType } from "react-icons";
 
 interface Props {
-    count:string|number;
-    title:string;
-    Icon:IconType
+	count: string | number;
+	title: string;
+	Icon: IconType;
 }
 
-const SellerSpecCard = ({count,title,Icon}: Props) => {
-  return (
-		<Stack
-			w="30%"
-			bgColor={"teal.50"}
+const SellerSpecCard = ({ count, title, Icon }: Props) => {
+	return (
+		<Flex
 			p="1rem"
+			flexDirection={"column"}
+			bgColor={"teal.50"}
+			alignContent="center"
+			alignItems="flex-start"
 			borderRadius={"0.5rem"}
 			outline={"1px dashed teal"}>
 			<Icon size="25" color="teal" />
@@ -25,8 +27,8 @@ const SellerSpecCard = ({count,title,Icon}: Props) => {
 			</Heading>
 			<Spacer />
 			<Spacer />
-		</Stack>
+		</Flex>
 	);
-}
+};
 
-export default SellerSpecCard
+export default SellerSpecCard;
