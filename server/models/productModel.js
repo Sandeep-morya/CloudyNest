@@ -36,7 +36,7 @@ const productSchema = mongoose.Schema(
 		is_for: { type: String, default: "every" }, //mens/children/girls/oldies/every
 		for_gender: { type: String, default: "every" }, //male/female/trans/every
 		for_age: { type: String, default: "0-100" }, // 0-2,3-5, 5-8 etc..
-		sizes: [{ type: String, default:[] }], // all types of sizes
+		sizes: [{ type: String, default: [] }], // all types of sizes
 	},
 	{ timestamps: true },
 );

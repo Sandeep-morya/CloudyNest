@@ -12,6 +12,7 @@ const cartRouter = require("./routes/cartRoute");
 const productRouter = require("./routes/productRoute");
 const orderRouter = require("./routes/orderRoute");
 const favouriteRouter = require("./routes/favouriteRoute");
+const Product = require("./models/productModel");
 
 /* 😂 more variables */
 const app = express();
@@ -27,6 +28,13 @@ app.use("/cart", cartRouter);
 app.use("/product", productRouter);
 app.use("/orders", orderRouter);
 app.use("/favourites", favouriteRouter);
+
+// :: curretly for devs toa add mulitple objects ::
+
+// app.post("/",async(req,res)=>{
+// 	const data = await Product.insertMany(req.body)
+// 	res.send(data)
+// })
 
 app.listen(process.env.PORT, () =>
 	console.log("server in running on " + process.env.PORT),
