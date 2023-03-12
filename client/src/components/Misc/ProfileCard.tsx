@@ -29,7 +29,7 @@ const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const ProfileCard = ({ data }: Props) => {
-	const [cookies] = useCookies(["cloudynest_jwt_token"]);
+	const [cookies] = useCookies();
 	const [imageSrc, setImageSrc] = useState(data.image);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);

@@ -1,4 +1,5 @@
-﻿import { FinalProductType } from "@/Types";
+﻿import useToastAlert from "@/hooks/useToastalert";
+import { FinalProductType } from "@/Types";
 import {
 	Box,
 	Button,
@@ -13,6 +14,7 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
 import { FaEye, FaPencilAlt, FaTrash } from "react-icons/fa";
+import { MdAddCircle } from "react-icons/md";
 import ProductCard from "../Content/ProductCard";
 type Props = {
 	seller_id: string;
@@ -23,9 +25,9 @@ const AllProducts = ({ seller_id }: Props) => {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
-	const [cookies, setCookie] = useCookies(["cloudynest_jwt_token"]);
+	const [cookies, setCookie] = useCookies();
 	const router = useRouter();
-
+	const toastAlert = useToastAlert();
 	const getProducts = useCallback(
 		async function () {
 			setIsLoading(true);
@@ -43,6 +45,9 @@ const AllProducts = ({ seller_id }: Props) => {
 		[cookies.cloudynest_jwt_token],
 	);
 	// console.log(productList);
+	async function handleDelete(id: string) {
+		toastAlert("success", id);
+	}
 
 	useEffect(() => {
 		getProducts();
@@ -52,16 +57,21 @@ const AllProducts = ({ seller_id }: Props) => {
 	}
 
 	return (
-		<Stack w="100%" borderRadius="0.5rem" p="1rem">
+		<Stack w="100%" borderRadius="0.5rem" p="1rem" bgColor={"white"}>
 			<Flex w="100%" justifyContent={"space-between"} p="1.5rem">
-				<Heading as="h1" size="lg">
-					Showing All the Products
+				<Heading as="h1" size="lg" color="gray">
+					Showing uploaded products
 				</Heading>
 				<Button
+					_hover={{
+						background: "teal.100",
+					}}
+					colorScheme="teal"
+					leftIcon={<MdAddCircle />}
 					onClick={() =>
 						router.push("/supplier/add_product/" + router.query.id)
 					}>
-					Add Product
+					Add a new Product
 				</Button>
 			</Flex>
 
@@ -70,6 +80,7 @@ const AllProducts = ({ seller_id }: Props) => {
 			<SimpleGrid
 				w="100%"
 				gap="2rem"
+				p="1rem"
 				columns={{ base: 1, sm: 1, md: 3, lg: 3, xl: 4, "2xl": 5 }}>
 				{productList.map((product, i) => (
 					<Box key={product._id + i * 2} className="seller_product_item">
@@ -82,7 +93,11 @@ const AllProducts = ({ seller_id }: Props) => {
 									View
 								</Button>
 								<Button leftIcon={<FaPencilAlt />}>Edit</Button>
-								<Button leftIcon={<FaTrash />}>Delete</Button>
+								<Button
+									onClick={() => handleDelete(product._id)}
+									leftIcon={<FaTrash />}>
+									Delete
+								</Button>
 							</Box>
 						</Box>
 					</Box>

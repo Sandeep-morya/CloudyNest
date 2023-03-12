@@ -84,6 +84,7 @@ console.log("data",data); */
 						w="100%"
 						p={{ md: "0", xl: "0", "2xl": "2rem 15rem" }}
 						justifyContent={"center"}
+						spacing="2rem"
 						alignItems="center">
 						<ProfileCard data={data} />
 

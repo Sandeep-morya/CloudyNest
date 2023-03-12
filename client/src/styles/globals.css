@@ -70,6 +70,7 @@ button:hover{
     position: relative;
     overflow: hidden;
     border-radius: 0.5rem;
+    box-shadow: 0 0 5px black;
 }
 .seller_product_item:hover .seller_product_menu{
     /* margin-top: 0; */
