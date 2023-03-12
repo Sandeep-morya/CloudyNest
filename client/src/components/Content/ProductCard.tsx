@@ -38,16 +38,16 @@ const ProductCard = ({ product }: Props) => {
 				className="product_card_image_div">
 				<Image w="100%" h="100%" src={product.thumbnail} alt={product.title} />
 
-				<FaHeart className="heart_icon" color="white" />
+				{/* <FaHeart className="heart_icon" color="white" /> */}
 			</Box>
 
 			<Stack p="0.5rem" spacing="3">
 				<Badge borderRadius={"0.5rem"} maxW={"max-content"} colorScheme="teal">
 					{product.brand}
 				</Badge>
+
 				<Text h="3rem">{product.title}</Text>
 
-				<Divider />
 				<Flex alignItems="center" justifyContent={"space-between"}>
 					<HStack alignItems="baseline">
 						<Heading fontSize={"1.2rem"}>₹{product.price}</Heading>
@@ -72,7 +72,11 @@ const ProductCard = ({ product }: Props) => {
 						/>
 					)}
 				</Flex>
-				<Divider />
+				<Divider
+					borderWidth="0.1rem"
+					borderRadius={"1rem"}
+					borderColor="blackAlpha.400"
+				/>
 				<Flex alignItems="center" justifyContent={"space-between"}>
 					<HStack
 						fontSize={"sm"}

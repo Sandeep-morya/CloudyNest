@@ -66,4 +66,31 @@ button:hover{
     margin-top: -1%;
 }
 
-/*  */
+.seller_product_item{
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+}
+.seller_product_item:hover .seller_product_menu{
+    /* margin-top: 0; */
+    opacity: 1;
+}
+.seller_product_menu{
+    position: absolute;
+    top:0;
+    left:0;
+    /* margin-top: 200%; */
+    background-color: rgba(0, 128, 128, 0.8);
+    width: 100%;
+    height: 100%;
+    display: grid;
+    opacity: 0;
+    place-items: center;
+    transition: all 0.3s;
+
+}
+.seller_product_menu >div{
+
+    display: grid;
+    gap:1.5rem;
+}

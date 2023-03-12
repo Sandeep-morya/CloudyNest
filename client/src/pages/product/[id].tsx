@@ -153,7 +153,7 @@ export default function SingleProduct({ product }: Props) {
 											w={"3rem"}
 											fontWeight="600"
 											h="2rem">
-											M
+											{e}
 										</Flex>
 									))}
 								</Flex>
