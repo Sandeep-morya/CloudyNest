@@ -7,7 +7,7 @@ type Props = {};
 const Dashboard = (props: Props) => {
 	return (
 		<Flex w="75%" border={"1px solid red"}>
-			<SellerCard />
+			Dashboard
 		</Flex>
 	);
 };
