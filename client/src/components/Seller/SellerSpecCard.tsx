@@ -12,6 +12,7 @@ const SellerSpecCard = ({ count, title, Icon }: Props) => {
 	return (
 		<Flex
 			p="1rem"
+			flex="1"
 			flexDirection={"column"}
 			bgColor={"teal.50"}
 			alignContent="center"

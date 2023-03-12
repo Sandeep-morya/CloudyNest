@@ -65,7 +65,11 @@ const SellerCard = ({ seller_id }: Props) => {
 				alignItems="flex-start"
 				p="1rem"
 				gap="2rem">
-				<Stack spacing={"1rem"} textAlign="center">
+				<Stack
+					maxW={"min-content"}
+					spacing={"1rem"}
+					textAlign="center"
+					alignItems={"center"}>
 					<Avatar
 						outline={"0.15rem solid teal"}
 						outlineOffset="0.2rem"
@@ -73,7 +77,7 @@ const SellerCard = ({ seller_id }: Props) => {
 						name={supplierProfile.name}
 						src={supplierProfile.image}
 					/>
-					<Heading as="h2" size="md" color={"blackAlpha.900"}>
+					<Heading as="h2" size="md" color={"gray"}>
 						{supplierProfile.name}
 					</Heading>
 				</Stack>
