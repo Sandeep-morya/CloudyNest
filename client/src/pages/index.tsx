@@ -20,11 +20,14 @@ export default function Home() {
 	const [isError, setIsError] = useState(false);
 
 	async function getProducts() {
+		setIsLoading(true);
 		try {
 			const { data } = await axios.get(`${base_url}/product/all`);
 			setProductList(data);
+			setIsLoading(false);
 		} catch (error) {
-			console.log(error);
+			setIsLoading(false);
+			setIsError(true);
 		}
 	}
 
