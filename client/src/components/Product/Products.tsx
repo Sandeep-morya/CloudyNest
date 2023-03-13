@@ -5,15 +5,20 @@ import ProductCard from "./ProductCard";
 
 type Props = {
 	products: FinalProductType[];
+	isLoading: boolean;
+	isError: boolean;
 };
 
-const Products = ({ products }: Props) => {
-	if (products.length < 1) {
+const Products = ({ isLoading, isError, products }: Props) => {
+	if (isLoading) {
 		return (
 			<Center w={"70%"}>
 				<Spinner size="xl" color="teal.400" thickness="0.3rem" />
 			</Center>
 		);
+	}
+	if (isError) {
+		return <Center w={"70%"}>Server Error</Center>;
 	}
 	return (
 		<Stack w={"70%"}>

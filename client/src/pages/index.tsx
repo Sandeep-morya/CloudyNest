@@ -16,6 +16,8 @@ const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function Home() {
 	const [productList, setProductList] = useState([] as FinalProductType[]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
 
 	async function getProducts() {
 		try {
@@ -49,7 +51,7 @@ export default function Home() {
 					</Heading>
 					<Flex justifyContent={"space-between"} alignItems="flex-start">
 						<Category />
-						<Products products={productList} />
+						<Products products={productList} {...{ isLoading, isError }} />
 					</Flex>
 				</Stack>
 				{/* <Footer /> */}
