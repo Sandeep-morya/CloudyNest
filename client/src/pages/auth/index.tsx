@@ -39,7 +39,7 @@ export default function UserAuthentication() {
 						pt="0.5rem"
 						pb="1rem"
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
-						<Navbar hideExtras={true} />
+						<Navbar cartCount={0} hideExtras={true} />
 					</Box>
 					<Box
 						h="100%"

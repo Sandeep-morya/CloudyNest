@@ -1,4 +1,5 @@
 ﻿import {
+	Badge,
 	Button,
 	Divider,
 	Flex,
@@ -22,27 +23,31 @@ import { Theme } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
 import { useCookies } from "react-cookie";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import useLogout from "@/hooks/useLogout";
 
 interface Props {
+	cartCount:number
 	hideExtras: boolean;
 }
 
 const secret = process.env.NEXT_PUBLIC_SECERT as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
-const Navbar = ({ hideExtras }: Props) => {
+const Navbar = ({cartCount, hideExtras }: Props) => {
 	const [cookies] = useCookies();
 	const [hidden, setHidden] = useState(true);
 	const [serachBarText, setSearchBarText] = useState("");
 	const [username, setUsername] = useState("");
 	const router = useRouter();
+	const [cartItems, setCartItems] = useState(cartCount);
+
+
 	const logout = useLogout("user_cloudynest_jwt_token");
+	const token = cookies.user_cloudynest_jwt_token;
 
 	const getUser = useCallback(
 		async function () {
-			const token = cookies.user_cloudynest_jwt_token;
 			try {
 				// :: if verifaction failed it will go in catch ::
 				if (!token) {
@@ -50,19 +55,39 @@ const Navbar = ({ hideExtras }: Props) => {
 				}
 
 				const { data } = await axios.get(`${base_url}/user/profile`, {
-					headers: { Authorization: cookies.user_cloudynest_jwt_token },
+					headers: { Authorization: token },
 				});
 				setUsername(data.name);
 			} catch (error) {
 				console.log(error);
 			}
 		},
-		[cookies.user_cloudynest_jwt_token],
+		[token],
 	);
+
+const getUserCart = useCallback(async () => {
+	try {
+		if (!token) {
+			return;
+		}
+		const { data }= await axios.get(base_url + "/cart", {
+			headers: { Authorization: token },
+		});
+		setCartItems(data.length);
+	} catch (error) {
+		setCartItems(0)
+	}
+}, [token]);
+
+useEffect(() => {
+	getUserCart();
+}, [getUserCart,cartCount]);
 
 	useEffect(() => {
 		getUser();
 	}, [getUser]);
+
+
 	return (
 		<Flex
 			w="100%"
@@ -86,7 +111,7 @@ const Navbar = ({ hideExtras }: Props) => {
 				<Spacer />
 				<Spacer />
 
-				<InputGroup>
+				<InputGroup hidden={hideExtras}>
 					<InputLeftElement pointerEvents="none" top="4px">
 						<FiSearch size={18} />
 					</InputLeftElement>
@@ -146,13 +171,23 @@ const Navbar = ({ hideExtras }: Props) => {
 					borderWidth={".1rem"}
 					borderColor={"rgba(0,0,0,0.2)"}
 				/>
-				<Button
-					hidden={hideExtras}
-					variant={"none"}
-					leftIcon={<MdOutlineShoppingCart size={22} />}>
-					Cart
-				</Button>
-
+				<div className="cart_icon_div">
+					<Button
+						hidden={hideExtras}
+						variant={"none"}
+						onClick={() => router.push("/user/cart")}
+						leftIcon={<MdOutlineShoppingCart size={22} />}>
+						Cart
+					</Button>
+					{cartItems > 0 && (
+						<Badge
+							className="cart_count"
+							borderRadius={"50%"}
+							colorScheme="teal">
+							{cartItems}
+						</Badge>
+					)}
+				</div>
 				{/* This Box is will be present under profile section */}
 				<Stack
 					position="absolute"
@@ -189,6 +224,7 @@ const Navbar = ({ hideExtras }: Props) => {
 							onClick={() => {
 								logout();
 								setUsername("");
+								setCartItems(0)
 							}}
 							_hover={{
 								background: "teal",
