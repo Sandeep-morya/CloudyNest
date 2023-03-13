@@ -80,7 +80,6 @@ export default function SingleProduct({ product }: Props) {
 			console.log(error);
 		}
 	}, [token]);
-	console.log(cartItems)
 
 	useEffect(() => {
 		getUserCart();

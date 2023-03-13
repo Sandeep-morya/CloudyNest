@@ -32,30 +32,25 @@ import { useRouter } from "next/router";
 import ProgressSteps from "@/components/Cart/ProgressSteps";
 import Cart from "@/components/Cart/Cart";
 import CartNav from "@/components/Cart/CartNav";
+import { GetServerSideProps } from "next";
+import axios, { AxiosResponse } from "axios";
+import useThrottle from "@/hooks/useThrottle";
+import useToastAlert from "@/hooks/useToastalert";
 
-const initalState = {
-	f_name: "",
-	l_name: "",
-	email: "",
-	password: "",
-	c_password: "",
-	address: "",
-	gst_no: "",
-	checked: true,
-	image:
-		"https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
-};
+interface Props {
+	cartList: string[];
+}
 
-export default function SingleUserCart() {
+export default function SingleUserCart({ cartList }: Props) {
 	const [state, setState] = useState(0);
-	const [showLogin, setShowLogin] = useState(false);
-	const [show, setShow] = useState(false);
-	const [formData, setFormData] = useState(initalState);
+	const [cartItemsList, setCartItemsList] = useState(cartList);
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
-	const router = useRouter();
 
-	const [cartAmount,setCartAmount] = useState(0)
+	const router = useRouter();
+	const throttle = useThrottle();
+	const toastAlert = useToastAlert();
 
 	useEffect(() => {
 		if (state > 70) {
@@ -88,7 +83,7 @@ export default function SingleUserCart() {
 						pb="1rem"
 						zIndex={5}
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
-						<CartNav {...{state}}/>
+						<CartNav {...{ state }} />
 					</Box>
 
 					<Stack
@@ -97,12 +92,10 @@ export default function SingleUserCart() {
 						bgColor={"blackAlpha.100"}
 						p={{ md: "2rem 0", xl: "2rem 0", "2xl": "2rem 15rem" }}
 						alignItems={"center"}>
-
-
-						<Flex w="100%" justifyContent={"space-between"} gap="2rem" >
+						<Flex w="100%" justifyContent={"space-between"} gap="2rem">
 							{/* Cart  */}
 							<Box flex="1">
-								<Cart />
+								<Cart cartList={cartItemsList} />
 							</Box>
 							<Divider
 								height="auto"
@@ -146,3 +139,25 @@ export default function SingleUserCart() {
 		</>
 	);
 }
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	try {
+		const { data }: AxiosResponse<string[]> = await axios.get(
+			`${process.env.BASE_URL}/cart`,
+			{
+				headers: {
+					Authorization: context.req.cookies.user_cloudynest_jwt_token,
+				},
+			},
+		);
+		return {
+			props: { cartList: data },
+		};
+	} catch {
+		return {
+			redirect: {
+				destination: "/supplier",
+				permanent: false,
+			},
+		};
+	}
+};

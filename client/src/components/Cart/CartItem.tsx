@@ -1,4 +1,5 @@
-﻿import {
+﻿import { FinalProductType } from "@/Types";
+import {
 	Box,
 	Button,
 	Divider,
@@ -8,18 +9,43 @@
 	Stack,
 	Text,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import axios, { AxiosResponse } from "axios";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { TbPlus, TbMinus } from "react-icons/tb";
 
-type Props = {};
-const price=387;
-const CartItem = (props: Props) => {
+type Props = {
+	id: string;
+	deleteCartItem: (id: string) => Promise<void>;
+};
+const price = 387;
+const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
+
+const CartItem = ({ id, deleteCartItem }: Props) => {
 	const [count, setCount] = useState(1);
-    const [totalPrice,setTotalPrice] = useState(price)
-    useEffect(()=>{
-        setTotalPrice(count*price)
-    },[count])
+	const [product, setProduct] = useState({} as FinalProductType);
+	const [totalPrice, setTotalPrice] = useState(0);
+	useEffect(() => {
+		setTotalPrice(count * product.price || 0);
+	}, [count, product.price]);
+
+	const getProduct = useCallback(
+		async function () {
+			try {
+				const { data }: AxiosResponse<FinalProductType, any> = await axios.get(
+					`${base_url}/product/${id}`,
+				);
+				setProduct(data);
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		[id],
+	);
+
+	useEffect(() => {
+		getProduct();
+	}, [getProduct]);
 	return (
 		<Stack
 			spacing={0}
@@ -33,18 +59,18 @@ const CartItem = (props: Props) => {
 					<Image
 						w={"7rem"}
 						h={"7rem"}
-                        borderRadius="0.5rem"
-                        objectFit={"cover"}
-						src="https://images.meesho.com/images/products/19519349/3acaf_512.jpg"
-						alt="image"
+						borderRadius="0.5rem"
+						objectFit={"cover"}
+						src={product.thumbnail}
+						alt={product.title}
 					/>
 					<Stack>
 						<Text fontWeight={"600"} fontSize="1.1rem">
-							Unique Men Watches
+							{product.title}
 						</Text>
 						<Text>Size: Free Size</Text>
 
-						<Text>₹ {price}</Text>
+						<Text>₹ {product.price}</Text>
 					</Stack>
 				</Flex>
 
@@ -82,6 +108,9 @@ const CartItem = (props: Props) => {
 						/>
 					</Flex>
 					<Button
+						onClick={() => {
+							deleteCartItem(product._id);
+						}}
 						leftIcon={<FaTrash />}
 						variant="solid"
 						colorScheme={"teal"}>
@@ -91,7 +120,7 @@ const CartItem = (props: Props) => {
 			</Flex>
 			<Divider borderColor={"rgba(0,0,0,0.1)"} />
 			<Flex p="1rem" justifyContent={"space-between"}>
-				<Text>Supplier : {"seller Name"}</Text>
+				<Text>Brand : {product.brand}</Text>
 				<Text>Total Price : ₹ {totalPrice}</Text>
 			</Flex>
 		</Stack>

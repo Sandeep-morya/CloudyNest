@@ -43,11 +43,11 @@ router.patch(
 /* Delete cart Itmes */
 
 router.delete(
-	"/",
+	"/:id",
 	asyncHandler(async (req, res) => {
-		const { _id, items, productID } = req.body;
+		const { _id, items } = req.body;
 
-		const updatedItems = items.filter(e=>e!=productID)
+		const updatedItems = items.filter((e) => e != req.params.id);
 
 		const data = await Cart.findOneAndUpdate(
 			{ _id },
@@ -55,7 +55,7 @@ router.delete(
 			{ returnOriginal: false },
 		).select("items");
 
-		res.send(data.items);
+		res.send(updatedItems);
 	}),
 );
 
