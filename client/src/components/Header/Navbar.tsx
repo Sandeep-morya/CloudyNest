@@ -166,10 +166,12 @@ const Navbar = ({ hideExtras }: Props) => {
 					boxShadow="0 0 5px #111"
 					borderRadius={"0.3rem"}>
 					<Heading as="h3" size="md">
-						Hello {username == "" ? "User" : username}
+						Hello {username === "" ? "User" : username}
 					</Heading>
-					<Text fontSize={".8rem"}>To access your Meesho account</Text>
-					{username == "" ? (
+					{username === "" && (
+						<Text fontSize={".8rem"}>To access your Meesho account</Text>
+					)}
+					{username === "" ? (
 						<Button
 							variant="solid"
 							colorScheme={"teal"}
