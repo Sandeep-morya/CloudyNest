@@ -1,6 +1,6 @@
 import Advertisments from "@/components/Content/Advertisments";
 import Category from "@/components/Content/Category";
-import Products from "@/components/Content/Products";
+import Products from "@/components/Product/Products";
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
 import { FinalProductType } from "@/Types";

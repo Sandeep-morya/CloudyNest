@@ -1,7 +1,7 @@
 ﻿import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
-import ProductView from "@/components/SingleProduct/ProductView";
-import Recommendation from "@/components/SingleProduct/Recommendation";
+import ProductView from "@/components/Product/ProductView";
+import Recommendation from "@/components/Product/Recommendation";
 import {
 	Box,
 	Button,
