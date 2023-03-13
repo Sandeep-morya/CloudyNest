@@ -15,7 +15,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Cookies, useCookies } from "react-cookie";
 import { FaEye, FaPencilAlt, FaTrash } from "react-icons/fa";
 import { MdAddCircle } from "react-icons/md";
-import ProductCard from "../Content/ProductCard";
+import ProductCard from "../Product/ProductCard";
 type Props = {
 	seller_id: string;
 };

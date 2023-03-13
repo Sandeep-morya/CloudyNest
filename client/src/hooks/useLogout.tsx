@@ -2,12 +2,10 @@
 import React from "react";
 import { useCookies } from "react-cookie";
 
-const useLogout = () => {
+const useLogout = (key: string) => {
 	const [_, setCookie, removeCookie] = useCookies();
-	const router = useRouter();
 	return () => {
-		removeCookie("cloudynest_jwt_token");
-		router.replace("/supplier");
+		removeCookie(key);
 	};
 };
 

@@ -20,6 +20,11 @@ router.post(
 	"/register",
 	asyncHandler(async (req, res) => {
 		const { name, email, password } = req.body;
+		const emailExists = await User.findOne({ email });
+		if (emailExists) {
+			res.send("Email ID already Registered");
+			return;
+		}
 
 		const hasedPassword = await bcrypt.hash(String(password), 5);
 
@@ -32,16 +37,12 @@ router.post(
 		const cart = await new Cart({ _id });
 		cart.save();
 
-
 		/* Activating favuirtes Features for user */
 
 		const favourite = await new Favourite({ _id });
 		favourite.save();
 
-
-		const token = jwt.sign({ id: _id }, process.env.SECERT, {
-			expiresIn: "7d",
-		});
+		const token = jwt.sign(_id.toString(), process.env.SECERT);
 		res.send({ error: false, token });
 	}),
 );
@@ -53,16 +54,20 @@ router.post(
 	asyncHandler(async (req, res) => {
 		const { email, password } = req.body;
 		const user = await User.findOne({ email });
-		if (!user) throw new Error("User not Found");
+		if (!user) {
+			res.send("Above Email is not registered with us");
+			return;
+		}
 		/* else */
 
 		const auth = await bcrypt.compare(String(password), user.password);
 
-		if (!auth) throw new Error("User Authorization failed");
+		if (!auth) {
+			res.send("Oopss.. you have enterd a wrong password");
+			return;
+		}
 
-		const token = jwt.sign({ id: user._id }, process.env.SECERT, {
-			expiresIn: "7d",
-		});
+		const token = jwt.sign(user._id.toString(), process.env.SECERT);
 		res.send({ error: false, token });
 	}),
 );
@@ -102,7 +107,5 @@ router.patch(
 		res.send(user);
 	}),
 );
-
-
 
 module.exports = router;
