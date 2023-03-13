@@ -41,7 +41,7 @@ export default function Home() {
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
 			</Head>
 			<main>
-				<Header />
+				<Header cartCount={0} />
 				<Stack spacing={5} w={"75%"} m="auto">
 					<Advertisments />
 					<Heading size="xl" as="h2">
