@@ -13,22 +13,56 @@
 	Text,
 	theme,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FiSearch, FiUser } from "react-icons/fi";
 import { GiSmartphone } from "react-icons/gi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { BsBagCheck } from "react-icons/bs";
 import { Theme } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import jwt from "jsonwebtoken";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import useLogout from "@/hooks/useLogout";
 
 interface Props {
 	hideExtras: boolean;
 }
 
+const secret = process.env.NEXT_PUBLIC_SECERT as string;
+const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
+
 const Navbar = ({ hideExtras }: Props) => {
+	const [cookies] = useCookies();
 	const [hidden, setHidden] = useState(true);
 	const [serachBarText, setSearchBarText] = useState("");
+	const [username, setUsername] = useState("");
 	const router = useRouter();
+	const logout = useLogout("user_cloudynest_jwt_token");
+
+	const getUser = useCallback(
+		async function () {
+			const token = cookies.user_cloudynest_jwt_token;
+			try {
+				// :: if verifaction failed it will go in catch ::
+				if (!token) {
+					return;
+				}
+
+				const { data } = await axios.get(`${base_url}/user/profile`, {
+					headers: { Authorization: cookies.user_cloudynest_jwt_token },
+				});
+				setUsername(data.name);
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		[cookies.user_cloudynest_jwt_token],
+	);
+
+	useEffect(() => {
+		getUser();
+	}, [getUser]);
 	return (
 		<Flex
 			w="100%"
@@ -132,19 +166,37 @@ const Navbar = ({ hideExtras }: Props) => {
 					boxShadow="0 0 5px #111"
 					borderRadius={"0.3rem"}>
 					<Heading as="h3" size="md">
-						Hello User
+						Hello {username === "" ? "User" : username}
 					</Heading>
-					<Text fontSize={".8rem"}>To access your Meesho account</Text>
-					<Button
-						variant="solid"
-						colorScheme={"teal"}
-						onClick={() => router.push("/auth")}
-						_hover={{
-							background: "teal",
-							color: "white",
-						}}>
-						Sign Up
-					</Button>
+					{username === "" && (
+						<Text fontSize={".8rem"}>To access your Meesho account</Text>
+					)}
+					{username === "" ? (
+						<Button
+							variant="solid"
+							colorScheme={"teal"}
+							onClick={() => router.push("/auth")}
+							_hover={{
+								background: "teal",
+								color: "white",
+							}}>
+							Sign Up
+						</Button>
+					) : (
+						<Button
+							variant="solid"
+							colorScheme={"teal"}
+							onClick={() => {
+								logout();
+								setUsername("");
+							}}
+							_hover={{
+								background: "teal",
+								color: "white",
+							}}>
+							Logout
+						</Button>
+					)}
 					<Divider />
 					<Button variant="ghost" leftIcon={<BsBagCheck />}>
 						My Orders

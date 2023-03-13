@@ -36,11 +36,12 @@ import axios, { AxiosResponse } from "axios";
 import { sellerProfileType, SellerType } from "@/Types";
 import ProfileCard from "@/components/Misc/ProfileCard";
 import { useRouter } from "next/router";
+import AllProducts from "@/components/Seller/AllProducts";
 
 interface Props {
 	// auth: boolean;
 	// token: string;
-	data: SellerType;
+	data: sellerProfileType;
 }
 
 export default function Seller({ data }: Props) {
@@ -83,14 +84,11 @@ console.log("data",data); */
 						w="100%"
 						p={{ md: "0", xl: "0", "2xl": "2rem 15rem" }}
 						justifyContent={"center"}
+						spacing="2rem"
 						alignItems="center">
 						<ProfileCard data={data} />
-						<Button
-							onClick={() =>
-								router.push("/supplier/add_product/" + router.query.id)
-							}>
-							Add Product
-						</Button>
+
+						<AllProducts seller_id={data._id} />
 					</Stack>
 				</Stack>
 			</main>

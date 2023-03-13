@@ -71,3 +71,20 @@ export interface FinalProductType {
 	createdAt: string;
 	updatedAt: string;
 }
+
+export interface userFormType {
+	name?: string;
+	email: string;
+	password: string;
+}
+export interface FinalUserType {
+	_id: string;
+	name: string;
+	email: string;
+	mobile: string;
+	address: string[];
+	isPrime: false;
+	createdAt: string;
+	updatedAt: string;
+	__v: number;
+}

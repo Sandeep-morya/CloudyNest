@@ -83,7 +83,7 @@ router.get(
 
 /* find products of seller */
 router.get(
-	"/products/:id",
+	"/products",
 	asyncHandler(async (req, res) => {
 		const { _id } = req.body;
 		const products = await Product.find({ seller: _id });

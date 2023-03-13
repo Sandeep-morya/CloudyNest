@@ -1,7 +1,7 @@
 ﻿import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
-import ProductView from "@/components/SingleProduct/ProductView";
-import Recommendation from "@/components/SingleProduct/Recommendation";
+import ProductView from "@/components/Product/ProductView";
+import Recommendation from "@/components/Product/Recommendation";
 import {
 	Box,
 	Button,
@@ -153,7 +153,7 @@ export default function SingleProduct({ product }: Props) {
 											w={"3rem"}
 											fontWeight="600"
 											h="2rem">
-											M
+											{e}
 										</Flex>
 									))}
 								</Flex>

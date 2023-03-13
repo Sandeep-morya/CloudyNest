@@ -61,7 +61,7 @@ const parse = (val: string) => val.replace(/^\$/, "");
 
 // :: Component ::
 const AddProduct = ({ data }: Props) => {
-	const [cookies, setCookie] = useCookies(["cloudynest_jwt_token"]);
+	const [cookies, setCookie] = useCookies();
 	const [showLogin, setShowLogin] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);

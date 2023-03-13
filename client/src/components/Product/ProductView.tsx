@@ -26,7 +26,10 @@ const ProductView = ({ images }: Props) => {
 						h={20}
 						borderRadius="0.3rem"
 						objectFit="cover"
-						onClick={() => setSrc(e)}
+						onClick={() => {
+							setSrc(e);
+							setFullView(true);
+						}}
 					/>
 				))}
 			</Stack>

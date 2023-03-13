@@ -1,13 +1,26 @@
 ﻿import { sellerProfileType, SellerType } from "@/Types";
-import { Box, Flex, Stack, Image, Heading, Spinner } from "@chakra-ui/react";
+import {
+	Box,
+	Flex,
+	Stack,
+	Image,
+	Heading,
+	Spinner,
+	Center,
+	Text,
+	HStack,
+	Divider,
+} from "@chakra-ui/react";
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { FaPencilAlt } from "react-icons/fa";
+import { FaClock, FaPencilAlt } from "react-icons/fa";
 import axios, { AxiosResponse } from "axios";
 import useToastAlert from "@/hooks/useToastalert";
 import { useCookies } from "react-cookie";
+import { FcCalendar, FcPhone, FcAddressBook } from "react-icons/fc";
+import useDate from "@/hooks/useDate";
 
 type Props = {
-	data: SellerType;
+	data: sellerProfileType;
 };
 
 const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
@@ -16,11 +29,12 @@ const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const ProfileCard = ({ data }: Props) => {
-	const [cookies] = useCookies(["cloudynest_jwt_token"]);
+	const [cookies] = useCookies();
 	const [imageSrc, setImageSrc] = useState(data.image);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const toastAlert = useToastAlert();
+	const date = useDate(data.createdAt);
 
 	// :: Uplaod Image on Cloudnary ::
 	async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
@@ -119,21 +133,41 @@ const ProfileCard = ({ data }: Props) => {
 					/>
 				</Box>
 			</Box>
-			<Flex
-				alignItems={"flex-end"}
-				justifyContent="center"
-				bgColor={"white"}
+
+			<Stack
+				alignItems={"center"}
+				bgColor="white"
 				w="100%"
-				h="20rem">
-				<Heading
-					as="h1"
-					size="3xl"
-					letterSpacing="0.4rem"
-					marginBottom={"4rem"}
-					color={"gray"}>
+				h="20rem"
+				gap="1rem"
+				pb="3rem"
+				flexDirection={"column-reverse"}>
+				<Flex gap="2rem">
+					<HStack title="Joining Date" gap="0.5rem">
+						<FcCalendar size="25" />
+						<Text fontWeight={600} color="gray.500" letterSpacing="0.05rem">
+							{date.toDateString()}
+						</Text>
+					</HStack>
+					<Divider orientation="vertical" borderColor={"rgba(0,0,0,0,5)"} />
+					<HStack title="Email ID" gap="0.5rem">
+						<FcAddressBook size="25" />
+						<Text fontWeight={600} color="gray.500" letterSpacing="0.05rem">
+							{data.email}
+						</Text>
+					</HStack>
+					<Divider orientation="vertical" borderColor={"rgba(0,0,0,0,5)"} />
+					<HStack title="Mobile Number" gap="0.5rem">
+						<FcPhone size="25" />
+						<Text fontWeight={600} color="gray.500" letterSpacing="0.05rem">
+							{data.mobile}
+						</Text>
+					</HStack>
+				</Flex>
+				<Heading as="h1" size="3xl" letterSpacing="0.2rem" color={"gray"}>
 					{data.name}
 				</Heading>
-			</Flex>
+			</Stack>
 		</Stack>
 	);
 };

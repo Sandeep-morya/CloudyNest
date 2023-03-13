@@ -14,9 +14,11 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState } from "react";
+import { GetServerSideProps } from "next";
+import jwt from "jsonwebtoken";
 
-export default function Auth() {
-	const [auth, setAuth] = useState(false);
+export default function UserAuthentication() {
+	const [showlogin, setShowLogin] = useState(true);
 	return (
 		<>
 			<Head>
@@ -30,7 +32,6 @@ export default function Auth() {
 			</Head>
 			<main>
 				<Stack bgColor={"white"} w={"100vw"} spacing={0}>
-
 					<Box
 						position="sticky"
 						top={0}
@@ -59,7 +60,10 @@ export default function Auth() {
 							alignItems="center"
 							borderRadius={"0.3rem"}
 							overflow="hidden">
-							<Image src="/ads/ad1.png" alt="CloudyNest-Complete_logo" />
+							<Image
+								src="https://res.cloudinary.com/due9pi68z/image/upload/v1678684733/phfnut3wovgvebriytsl.png"
+								alt="CloudyNest-ad"
+							/>
 							<Image
 								w={"min-content"}
 								h={150}
@@ -68,16 +72,19 @@ export default function Auth() {
 								alt="CloudyNest-Complete_logo"
 							/>
 
-							{auth ? <Login /> : <SignUp />}
+							{showlogin ? <Login /> : <SignUp />}
 							<BannerHeading size="md" title="or" />
-							{!auth ? (
+
+							{/*  */}
+
+							{!showlogin ? (
 								<Heading as="h2" size="sm" cursor={"pointer"}>
 									{"Already have an account ? "}
 									<Text
 										as="span"
 										fontWeight={"600"}
 										color="teal"
-										onClick={() => setAuth(true)}>
+										onClick={() => setShowLogin(true)}>
 										{"Login"}
 									</Text>
 								</Heading>
@@ -88,7 +95,7 @@ export default function Auth() {
 										as="span"
 										fontWeight={"600"}
 										color="teal"
-										onClick={() => setAuth(false)}>
+										onClick={() => setShowLogin(false)}>
 										{"SignUp"}
 									</Text>
 								</Heading>
@@ -100,3 +107,20 @@ export default function Auth() {
 		</>
 	);
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	const token = context.req.cookies.user_cloudynest_jwt_token;
+	try {
+		const status = jwt.verify(token as string, process.env.SECERT as string);
+		return {
+			redirect: {
+				destination: "/",
+				permanent: true,
+			},
+		};
+	} catch (error) {
+		return {
+			props: {},
+		};
+	}
+};

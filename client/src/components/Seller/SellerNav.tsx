@@ -11,7 +11,7 @@ interface Props {
 }
 
 const SellerNav = ({ hideExtras, showLogin, setShowLogin }: Props) => {
-	const logout = useLogout();
+	const logout = useLogout("cloudynest_jwt_token");
 
 	const router = useRouter();
 
@@ -53,7 +53,10 @@ const SellerNav = ({ hideExtras, showLogin, setShowLogin }: Props) => {
 					_hover={{
 						background: "teal.100",
 					}}
-					onClick={logout}
+					onClick={() => {
+						logout();
+						router.replace("/supplier");
+					}}
 					colorScheme={"teal"}>
 					Logout
 				</Button>
