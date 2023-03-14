@@ -95,3 +95,14 @@ button:hover{
     display: grid;
     gap:1.5rem;
 }
+.cart_icon_div{
+    position: relative;
+}
+.cart_count{
+    position: absolute;
+    top:0;
+    right:0;
+    border-radius: 50%;
+    background-color: teal;
+    color:white;
+}

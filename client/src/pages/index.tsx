@@ -16,13 +16,18 @@ const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function Home() {
 	const [productList, setProductList] = useState([] as FinalProductType[]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
 
 	async function getProducts() {
+		setIsLoading(true);
 		try {
 			const { data } = await axios.get(`${base_url}/product/all`);
 			setProductList(data);
+			setIsLoading(false);
 		} catch (error) {
-			console.log(error);
+			setIsLoading(false);
+			setIsError(true);
 		}
 	}
 
@@ -41,7 +46,7 @@ export default function Home() {
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
 			</Head>
 			<main>
-				<Header />
+				<Header cartCount={0} />
 				<Stack spacing={5} w={"75%"} m="auto">
 					<Advertisments />
 					<Heading size="xl" as="h2">
@@ -49,7 +54,7 @@ export default function Home() {
 					</Heading>
 					<Flex justifyContent={"space-between"} alignItems="flex-start">
 						<Category />
-						<Products products={productList} />
+						<Products products={productList} {...{ isLoading, isError }} />
 					</Flex>
 				</Stack>
 				{/* <Footer /> */}

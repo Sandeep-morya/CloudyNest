@@ -1,4 +1,7 @@
-﻿import {
+﻿import useDebounce from "@/hooks/useDebounce";
+import useThrottle from "@/hooks/useThrottle";
+import { FinalProductType } from "@/Types";
+import {
 	Box,
 	Button,
 	Divider,
@@ -8,18 +11,55 @@
 	Stack,
 	Text,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import axios, { AxiosResponse } from "axios";
+import React, { useCallback, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { TbPlus, TbMinus } from "react-icons/tb";
 
-type Props = {};
-const price=387;
-const CartItem = (props: Props) => {
-	const [count, setCount] = useState(1);
-    const [totalPrice,setTotalPrice] = useState(price)
-    useEffect(()=>{
-        setTotalPrice(count*price)
-    },[count])
+type Props = {
+	id: string;
+	initialCount: number;
+	deleteCartItem: (id: string) => Promise<void>;
+	updateCartItem: (id: string, count: number) => Promise<void>;
+	handleCartAmount: (p: number) => void;
+};
+
+const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
+
+const CartItem = ({
+	id,
+	initialCount,
+	deleteCartItem,
+	handleCartAmount,
+	updateCartItem,
+}: Props) => {
+	const [count, setCount] = useState(initialCount);
+	const [product, setProduct] = useState({} as FinalProductType);
+
+	const debouncedValue = useDebounce(count, 1000);
+
+	useEffect(() => {
+		updateCartItem(id, debouncedValue);
+	}, [debouncedValue, id, updateCartItem]);
+
+	const getProduct = useCallback(
+		async function () {
+			try {
+				const { data }: AxiosResponse<FinalProductType, any> = await axios.get(
+					`${base_url}/product/${id}`,
+				);
+				setProduct(data);
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		[id],
+	);
+
+	useEffect(() => {
+		getProduct();
+	}, [getProduct]);
+
 	return (
 		<Stack
 			spacing={0}
@@ -33,18 +73,18 @@ const CartItem = (props: Props) => {
 					<Image
 						w={"7rem"}
 						h={"7rem"}
-                        borderRadius="0.5rem"
-                        objectFit={"cover"}
-						src="https://images.meesho.com/images/products/19519349/3acaf_512.jpg"
-						alt="image"
+						borderRadius="0.5rem"
+						objectFit={"cover"}
+						src={product.thumbnail}
+						alt={product.title}
 					/>
 					<Stack>
 						<Text fontWeight={"600"} fontSize="1.1rem">
-							Unique Men Watches
+							{product.title}
 						</Text>
 						<Text>Size: Free Size</Text>
 
-						<Text>₹ {price}</Text>
+						<Text>₹ {product.price}</Text>
 					</Stack>
 				</Flex>
 
@@ -62,7 +102,9 @@ const CartItem = (props: Props) => {
 					<Flex alignItems={"center"} gap="1rem">
 						<IconButton
 							isDisabled={count === 1}
-							onClick={() => setCount(count - 1)}
+							onClick={() => {
+								setCount(count - 1);
+							}}
 							borderRadius={"50%"}
 							variant="outline"
 							size="sm"
@@ -73,7 +115,9 @@ const CartItem = (props: Props) => {
 							{count}
 						</Text>
 						<IconButton
-							onClick={() => setCount(count + 1)}
+							onClick={() => {
+								setCount(count + 1);
+							}}
 							borderRadius={"50%"}
 							size="sm"
 							variant="outline"
@@ -82,6 +126,9 @@ const CartItem = (props: Props) => {
 						/>
 					</Flex>
 					<Button
+						onClick={() => {
+							deleteCartItem(product._id);
+						}}
 						leftIcon={<FaTrash />}
 						variant="solid"
 						colorScheme={"teal"}>
@@ -91,8 +138,8 @@ const CartItem = (props: Props) => {
 			</Flex>
 			<Divider borderColor={"rgba(0,0,0,0.1)"} />
 			<Flex p="1rem" justifyContent={"space-between"}>
-				<Text>Supplier : {"seller Name"}</Text>
-				<Text>Total Price : ₹ {totalPrice}</Text>
+				<Text>Brand : {product.brand}</Text>
+				<Text>Total Price : ₹ {count * product.price}</Text>
 			</Flex>
 		</Stack>
 	);

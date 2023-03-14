@@ -6,6 +6,8 @@ import {
 	Flex,
 	Heading,
 	SimpleGrid,
+	Skeleton,
+	SkeletonText,
 	Spinner,
 	Stack,
 } from "@chakra-ui/react";
@@ -52,8 +54,9 @@ const AllProducts = ({ seller_id }: Props) => {
 	useEffect(() => {
 		getProducts();
 	}, [getProducts]);
+
 	if (isError) {
-		return <></>;
+		return <>server Error</>;
 	}
 
 	return (
