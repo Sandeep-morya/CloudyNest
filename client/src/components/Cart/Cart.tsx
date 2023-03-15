@@ -7,7 +7,7 @@ import CartItem from "./CartItem";
 
 type Props = {
 	cartList: { id: string; count: number }[];
-	handleCartAmount: (param: number) => void;
+	handleCartAmount: () => void;
 };
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
@@ -43,7 +43,7 @@ const Cart = ({ cartList, handleCartAmount }: Props) => {
 	};
 
 	return (
-		<Stack spacing={"2rem"}>
+		<Stack spacing={"2rem"} h="100%">
 			{/* Number of Items */}
 			<HStack gap={"0.5rem"}>
 				<Heading as="h3" size="md" color="blackAlpha.600">
@@ -61,14 +61,16 @@ const Cart = ({ cartList, handleCartAmount }: Props) => {
 			</HStack>
 
 			{/* All Items */}
-			{cartItemsList.map((e) => (
-				<CartItem
-					key={e.id}
-					id={e.id}
-					initialCount={e.count}
-					{...{ deleteCartItem, handleCartAmount, updateCartItem }}
-				/>
-			))}
+			<Stack h="100%" overflowY={"scroll"} borderRadius="0.5rem">
+				{cartItemsList.map((e) => (
+					<CartItem
+						key={e.id}
+						id={e.id}
+						initialCount={e.count}
+						{...{ deleteCartItem, handleCartAmount, updateCartItem }}
+					/>
+				))}
+			</Stack>
 		</Stack>
 	);
 };

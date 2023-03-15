@@ -57,7 +57,12 @@ export default function SingleProduct({ product }: Props) {
 			const { data } = await axios.patch(
 				base_url + "/cart",
 				{
-					data: { id: product._id, count: 1 },
+					data: {
+						id: product._id,
+						title: product.title,
+						price: product.price,
+						count: 1,
+					},
 				},
 				{ headers: { Authorization: token } },
 			);
@@ -105,7 +110,7 @@ export default function SingleProduct({ product }: Props) {
 					padding={"1rem"}
 					gap={"2rem"}>
 					{/* Visual Side */}
-					<Stack spacing={5} flexGrow="1">
+					<Stack spacing={5}>
 						<ProductView images={product.images} />
 
 						<Flex justifyContent={"flex-end"} gap="2rem">

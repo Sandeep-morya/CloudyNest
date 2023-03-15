@@ -21,7 +21,7 @@ type Props = {
 	initialCount: number;
 	deleteCartItem: (id: string) => Promise<void>;
 	updateCartItem: (id: string, count: number) => Promise<void>;
-	handleCartAmount: (p: number) => void;
+	handleCartAmount: () => void;
 };
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
@@ -33,7 +33,7 @@ const CartItem = ({
 	handleCartAmount,
 	updateCartItem,
 }: Props) => {
-	const [count, setCount] = useState(initialCount);
+	const [count, setCount] = useState(initialCount || 0);
 	const [product, setProduct] = useState({} as FinalProductType);
 
 	const debouncedValue = useDebounce(count, 1000);
@@ -104,6 +104,7 @@ const CartItem = ({
 							isDisabled={count === 1}
 							onClick={() => {
 								setCount(count - 1);
+								handleCartAmount();
 							}}
 							borderRadius={"50%"}
 							variant="outline"
@@ -117,6 +118,7 @@ const CartItem = ({
 						<IconButton
 							onClick={() => {
 								setCount(count + 1);
+								handleCartAmount();
 							}}
 							borderRadius={"50%"}
 							size="sm"
@@ -128,6 +130,7 @@ const CartItem = ({
 					<Button
 						onClick={() => {
 							deleteCartItem(product._id);
+							handleCartAmount();
 						}}
 						leftIcon={<FaTrash />}
 						variant="solid"

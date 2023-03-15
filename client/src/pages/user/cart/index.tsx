@@ -45,18 +45,12 @@ export default function SingleUserCart({ cartList }: Props) {
 	const [state, setState] = useState(0);
 	const [cartItemsList, setCartItemsList] = useState(cartList);
 
-	const [checkoutPrice, setCheckoutPrice] = useState(0);
-
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 
 	const router = useRouter();
 	const throttle = useThrottle();
 	const toastAlert = useToastAlert();
-
-	const handleCartAmount = useCallback(function (value: number) {
-		setCheckoutPrice((e) => e + value);
-	}, []);
 
 	useEffect(() => {
 		if (state > 70) {
@@ -67,8 +61,10 @@ export default function SingleUserCart({ cartList }: Props) {
 		}
 	}, [state]);
 
-	// console.log(cartList);
-	console.log(checkoutPrice);
+	function updateCartAmount() {
+		console.log("cart updated please check for total price again");
+	}
+
 	return (
 		<>
 			<Head>
@@ -97,13 +93,18 @@ export default function SingleUserCart({ cartList }: Props) {
 					<Stack
 						w={"100%"}
 						spacing={5}
+						h={"100vh"}
 						bgColor={"blackAlpha.100"}
 						p={{ md: "2rem 0", xl: "2rem 0", "2xl": "2rem 15rem" }}
 						alignItems={"center"}>
-						<Flex w="100%" justifyContent={"space-between"} gap="2rem">
+						<Flex
+							w="100%"
+							justifyContent={"space-between"}
+							gap="2rem"
+							h={"75%"}>
 							{/* Cart  */}
 							<Box flex="1">
-								<Cart cartList={cartItemsList} {...{ handleCartAmount }} />
+								<Cart cartList={cartList} handleCartAmount={updateCartAmount} />
 							</Box>
 							<Divider
 								height="auto"
