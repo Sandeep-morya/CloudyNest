@@ -1,9 +1,9 @@
 ﻿import { useRouter } from "next/router";
 import React from "react";
-import { useCookies } from "react-cookie";
+import useRemoveCookie from "./useRemoveCookie";
 
 const useLogout = (key: string) => {
-	const [_, setCookie, removeCookie] = useCookies();
+	const removeCookie = useRemoveCookie();
 	return () => {
 		removeCookie(key);
 	};

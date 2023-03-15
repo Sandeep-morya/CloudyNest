@@ -25,9 +25,9 @@ import axios, { AxiosResponse } from "axios";
 import originalPriceBeforeDiscount from "@/functions/originalPriceBeforeDiscount";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import useThrottle from "@/hooks/useThrottle";
 import useToastAlert from "@/hooks/useToastalert";
+import useGetCookie from "@/hooks/useGetCookie";
 
 interface Props {
 	product: FinalProductType;
@@ -37,7 +37,7 @@ const secret = process.env.NEXT_PUBLIC_SECERT as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function SingleProduct({ product }: Props) {
-	const [cookies] = useCookies();
+	const getCookie = useGetCookie();
 	const [hidden, setHidden] = useState(true);
 	const [serachBarText, setSearchBarText] = useState("");
 	const [username, setUsername] = useState("");
@@ -45,7 +45,7 @@ export default function SingleProduct({ product }: Props) {
 	const throttle = useThrottle();
 	const toastAlert = useToastAlert();
 	const [cartItems, setCartItems] = useState([] as string[]);
-	const token = cookies.user_cloudynest_jwt_token;
+	const token = getCookie("user_cloudynest_jwt_token");
 
 	async function addToCart() {
 		if (!token) {

@@ -50,8 +50,8 @@ import useToastAlert from "@/hooks/useToastalert";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
 import useThrottle from "@/hooks/useThrottle";
-import useCookies from "react-cookie/cjs/useCookies";
 import { GetServerSideProps } from "next";
+import useSetCookie from "@/hooks/useSetCookie";
 
 const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
 const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
@@ -59,7 +59,7 @@ const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function Seller() {
-	const [cookies, setCookie] = useCookies(["cloudynest_jwt_token"]);
+	const setCookie = useSetCookie();
 	const [showLogin, setShowLogin] = useState(true);
 	const [show, setShow] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -361,7 +361,6 @@ export default function Seller() {
 												)}
 											</FormControl>
 
-											
 											{/* Mobile Number */}
 											<FormControl isInvalid={mobileError != ""} isRequired>
 												<FormLabel>Mobile Number</FormLabel>
@@ -521,7 +520,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 		const status = jwt.verify(token as string, process.env.SECERT as string);
 		return {
 			redirect: {
-
 				destination: "/supplier/dashboard/" + token + status,
 				permanent: true,
 			},

@@ -40,11 +40,11 @@ import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
 import { productType, sellerProfileType, SellerType } from "@/Types";
 import validateInputString from "@/functions/validateInputString";
-import useCookies from "react-cookie/cjs/useCookies";
 import { GetServerSideProps } from "next";
 import useThrottle from "@/hooks/useThrottle";
 import validateRangeInput from "@/functions/validateRangeInput";
 import validateInputArray from "@/functions/validateInputArray";
+import useGetCookie from "@/hooks/useGetCookie";
 
 type Props = {
 	data: SellerType;
@@ -61,7 +61,7 @@ const parse = (val: string) => val.replace(/^\$/, "");
 
 // :: Component ::
 const AddProduct = ({ data }: Props) => {
-	const [cookies, setCookie] = useCookies();
+	const getCookie = useGetCookie();
 	const [showLogin, setShowLogin] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -116,7 +116,7 @@ const AddProduct = ({ data }: Props) => {
 			formData.append("cloud_name", cloud_name);
 			const { data } = await axios.post(upload_url, formData);
 			setThumbnail(data.url);
-			setImages([...images,data.url])
+			setImages([...images, data.url]);
 			setIsLoading(false);
 		} catch (error) {
 			setIsError(true);
@@ -228,7 +228,7 @@ const AddProduct = ({ data }: Props) => {
 			toastAlert("error", "Review form: Some is filled correctly");
 		}
 	}
-console.log(productDetails)
+	console.log(productDetails);
 	/* Mangae Errors */
 	function validateError(
 		validation_result: string,
@@ -254,16 +254,15 @@ console.log(productDetails)
 		setIsLoading(true);
 		try {
 			const data = await axios.post(base_url + "/product/add", productDetails, {
-				headers: { Authorization: cookies.cloudynest_jwt_token },
+				headers: { Authorization: getCookie("cloudynest_jwt_token") },
 			});
-			console.log(data)
-			toastAlert("success","Product added successfully")
+			console.log(data);
+			toastAlert("success", "Product added successfully");
 			setIsLoading(false);
-
 		} catch {
 			setIsError(true);
 			setIsLoading(false);
-			toastAlert("error","500 internal server error")
+			toastAlert("error", "500 internal server error");
 		}
 	}
 	useEffect(() => {

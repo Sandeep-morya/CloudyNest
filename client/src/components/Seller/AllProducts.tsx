@@ -1,4 +1,5 @@
-﻿import useToastAlert from "@/hooks/useToastalert";
+﻿import useGetCookie from "@/hooks/useGetCookie";
+import useToastAlert from "@/hooks/useToastalert";
 import { FinalProductType } from "@/Types";
 import {
 	Box,
@@ -14,7 +15,6 @@ import {
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
-import { Cookies, useCookies } from "react-cookie";
 import { FaEye, FaPencilAlt, FaTrash } from "react-icons/fa";
 import { MdAddCircle } from "react-icons/md";
 import ProductCard from "../Product/ProductCard";
@@ -24,10 +24,9 @@ type Props = {
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 const AllProducts = ({ seller_id }: Props) => {
 	const [productList, setProductList] = useState([] as FinalProductType[]);
-
+	const getCookie = useGetCookie();
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
-	const [cookies, setCookie] = useCookies();
 	const router = useRouter();
 	const toastAlert = useToastAlert();
 	const getProducts = useCallback(
@@ -35,7 +34,7 @@ const AllProducts = ({ seller_id }: Props) => {
 			setIsLoading(true);
 			try {
 				const { data } = await axios.get(`${base_url}/seller/products`, {
-					headers: { Authorization: cookies.cloudynest_jwt_token },
+					headers: { Authorization: getCookie("cloudynest_jwt_token") },
 				});
 				setProductList(data);
 				setIsLoading(false);
@@ -44,7 +43,7 @@ const AllProducts = ({ seller_id }: Props) => {
 				setIsError(false);
 			}
 		},
-		[cookies.cloudynest_jwt_token],
+		[getCookie],
 	);
 	// console.log(productList);
 	async function handleDelete(id: string) {

@@ -22,29 +22,28 @@ import { BsBagCheck } from "react-icons/bs";
 import { Theme } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
-import { useCookies } from "react-cookie";
 import axios, { AxiosResponse } from "axios";
 import useLogout from "@/hooks/useLogout";
+import useGetCookie from "@/hooks/useGetCookie";
 
 interface Props {
-	cartCount:number
+	cartCount: number;
 	hideExtras: boolean;
 }
 
 const secret = process.env.NEXT_PUBLIC_SECERT as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
-const Navbar = ({cartCount, hideExtras }: Props) => {
-	const [cookies] = useCookies();
+const Navbar = ({ cartCount, hideExtras }: Props) => {
+	const getCookie = useGetCookie();
 	const [hidden, setHidden] = useState(true);
 	const [serachBarText, setSearchBarText] = useState("");
 	const [username, setUsername] = useState("");
 	const router = useRouter();
 	const [cartItems, setCartItems] = useState(cartCount);
 
-
 	const logout = useLogout("user_cloudynest_jwt_token");
-	const token = cookies.user_cloudynest_jwt_token;
+	const token = getCookie("user_cloudynest_jwt_token");
 
 	const getUser = useCallback(
 		async function () {
@@ -65,28 +64,27 @@ const Navbar = ({cartCount, hideExtras }: Props) => {
 		[token],
 	);
 
-const getUserCart = useCallback(async () => {
-	try {
-		if (!token) {
-			return;
+	const getUserCart = useCallback(async () => {
+		try {
+			if (!token) {
+				return;
+			}
+			const { data } = await axios.get(base_url + "/cart", {
+				headers: { Authorization: token },
+			});
+			setCartItems(data.length);
+		} catch (error) {
+			setCartItems(0);
 		}
-		const { data }= await axios.get(base_url + "/cart", {
-			headers: { Authorization: token },
-		});
-		setCartItems(data.length);
-	} catch (error) {
-		setCartItems(0)
-	}
-}, [token]);
+	}, [token]);
 
-useEffect(() => {
-	getUserCart();
-}, [getUserCart,cartCount]);
+	useEffect(() => {
+		getUserCart();
+	}, [getUserCart, cartCount]);
 
 	useEffect(() => {
 		getUser();
 	}, [getUser]);
-
 
 	return (
 		<Flex
@@ -224,7 +222,7 @@ useEffect(() => {
 							onClick={() => {
 								logout();
 								setUsername("");
-								setCartItems(0)
+								setCartItems(0);
 							}}
 							_hover={{
 								background: "teal",

@@ -26,15 +26,15 @@ import validatePassword from "@/functions/validatePassword";
 import validateInputString from "@/functions/validateInputString";
 import { userFormType } from "@/Types";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
+import useSetCookie from "@/hooks/useSetCookie";
 
 type Props = {};
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const SignUp = (props: Props) => {
-	const [cookie, setCookie] = useCookies(["user_cloudynest_jwt_token"]);
+	const setCookie = useSetCookie();
 	const throttle = useThrottle();
 	const toastAlert = useToastAlert();
 	const router = useRouter();

@@ -1,6 +1,7 @@
 ﻿import validateEmail from "@/functions/validataEmail";
 import validateInputString from "@/functions/validateInputString";
 import validatePassword from "@/functions/validatePassword";
+import useSetCookie from "@/hooks/useSetCookie";
 import useThrottle from "@/hooks/useThrottle";
 import useToastAlert from "@/hooks/useToastalert";
 import { userFormType } from "@/Types";
@@ -16,7 +17,6 @@ import {
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdClose, MdFace } from "react-icons/md";
 
@@ -25,7 +25,7 @@ type Props = {};
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const Login = (props: Props) => {
-	const [cookie, setCookie] = useCookies(["user_cloudynest_jwt_token"]);
+	const setCookie = useSetCookie();
 	const throttle = useThrottle();
 	const toastAlert = useToastAlert();
 	const router = useRouter();

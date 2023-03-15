@@ -1,8 +1,8 @@
-﻿import { FinalProductType } from "@/Types";
+﻿import useGetCookie from "@/hooks/useGetCookie";
+import { FinalProductType } from "@/Types";
 import { Divider, HStack, Stack, Heading, Flex, calc } from "@chakra-ui/react";
 import axios, { AxiosResponse } from "axios";
 import React, { useState } from "react";
-import { useCookies } from "react-cookie";
 import CartItem from "./CartItem";
 
 type Props = {
@@ -13,13 +13,14 @@ type Props = {
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const Cart = ({ cartList, handleCartAmount }: Props) => {
-	const [cookies] = useCookies();
+	const getCookie = useGetCookie();
 	const [cartItemsList, setCartItemsList] = useState(cartList);
+	const token = getCookie("user_cloudynest_jwt_token");
 
 	const deleteCartItem = async (id: string) => {
 		try {
 			const { data } = await axios.delete(`${base_url}/cart/${id}`, {
-				headers: { Authorization: cookies.user_cloudynest_jwt_token },
+				headers: { Authorization: token },
 			});
 			setCartItemsList(data);
 		} catch (error) {
@@ -33,7 +34,7 @@ const Cart = ({ cartList, handleCartAmount }: Props) => {
 				`${base_url}/cart/${id}`,
 				{ count },
 				{
-					headers: { Authorization: cookies.user_cloudynest_jwt_token },
+					headers: { Authorization: token },
 				},
 			);
 			setCartItemsList(data);
@@ -61,7 +62,7 @@ const Cart = ({ cartList, handleCartAmount }: Props) => {
 			</HStack>
 
 			{/* All Items */}
-			<Stack h="100%" overflowY={"scroll"} borderRadius="0.5rem">
+			<Stack h="100%" overflowY={"scroll"} borderRadius="0.5remn">
 				{cartItemsList.map((e) => (
 					<CartItem
 						key={e.id}
