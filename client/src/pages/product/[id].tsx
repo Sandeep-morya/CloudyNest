@@ -28,6 +28,7 @@ import { useCallback, useEffect, useState } from "react";
 import useThrottle from "@/hooks/useThrottle";
 import useToastAlert from "@/hooks/useToastalert";
 import useGetCookie from "@/hooks/useGetCookie";
+import useBuyNow from "@/hooks/useBuyNow";
 
 interface Props {
 	product: FinalProductType;
@@ -42,6 +43,7 @@ export default function SingleProduct({ product }: Props) {
 	const [serachBarText, setSearchBarText] = useState("");
 	const [username, setUsername] = useState("");
 	const router = useRouter();
+	const buyNow = useBuyNow();
 	const throttle = useThrottle();
 	const toastAlert = useToastAlert();
 	const [cartItems, setCartItems] = useState([] as string[]);
@@ -132,6 +134,16 @@ export default function SingleProduct({ product }: Props) {
 								_hover={{
 									background: "teal.100",
 								}}
+								onClick={() =>
+									buyNow([
+										{
+											id: product._id,
+											title: product.title,
+											count: 1,
+											price: product.price,
+										},
+									])
+								}
 								leftIcon={<HiOutlineChevronDoubleRight size="22" />}
 								variant="solid">
 								Buy Now

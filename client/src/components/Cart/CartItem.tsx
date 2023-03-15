@@ -141,6 +141,7 @@ const CartItem = ({
 						leftIcon={<HiOutlineChevronDoubleRight size="22" />}
 						variant="solid"
 						colorScheme={"teal"}
+						_hover={{ color: "white", backgroundColor: "teal" }}
 						onClick={() =>
 							buyNow([
 								{
