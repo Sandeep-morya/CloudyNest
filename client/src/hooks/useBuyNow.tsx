@@ -1,10 +1,11 @@
-﻿import { useRouter } from "next/router";
+﻿import { cartItemType } from "@/Types";
+import { useRouter } from "next/router";
 import React from "react";
 
 const useBuyNow = () => {
 	const router = useRouter();
-	return async (items: string[]) => {
-		console.log(items);
+	return (items: cartItemType[]) => {
+		localStorage.setItem("checkout", JSON.stringify(items));
 		router.push("/user/checkout");
 	};
 };

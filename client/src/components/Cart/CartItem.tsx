@@ -141,7 +141,16 @@ const CartItem = ({
 						leftIcon={<HiOutlineChevronDoubleRight size="22" />}
 						variant="solid"
 						colorScheme={"teal"}
-						onClick={() => buyNow([product._id])}>
+						onClick={() =>
+							buyNow([
+								{
+									id: product._id,
+									title: product.title,
+									count,
+									price: product.price,
+								},
+							])
+						}>
 						Buy Now
 					</Button>
 					<Button

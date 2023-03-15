@@ -1,4 +1,5 @@
 ﻿import useBuyNow from "@/hooks/useBuyNow";
+import { cartItemType } from "@/Types";
 import {
 	Box,
 	Button,
@@ -13,7 +14,7 @@ import {
 import React from "react";
 
 type Props = {
-	cartList: { id: string; count: number; title: string; price: number }[];
+	cartList: cartItemType[];
 };
 
 const CartPrice = ({ cartList }: Props) => {
@@ -51,7 +52,7 @@ const CartPrice = ({ cartList }: Props) => {
 			<Button
 				variant="solid"
 				colorScheme={"teal"}
-				onClick={() => buyNow(cartList.map((e) => e.id))}
+				onClick={() => buyNow(cartList)}
 				size="lg"
 				_hover={{ color: "white", backgroundColor: "teal" }}>
 				Buy All

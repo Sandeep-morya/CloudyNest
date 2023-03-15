@@ -88,3 +88,10 @@ export interface FinalUserType {
 	updatedAt: string;
 	__v: number;
 }
+
+export interface cartItemType {
+	id: string;
+	title: string;
+	count: number;
+	price: number;
+}

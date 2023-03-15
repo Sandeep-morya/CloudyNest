@@ -38,9 +38,6 @@ import useThrottle from "@/hooks/useThrottle";
 import useToastAlert from "@/hooks/useToastalert";
 import CartPrice from "@/components/Cart/CartPrice";
 import useGetCookie from "@/hooks/useGetCookie";
-import AddressForm from "@/components/Cart/AdressForm";
-import PaymentForm from "@/components/Cart/PaymentForm";
-import Summary from "@/components/Cart/Summary";
 
 interface Props {
 	cartList: { id: string; count: number; title: string; price: number }[];
@@ -150,30 +147,6 @@ export default function SingleUserCart({ cartList }: Props) {
 								</Box>
 							</Stack>
 						</Flex>
-
-						{/* <Flex
-							w="100%"
-							pt="2rem"
-							alignItems={"center"}
-							justifyContent="space-between">
-							<Button
-								colorScheme={"teal"}
-								visibility={state < 10 ? "hidden" : "visible"}
-								_hover={{ color: "white", backgroundColor: "teal" }}
-								disabled={state >= 0}
-								onClick={() => setState(state - 34)}>
-								Previous
-							</Button>
-
-							<Button
-								colorScheme={"teal"}
-								disabled={state >= 100}
-								visibility={state > 90 ? "hidden" : "visible"}
-								_hover={{ color: "white", backgroundColor: "teal" }}
-								onClick={() => setState(state + 34)}>
-								Next
-							</Button>
-						</Flex> */}
 					</Stack>
 				</Stack>
 			</main>
