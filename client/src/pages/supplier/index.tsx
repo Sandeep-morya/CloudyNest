@@ -284,7 +284,13 @@ export default function Seller() {
 								<Stack w="75%" m="auto" bgColor={"teal.300"} p="2rem">
 									<SellerLogin />
 								</Stack>
-								<Image w="75%" m="auto" src="/ads/ad4.png" alt="ad4" />
+								<Image
+									w="75%"
+									m="auto"
+									filter={"sepia(37%) brightness(43%) ;"}
+									src="https://en.keruilai.com/images/product/associate-banner.jpg"
+									alt="ad4"
+								/>
 							</Stack>
 						) : (
 							/* Signup */

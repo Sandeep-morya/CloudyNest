@@ -2,47 +2,18 @@
 import { FinalProductType } from "@/Types";
 import { Divider, HStack, Stack, Heading, Flex, calc } from "@chakra-ui/react";
 import axios, { AxiosResponse } from "axios";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import CartItem from "./CartItem";
 
 type Props = {
-	cartList: { id: string; count: number }[];
-	handleCartAmount: () => void;
+	cartList: { id: string; count: number; title: string; price: number }[];
+	deleteCartItem: (id: string) => Promise<void>;
+	updateCartItem: (id: string, count: number) => Promise<void>;
 };
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
-const Cart = ({ cartList, handleCartAmount }: Props) => {
-	const getCookie = useGetCookie();
-	const [cartItemsList, setCartItemsList] = useState(cartList);
-	const token = getCookie("user_cloudynest_jwt_token");
-
-	const deleteCartItem = async (id: string) => {
-		try {
-			const { data } = await axios.delete(`${base_url}/cart/${id}`, {
-				headers: { Authorization: token },
-			});
-			setCartItemsList(data);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	const updateCartItem = async (id: string, count: number) => {
-		try {
-			const { data } = await axios.patch(
-				`${base_url}/cart/${id}`,
-				{ count },
-				{
-					headers: { Authorization: token },
-				},
-			);
-			setCartItemsList(data);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
+const Cart = ({ cartList, deleteCartItem, updateCartItem }: Props) => {
 	return (
 		<Stack spacing={"2rem"} h="100%">
 			{/* Number of Items */}
@@ -57,18 +28,18 @@ const Cart = ({ cartList, handleCartAmount }: Props) => {
 					borderColor={"rgba(0,0,0,0.2)"}
 				/>
 				<Heading as="h3" size="md" color="blackAlpha.600">
-					{cartItemsList.length}
+					{cartList.length}
 				</Heading>
 			</HStack>
 
 			{/* All Items */}
-			<Stack h="100%" overflowY={"scroll"} borderRadius="0.5remn">
-				{cartItemsList.map((e) => (
+			<Stack h="100%" overflowY={"scroll"} borderRadius="0.5rem">
+				{cartList.map((e) => (
 					<CartItem
 						key={e.id}
 						id={e.id}
 						initialCount={e.count}
-						{...{ deleteCartItem, handleCartAmount, updateCartItem }}
+						{...{ deleteCartItem, updateCartItem }}
 					/>
 				))}
 			</Stack>

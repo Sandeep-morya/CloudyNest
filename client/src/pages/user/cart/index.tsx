@@ -36,10 +36,13 @@ import { GetServerSideProps } from "next";
 import axios, { AxiosResponse } from "axios";
 import useThrottle from "@/hooks/useThrottle";
 import useToastAlert from "@/hooks/useToastalert";
+import CartPrice from "@/components/Cart/CartPrice";
+import useGetCookie from "@/hooks/useGetCookie";
 
 interface Props {
-	cartList: { id: string; count: number }[];
+	cartList: { id: string; count: number; title: string; price: number }[];
 }
+const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function SingleUserCart({ cartList }: Props) {
 	const [state, setState] = useState(0);
@@ -51,6 +54,37 @@ export default function SingleUserCart({ cartList }: Props) {
 	const router = useRouter();
 	const throttle = useThrottle();
 	const toastAlert = useToastAlert();
+	const getCookie = useGetCookie();
+	const token = getCookie("user_cloudynest_jwt_token");
+
+	const deleteCartItem = async (id: string) => {
+		try {
+			const { data } = await axios.delete(`${base_url}/cart/${id}`, {
+				headers: { Authorization: token },
+			});
+			setCartItemsList(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const updateCartItem = useCallback(
+		async (id: string, count: number) => {
+			try {
+				const { data } = await axios.patch(
+					`${base_url}/cart/${id}`,
+					{ count },
+					{
+						headers: { Authorization: token },
+					},
+				);
+				setCartItemsList(data);
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		[token],
+	);
 
 	useEffect(() => {
 		if (state > 70) {
@@ -60,10 +94,6 @@ export default function SingleUserCart({ cartList }: Props) {
 			setState(0);
 		}
 	}, [state]);
-
-	function updateCartAmount() {
-		console.log("cart updated please check for total price again");
-	}
 
 	return (
 		<>
@@ -104,7 +134,11 @@ export default function SingleUserCart({ cartList }: Props) {
 							h={"75%"}>
 							{/* Cart  */}
 							<Box flex="1">
-								<Cart cartList={cartList} handleCartAmount={updateCartAmount} />
+								<Cart
+									cartList={cartItemsList}
+									deleteCartItem={deleteCartItem}
+									updateCartItem={updateCartItem}
+								/>
 							</Box>
 							<Divider
 								height="auto"
@@ -114,10 +148,13 @@ export default function SingleUserCart({ cartList }: Props) {
 								borderColor={"rgba(0,0,0,0.1)"}
 							/>
 
-							<Stack flex="1">
+							<Stack flex="1" spacing={10}>
 								<Heading as="h3" size="md" color="blackAlpha.600">
 									Price Details
 								</Heading>
+								<Box w="100%" h="100%">
+									<CartPrice cartList={cartItemsList} />
+								</Box>
 							</Stack>
 						</Flex>
 
