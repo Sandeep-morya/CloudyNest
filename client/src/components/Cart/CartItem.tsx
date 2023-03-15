@@ -6,6 +6,7 @@ import {
 	Button,
 	Divider,
 	Flex,
+	Grid,
 	IconButton,
 	Image,
 	Stack,
@@ -15,6 +16,9 @@ import axios, { AxiosResponse } from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { TbPlus, TbMinus } from "react-icons/tb";
+import { HiOutlineChevronDoubleRight } from "react-icons/hi";
+import { useRouter } from "next/router";
+import useBuyNow from "@/hooks/useBuyNow";
 
 type Props = {
 	id: string;
@@ -35,6 +39,7 @@ const CartItem = ({
 	const [product, setProduct] = useState({} as FinalProductType);
 
 	const debouncedValue = useDebounce(count, 1000);
+	const buyNow = useBuyNow();
 
 	useEffect(() => {
 		updateCartItem(id, debouncedValue);
@@ -66,7 +71,11 @@ const CartItem = ({
 			boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
 			borderRadius={"0.5rem"}>
 			{/* Box - 1 */}
-			<Flex p="1rem" justifyContent={"space-between"}>
+			<Grid
+				p="1rem"
+				gridTemplateColumns={"2fr 1.5fr 0.5fr"}
+				gap="1.5rem"
+				justifyContent={"center"}>
 				<Flex gap="1rem">
 					<Image
 						w={"7rem"}
@@ -88,12 +97,12 @@ const CartItem = ({
 
 				{/* Box - 2 */}
 
-				<Stack h="100%" spacing={4}>
+				<Stack alignItems={"center"} h="100%" spacing={4}>
 					<Button
 						w="100%"
 						textAlign={"center"}
 						color="blackAlpha.500"
-						variant="outline">
+						variant="unstyled">
 						Quantity
 					</Button>
 
@@ -123,17 +132,29 @@ const CartItem = ({
 							icon={<TbPlus />}
 						/>
 					</Flex>
+				</Stack>
+				<Stack>
+					<Button
+						// onClick={() => {
+						// 	deleteCartItem(product._id);
+						// }}
+						leftIcon={<HiOutlineChevronDoubleRight size="22" />}
+						variant="solid"
+						colorScheme={"teal"}
+						onClick={() => buyNow([product._id])}>
+						Buy Now
+					</Button>
 					<Button
 						onClick={() => {
 							deleteCartItem(product._id);
 						}}
 						leftIcon={<FaTrash />}
-						variant="solid"
+						variant="outline"
 						colorScheme={"teal"}>
 						Remove
 					</Button>
 				</Stack>
-			</Flex>
+			</Grid>
 			<Divider borderColor={"rgba(0,0,0,0.1)"} />
 			<Flex p="1rem" justifyContent={"space-between"}>
 				<Text>Brand : {product.brand}</Text>

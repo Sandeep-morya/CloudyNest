@@ -38,6 +38,9 @@ import useThrottle from "@/hooks/useThrottle";
 import useToastAlert from "@/hooks/useToastalert";
 import CartPrice from "@/components/Cart/CartPrice";
 import useGetCookie from "@/hooks/useGetCookie";
+import AddressForm from "@/components/Cart/AdressForm";
+import PaymentForm from "@/components/Cart/PaymentForm";
+import Summary from "@/components/Cart/Summary";
 
 interface Props {
 	cartList: { id: string; count: number; title: string; price: number }[];
@@ -45,7 +48,6 @@ interface Props {
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function SingleUserCart({ cartList }: Props) {
-	const [state, setState] = useState(0);
 	const [cartItemsList, setCartItemsList] = useState(cartList);
 
 	const [isLoading, setIsLoading] = useState(false);
@@ -86,15 +88,6 @@ export default function SingleUserCart({ cartList }: Props) {
 		[token],
 	);
 
-	useEffect(() => {
-		if (state > 70) {
-			setState(100);
-		}
-		if (state < 30) {
-			setState(0);
-		}
-	}, [state]);
-
 	return (
 		<>
 			<Head>
@@ -117,7 +110,7 @@ export default function SingleUserCart({ cartList }: Props) {
 						pb="1rem"
 						zIndex={5}
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
-						<CartNav {...{ state }} />
+						<CartNav state={0} />
 					</Box>
 
 					<Stack
@@ -158,13 +151,14 @@ export default function SingleUserCart({ cartList }: Props) {
 							</Stack>
 						</Flex>
 
-						<Flex
+						{/* <Flex
 							w="100%"
 							pt="2rem"
 							alignItems={"center"}
 							justifyContent="space-between">
 							<Button
 								colorScheme={"teal"}
+								visibility={state < 10 ? "hidden" : "visible"}
 								_hover={{ color: "white", backgroundColor: "teal" }}
 								disabled={state >= 0}
 								onClick={() => setState(state - 34)}>
@@ -174,11 +168,12 @@ export default function SingleUserCart({ cartList }: Props) {
 							<Button
 								colorScheme={"teal"}
 								disabled={state >= 100}
+								visibility={state > 90 ? "hidden" : "visible"}
 								_hover={{ color: "white", backgroundColor: "teal" }}
 								onClick={() => setState(state + 34)}>
 								Next
 							</Button>
-						</Flex>
+						</Flex> */}
 					</Stack>
 				</Stack>
 			</main>
