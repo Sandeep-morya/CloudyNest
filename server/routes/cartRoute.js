@@ -21,14 +21,14 @@ router.get(
 	}),
 );
 
-/* Update cart Itmes */
+/* Update cart Item */
 
 router.patch(
 	"/",
 	asyncHandler(async (req, res) => {
-		const { _id, items, productID } = req.body;
+		const { _id, items } = req.body;
 
-		const updatedItems = [...items, productID];
+		const updatedItems = [...items, req.body.data];
 
 		const data = await Cart.findOneAndUpdate(
 			{ _id },
@@ -40,14 +40,14 @@ router.patch(
 	}),
 );
 
-/* Delete cart Itmes */
+/* Delete cart Item*/
 
 router.delete(
-	"/",
+	"/:id",
 	asyncHandler(async (req, res) => {
-		const { _id, items, productID } = req.body;
+		const { _id, items } = req.body;
 
-		const updatedItems = items.filter(e=>e!=productID)
+		const updatedItems = items.filter((e) => e.id != req.params.id);
 
 		const data = await Cart.findOneAndUpdate(
 			{ _id },
@@ -55,8 +55,27 @@ router.delete(
 			{ returnOriginal: false },
 		).select("items");
 
-		res.send(data.items);
+		res.send(updatedItems);
 	}),
 );
+/* update a cart Item*/
 
+router.patch(
+	"/:id",
+	asyncHandler(async (req, res) => {
+		const { _id, items } = req.body;
+
+		const updatedItems = items.map((e) =>
+			e.id === req.params.id ? { ...e, count: req.body.count } : e,
+		);
+
+		const data = await Cart.findOneAndUpdate(
+			{ _id },
+			{ items: updatedItems },
+			{ returnOriginal: false },
+		).select("items");
+
+		res.send(updatedItems);
+	}),
+);
 module.exports = router;

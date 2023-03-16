@@ -15,12 +15,14 @@ const orderSchema = mongoose.Schema(
 		item: { type: ObjectId, ref: "product" },
 		customer: { type: ObjectId, ref: "user" },
 		seller: { type: ObjectId, ref: "seller" },
-		quantity:{type:Number, default:1},
+		quantity: { type: Number, default: 1 },
 		delivery_address: { type: String },
-		amount:{type:Number, required:true},
+		amount: { type: Number, required: true },
+		payment_method: { type: String, required: true },
+		payment_status: { type: Boolean, required: true },
 		/* stage 2 */
 		current_location: { type: String, default: "" },
-		track_id: { type: Number },
+		track_id: { type: Number, default: "" },
 		delivery_status: { type: Boolean, default: false },
 
 		/* stage 3 */

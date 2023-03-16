@@ -23,15 +23,15 @@ import BannerHeading from "../Misc/BannerHeading";
 import jwt from "jsonwebtoken";
 import axios from "axios";
 import { useRouter } from "next/router";
-import useCookies from "react-cookie/cjs/useCookies";
 import { GetServerSideProps } from "next";
+import useSetCookie from "@/hooks/useSetCookie";
 
 type Props = {};
 
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const SellerLogin = (props: Props) => {
-	const [cookies, setCookie] = useCookies(["cloudynest_jwt_token"]);
+	const setCookie = useSetCookie();
 	const [show, setShow] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [email, setEmail] = useState("");

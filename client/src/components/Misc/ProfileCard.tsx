@@ -15,9 +15,9 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { FaClock, FaPencilAlt } from "react-icons/fa";
 import axios, { AxiosResponse } from "axios";
 import useToastAlert from "@/hooks/useToastalert";
-import { useCookies } from "react-cookie";
 import { FcCalendar, FcPhone, FcAddressBook } from "react-icons/fc";
 import useDate from "@/hooks/useDate";
+import useGetCookie from "@/hooks/useGetCookie";
 
 type Props = {
 	data: sellerProfileType;
@@ -29,7 +29,7 @@ const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const ProfileCard = ({ data }: Props) => {
-	const [cookies] = useCookies();
+	const getCookie = useGetCookie();
 	const [imageSrc, setImageSrc] = useState(data.image);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
@@ -69,7 +69,7 @@ const ProfileCard = ({ data }: Props) => {
 				{ image },
 				{
 					headers: {
-						Authorization: cookies.cloudynest_jwt_token,
+						Authorization: getCookie("cloudynest_jwt_token"),
 					},
 				},
 			);

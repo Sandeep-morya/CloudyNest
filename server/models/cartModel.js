@@ -11,8 +11,7 @@ const { String, Number, Boolean, ObjectId } = mongoose.Schema.Types;
 
 const cartSchema = mongoose.Schema({
 	_id: { type: ObjectId, required: true },
-	items: [{ type: ObjectId, ref: "product", default: [] }],
-
+	items: [],
 });
 
 const Cart = mongoose.model("cart", cartSchema);

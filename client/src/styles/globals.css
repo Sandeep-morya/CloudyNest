@@ -95,3 +95,31 @@ button:hover{
     display: grid;
     gap:1.5rem;
 }
+.cart_icon_div{
+    position: relative;
+}
+.cart_count{
+    position: absolute;
+    top:0;
+    right:0;
+    border-radius: 50%;
+    background-color: teal;
+    color:white;
+}
+
+.final_payment{
+    position: absolute;
+
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap:2rem;
+    background-color: #ffffff6c;
+    backdrop-filter: blur(10px);
+    z-index: 1;
+
+}

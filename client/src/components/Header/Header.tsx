@@ -3,12 +3,14 @@ import React from "react";
 import MenuTabs from "./MenuTabs";
 import Navbar from "./Navbar";
 
-type Props = {};
+type Props = {
+	cartCount:number
+};
 
-const Header = (props: Props) => {
+const Header = ({ cartCount }: Props) => {
 	return (
 		<VStack background={"white"} position="sticky" top={0} zIndex="1">
-			<Navbar hideExtras={false} />
+			<Navbar cartCount={cartCount} hideExtras={false} />
 			<MenuTabs />
 		</VStack>
 	);
