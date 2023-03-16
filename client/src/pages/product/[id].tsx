@@ -20,11 +20,11 @@ import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
 import SellerCard from "@/components/Seller/SellerCard";
 import { GetServerSideProps } from "next";
-import { FinalProductType } from "@/Types";
+import { cartItemType, FinalProductType } from "@/Types";
 import axios, { AxiosResponse } from "axios";
 import originalPriceBeforeDiscount from "@/functions/originalPriceBeforeDiscount";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import useThrottle from "@/hooks/useThrottle";
 import useToastAlert from "@/hooks/useToastalert";
 import useGetCookie from "@/hooks/useGetCookie";
@@ -46,7 +46,7 @@ export default function SingleProduct({ product }: Props) {
 	const buyNow = useBuyNow();
 	const throttle = useThrottle();
 	const toastAlert = useToastAlert();
-	const [cartItems, setCartItems] = useState([] as string[]);
+	const [cartItems, setCartItems] = useState([] as cartItemType[]);
 	const token = getCookie("user_cloudynest_jwt_token");
 
 	async function addToCart() {
@@ -89,6 +89,18 @@ export default function SingleProduct({ product }: Props) {
 		}
 	}, [token]);
 
+	const alreadyInCart = useMemo(() => {
+		for (let items of cartItems) {
+			if (items?.id === undefined) {
+				return true;
+			}
+			if (items.id === product._id) {
+				return true;
+			}
+		}
+		return false;
+	}, [cartItems, product]);
+
 	useEffect(() => {
 		getUserCart();
 	}, [getUserCart]);
@@ -120,12 +132,13 @@ export default function SingleProduct({ product }: Props) {
 							<Button
 								w="235px"
 								size={"lg"}
+								isDisabled={alreadyInCart}
 								colorScheme={"teal"}
 								onClick={() => throttle(addToCart, 2000)}
 								boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
 								leftIcon={<MdOutlineShoppingCart size="22" />}
 								variant="outline">
-								Add to Cart
+								{alreadyInCart ? "Added in Cart" : "Add to Cart"}
 							</Button>
 							<Button
 								w="235px"
