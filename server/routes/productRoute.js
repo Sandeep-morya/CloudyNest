@@ -14,9 +14,13 @@ router.get(
 	"/search",
 	asyncHandler(async (req, res) => {
 		const query = { $regex: req.query.q, $options: "i" };
+		const page = +req.query.page || 1;
+		const limit = +req.query.limit || 25;
 		const products = await Product.find({
 			$or: [{ title: query }, { brand: query }],
-		});
+		})
+			.skip((page - 1) * limit)
+			.limit(limit);
 		res.send(products);
 	}),
 );
@@ -26,9 +30,13 @@ router.get(
 	"/category",
 	asyncHandler(async (req, res) => {
 		const query = { $regex: req.query.q, $options: "i" };
+		const page = +req.query.page || 1;
+		const limit = +req.query.limit || 25;
 		const products = await Product.find({
 			tags: { $elemMatch: query },
-		});
+		})
+			.skip((page - 1) * limit)
+			.limit(limit);
 		res.send(products);
 	}),
 );
@@ -40,6 +48,8 @@ router.get(
 		const base = req.query.base || "price";
 		const min = req.query.min || 0;
 		const max = req.query.max || Infinity;
+		const page = +req.query.page || 1;
+		const limit = +req.query.limit || 25;
 		const order =
 			req.query.order === "asc"
 				? { [base]: "1" }
@@ -51,7 +61,9 @@ router.get(
 			.where(base)
 			.gte(min)
 			.lte(max)
-			.sort(order);
+			.sort(order)
+			.skip((page - 1) * limit)
+			.limit(limit);
 		res.send({ total: products.length, products });
 	}),
 );
@@ -59,7 +71,11 @@ router.get(
 router.get(
 	"/all",
 	asyncHandler(async (req, res) => {
-		const products = await Product.find();
+		const page = +req.query.page || 1;
+		const limit = +req.query.limit || 25;
+		const products = await Product.find()
+			.skip((page - 1) * limit)
+			.limit(limit);
 		res.send(products);
 	}),
 );
