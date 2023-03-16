@@ -8,6 +8,7 @@ import {
 	Flex,
 	Grid,
 	SimpleGrid,
+	Spinner,
 	Stack,
 	Text,
 } from "@chakra-ui/react";
@@ -15,19 +16,50 @@ import axios from "axios";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import jwt from "jsonwebtoken";
 import CartPrice from "@/components/Cart/CartPrice";
 import PaymentForm from "@/components/Checkout/PaymentForm";
 import Summary from "@/components/Checkout/Summary";
+import useToastAlert from "@/hooks/useToastalert";
+import useThrottle from "@/hooks/useThrottle";
 
 type Props = {};
 
 const Checkout = (props: Props) => {
 	const [state, setState] = useState(35);
 	const router = useRouter();
+	const throttle = useThrottle();
+	const toastAlert = useToastAlert();
 	const [checkoutList, setCheckoutList] = useState([] as cartItemType[]);
 	const total = checkoutList.reduce((sum, e) => sum + e.count * e.price, 0);
+	const [paymentMethod, setPaymentMethod] = useState("");
+	const [paymentStatus, setPaymentStatus] = useState(false);
+	const [isError, setIsError] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+
+	async function makeOrder() {
+		setIsLoading(true);
+		try {
+		} catch (error) {}
+	}
+
+	function handleClick() {
+		setState((e) => {
+			const next = e + 34;
+			if (next > 90) {
+				if (paymentMethod != "") {
+					makeOrder();
+				} else {
+					throttle(() => {
+						toastAlert("error", "Select a payment method");
+					}, 1000);
+					return e;
+				}
+			}
+			return next;
+		});
+	}
 
 	useEffect(() => {
 		const list = JSON.parse(localStorage.getItem("checkout")!) || [];
@@ -37,6 +69,7 @@ const Checkout = (props: Props) => {
 			setCheckoutList(list);
 		}
 	}, [router]);
+	console.log(paymentMethod);
 
 	return (
 		<>
@@ -49,7 +82,19 @@ const Checkout = (props: Props) => {
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
 			</Head>
-			<main>
+			<main style={{ position: "relative" }}>
+				{isLoading && (
+					<div className="final_payment">
+						<Text as="b">Waiting for Payment</Text>
+						<Spinner
+							thickness="4px"
+							speed="0.65s"
+							emptyColor="gray.200"
+							color="teal.400"
+							size="xl"
+						/>
+					</div>
+				)}
 				<Stack w={"100vw"} h="100vh" spacing={0} alignItems={"center"}>
 					<Box
 						w="100%"
@@ -81,7 +126,14 @@ const Checkout = (props: Props) => {
 						{state < 40 ? (
 							<AddressForm />
 						) : state > 40 && state < 90 ? (
-							<PaymentForm />
+							<PaymentForm
+								{...{
+									setPaymentMethod,
+									paymentStatus,
+									setPaymentStatus,
+									isLoading,
+								}}
+							/>
 						) : (
 							<Summary />
 						)}
@@ -102,10 +154,10 @@ const Checkout = (props: Props) => {
 
 								<Button
 									colorScheme={"teal"}
-									disabled={state >= 100}
+									disabled={state > 90}
 									visibility={state > 90 ? "hidden" : "visible"}
 									_hover={{ color: "white", backgroundColor: "teal" }}
-									onClick={() => setState(state + 34)}>
+									onClick={handleClick}>
 									{state > 60 ? "Submit" : "Next"}
 								</Button>
 							</Flex>

@@ -166,7 +166,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 	} catch {
 		return {
 			redirect: {
-				destination: "/",
+				destination: "/auth",
 				permanent: false,
 			},
 		};
