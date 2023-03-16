@@ -1,11 +1,18 @@
 ﻿import Header from "@/components/Header/Header";
-import { Stack } from "@chakra-ui/react";
+import OrderCard from "@/components/Order/OrderCard";
+import { FinalOrderType } from "@/Types";
+import { Flex, Grid, Heading, Image, Stack } from "@chakra-ui/react";
+import axios, { AxiosResponse } from "axios";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import React from "react";
 
-type Props = {};
+type Props = {
+	orders: FinalOrderType[];
+};
 
-const UserDashboard = (props: Props) => {
+const UserDashboard = ({ orders }: Props) => {
+	console.log(orders);
 	return (
 		<>
 			<Head>
@@ -22,11 +29,44 @@ const UserDashboard = (props: Props) => {
 				<Stack
 					spacing={5}
 					w={"100%"}
-					p={{ md: "2rem 0", xl: "2rem 0", "2xl": "2rem 15rem" }}
-					m="auto"></Stack>
+					p={{ md: "2rem", xl: "2rem", "2xl": "2rem 15rem" }}
+					m="auto">
+					<Heading color={"blackAlpha.600"} size="lg">
+						Your orders
+					</Heading>
+
+					<Stack spacing={"1rem"}>
+						{orders.map((e) => (
+							<OrderCard key={e._id} order={e} />
+						))}
+					</Stack>
+				</Stack>
 			</main>
 		</>
 	);
 };
 
 export default UserDashboard;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+	try {
+		const { data }: AxiosResponse<FinalOrderType[]> = await axios.get(
+			`${process.env.BASE_URL}/user/orders`,
+			{
+				headers: {
+					Authorization: context.req.cookies.user_cloudynest_jwt_token,
+				},
+			},
+		);
+		return {
+			props: { orders: data },
+		};
+	} catch {
+		return {
+			redirect: {
+				destination: "/auth",
+				permanent: false,
+			},
+		};
+	}
+};

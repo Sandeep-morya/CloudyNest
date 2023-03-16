@@ -37,6 +37,7 @@ import { sellerProfileType, SellerType } from "@/Types";
 import ProfileCard from "@/components/Misc/ProfileCard";
 import { useRouter } from "next/router";
 import AllProducts from "@/components/Seller/AllProducts";
+import AllOrders from "@/components/Seller/AllOrders";
 
 interface Props {
 	// auth: boolean;
@@ -50,12 +51,6 @@ export default function Seller({ data }: Props) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const router = useRouter();
-
-	/* console.log("auth",auth);
-console.log("token",token);
-console.log("data",data); */
-
-	async function handleFileChange() {}
 
 	return (
 		<>
@@ -89,6 +84,8 @@ console.log("data",data); */
 						<ProfileCard data={data} />
 
 						<AllProducts seller_id={data._id} />
+
+						<AllOrders />
 					</Stack>
 				</Stack>
 			</main>

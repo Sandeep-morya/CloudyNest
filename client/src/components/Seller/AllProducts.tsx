@@ -29,27 +29,25 @@ const AllProducts = ({ seller_id }: Props) => {
 	const [isError, setIsError] = useState(false);
 	const router = useRouter();
 	const toastAlert = useToastAlert();
-	const getProducts = useCallback(
-		async function () {
-			setIsLoading(true);
-			try {
-				const { data } = await axios.get(`${base_url}/seller/products`, {
-					headers: { Authorization: getCookie("cloudynest_jwt_token") },
-				});
-				setProductList(data);
-				setIsLoading(false);
-			} catch (error) {
-				setIsLoading(false);
-				setIsError(false);
-			}
-		},
-		[getCookie],
-	);
-	// console.log(productList);
+	const token = getCookie("cloudynest_jwt_token");
+	const getProducts = useCallback(async () => {
+		setIsLoading(true);
+		try {
+			const { data } = await axios.get(`${base_url}/seller/products`, {
+				headers: { Authorization: token },
+			});
+			setProductList(data);
+			setIsLoading(false);
+		} catch (error) {
+			setIsLoading(false);
+			setIsError(false);
+		}
+	}, [token]);
+
 	async function handleDelete(id: string) {
 		toastAlert("success", id);
 	}
-
+	console.log("products");
 	useEffect(() => {
 		getProducts();
 	}, [getProducts]);

@@ -105,3 +105,24 @@ export interface addressType {
 	state: string;
 	pincode: string;
 }
+
+export interface FinalOrderType {
+	_id: string;
+	item: string;
+	customer: string;
+	seller: string;
+	quantity: number;
+	delivery_address: string;
+	amount: number;
+	payment_method: string;
+	payment_status: boolean;
+	current_location: string;
+	track_id: string;
+	delivery_status: boolean;
+	canceled: boolean;
+	returned: boolean;
+	completed: boolean;
+	createdAt: string;
+	updatedAt: string;
+	__v: number;
+}
