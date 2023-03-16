@@ -142,16 +142,18 @@ const CartItem = ({
 						variant="solid"
 						colorScheme={"teal"}
 						_hover={{ color: "white", backgroundColor: "teal" }}
-						onClick={() =>
+						onClick={() => {
 							buyNow([
 								{
 									id: product._id,
 									title: product.title,
 									count,
+									seller: product.seller,
 									price: product.price,
 								},
-							])
-						}>
+							]);
+							deleteCartItem(product._id);
+						}}>
 						Buy Now
 					</Button>
 					<Button

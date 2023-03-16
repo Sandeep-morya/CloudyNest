@@ -232,7 +232,10 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 						</Button>
 					)}
 					<Divider />
-					<Button variant="ghost" leftIcon={<BsBagCheck />}>
+					<Button
+						onClick={() => router.push("/user/dashboard")}
+						variant="ghost"
+						leftIcon={<BsBagCheck />}>
 						My Orders
 					</Button>
 				</Stack>

@@ -94,4 +94,14 @@ export interface cartItemType {
 	title: string;
 	count: number;
 	price: number;
+	seller: string;
+}
+
+export interface addressType {
+	house: string;
+	area: string;
+	landmark: string;
+	city: string;
+	state: string;
+	pincode: string;
 }

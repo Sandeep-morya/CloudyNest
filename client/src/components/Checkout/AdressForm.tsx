@@ -1,4 +1,5 @@
-﻿import {
+﻿import { addressType } from "@/Types";
+import {
 	Divider,
 	FormControl,
 	FormLabel,
@@ -9,12 +10,14 @@
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-type Props = {};
+type Props = {
+	address: addressType;
+	setAddress: React.Dispatch<React.SetStateAction<addressType>>;
+};
 
-const AddressForm = (props: Props) => {
+const AddressForm = ({ address, setAddress }: Props) => {
 	const [isError, setIsError] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	// const [formData,setFormData] = useState({});
 
 	return (
 		<Stack
@@ -39,8 +42,8 @@ const AddressForm = (props: Props) => {
 					pr="4.5rem"
 					type={"text"}
 					onKeyDown={() => setIsError(false)}
-					// value={name}
-					onChange={(e) => e.target.value}
+					value={address.house}
+					onChange={(e) => setAddress({ ...address, house: e.target.value })}
 				/>
 			</FormControl>
 
@@ -51,8 +54,8 @@ const AddressForm = (props: Props) => {
 					pr="4.5rem"
 					type={"text"}
 					onKeyDown={() => setIsError(false)}
-					// value={name}
-					onChange={(e) => e.target.value}
+					value={address.area}
+					onChange={(e) => setAddress({ ...address, area: e.target.value })}
 				/>
 			</FormControl>
 
@@ -63,8 +66,8 @@ const AddressForm = (props: Props) => {
 					pr="4.5rem"
 					type={"text"}
 					onKeyDown={() => setIsError(false)}
-					// value={name}
-					onChange={(e) => e.target.value}
+					value={address.landmark}
+					onChange={(e) => setAddress({ ...address, landmark: e.target.value })}
 				/>
 			</FormControl>
 			<FormControl>
@@ -74,8 +77,8 @@ const AddressForm = (props: Props) => {
 					pr="4.5rem"
 					type={"text"}
 					onKeyDown={() => setIsError(false)}
-					// value={name}
-					onChange={(e) => e.target.value}
+					value={address.city}
+					onChange={(e) => setAddress({ ...address, city: e.target.value })}
 				/>
 			</FormControl>
 			<FormControl>
@@ -85,8 +88,8 @@ const AddressForm = (props: Props) => {
 					pr="4.5rem"
 					type={"text"}
 					onKeyDown={() => setIsError(false)}
-					// value={name}
-					onChange={(e) => e.target.value}
+					value={address.state}
+					onChange={(e) => setAddress({ ...address, state: e.target.value })}
 				/>
 			</FormControl>
 			<FormControl>
@@ -94,10 +97,10 @@ const AddressForm = (props: Props) => {
 				<Input
 					focusBorderColor={"teal.500"}
 					pr="4.5rem"
-					type={"text"}
+					type={"number"}
 					onKeyDown={() => setIsError(false)}
-					// value={name}
-					onChange={(e) => e.target.value}
+					value={address.pincode}
+					onChange={(e) => setAddress({ ...address, pincode: e.target.value })}
 				/>
 			</FormControl>
 		</Stack>

@@ -15,11 +15,19 @@ import React from "react";
 
 type Props = {
 	cartList: cartItemType[];
+	deleteCartItem: (id: string) => Promise<void>;
 };
 
-const CartPrice = ({ cartList }: Props) => {
+const CartPrice = ({ cartList, deleteCartItem }: Props) => {
 	const total = cartList.reduce((sum, e) => sum + e.count * e.price, 0);
 	const buyNow = useBuyNow();
+
+	function handleClick() {
+		buyNow(cartList);
+		cartList.forEach((e) => {
+			deleteCartItem(e.id);
+		});
+	}
 
 	return (
 		<Stack w="100%" h="100%" bgColor={"white"} borderRadius="0.5rem" p="1rem">
@@ -52,7 +60,7 @@ const CartPrice = ({ cartList }: Props) => {
 			<Button
 				variant="solid"
 				colorScheme={"teal"}
-				onClick={() => buyNow(cartList)}
+				onClick={handleClick}
 				size="lg"
 				_hover={{ color: "white", backgroundColor: "teal" }}>
 				Buy All

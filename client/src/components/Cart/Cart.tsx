@@ -1,12 +1,12 @@
 ﻿import useGetCookie from "@/hooks/useGetCookie";
-import { FinalProductType } from "@/Types";
+import { cartItemType, FinalProductType } from "@/Types";
 import { Divider, HStack, Stack, Heading, Flex, calc } from "@chakra-ui/react";
 import axios, { AxiosResponse } from "axios";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import CartItem from "./CartItem";
 
 type Props = {
-	cartList: { id: string; count: number; title: string; price: number }[];
+	cartList: cartItemType[];
 	deleteCartItem: (id: string) => Promise<void>;
 	updateCartItem: (id: string, count: number) => Promise<void>;
 };

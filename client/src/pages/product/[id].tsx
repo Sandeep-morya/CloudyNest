@@ -62,6 +62,7 @@ export default function SingleProduct({ product }: Props) {
 					data: {
 						id: product._id,
 						title: product.title,
+						seller: product.seller,
 						price: product.price,
 						count: 1,
 					},
@@ -139,6 +140,7 @@ export default function SingleProduct({ product }: Props) {
 										{
 											id: product._id,
 											title: product.title,
+											seller: product.seller,
 											count: 1,
 											price: product.price,
 										},

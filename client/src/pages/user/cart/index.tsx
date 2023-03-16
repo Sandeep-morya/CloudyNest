@@ -38,9 +38,10 @@ import useThrottle from "@/hooks/useThrottle";
 import useToastAlert from "@/hooks/useToastalert";
 import CartPrice from "@/components/Cart/CartPrice";
 import useGetCookie from "@/hooks/useGetCookie";
+import { cartItemType } from "@/Types";
 
 interface Props {
-	cartList: { id: string; count: number; title: string; price: number }[];
+	cartList: cartItemType[];
 }
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
@@ -143,7 +144,10 @@ export default function SingleUserCart({ cartList }: Props) {
 									Price Details
 								</Heading>
 								<Box w="100%" h="100%">
-									<CartPrice cartList={cartItemsList} />
+									<CartPrice
+										cartList={cartItemsList}
+										deleteCartItem={deleteCartItem}
+									/>
 								</Box>
 							</Stack>
 						</Flex>

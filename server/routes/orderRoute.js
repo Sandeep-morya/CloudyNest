@@ -15,7 +15,8 @@ router.post(
 	"/",
 	asyncHandler(async (req, res) => {
 		const customer = req.body.generatedID;
-		const order = new Order({ ...req.body, customer });
+		const data = new Order({ ...req.body, customer });
+		const order = await data.save();
 		res.send({ message: "order Placed", order });
 	}),
 );

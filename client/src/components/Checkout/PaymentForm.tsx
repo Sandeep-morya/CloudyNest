@@ -21,9 +21,10 @@ import Pill from "../Misc/Pill";
 
 type Props = {
 	setPaymentMethod: React.Dispatch<React.SetStateAction<string>>;
+	setPaymentStatus: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const PaymentForm = ({ setPaymentMethod }: Props) => {
+const PaymentForm = ({ setPaymentMethod, setPaymentStatus }: Props) => {
 	// const [formData,setFormData] = useState({});
 
 	return (
@@ -46,7 +47,10 @@ const PaymentForm = ({ setPaymentMethod }: Props) => {
 				rightIcon={<TbTruckDelivery size="22" />}
 				size="md"
 				_focusWithin={{ backgroundColor: "teal.50" }}
-				onClick={() => setPaymentMethod("Cash on delivery")}
+				onClick={() => {
+					setPaymentMethod("Cash on delivery");
+					setPaymentStatus(false);
+				}}
 				variant="outline">
 				Cash on Delivery
 			</Button>
@@ -56,7 +60,10 @@ const PaymentForm = ({ setPaymentMethod }: Props) => {
 				type="image"
 				border={"none"}
 				_focusWithin={{ backgroundColor: "teal.50" }}
-				onClick={() => setPaymentMethod("Google Pay App")}
+				onClick={() => {
+					setPaymentMethod("Google Pay App");
+					setPaymentStatus(true);
+				}}
 				objectFit="contain"
 				src="https://png.oyepandeyji.com/wp-content/uploads/2021/08/gpay-new-logo-png-removebg-preview.png"
 				alt=""
@@ -67,7 +74,10 @@ const PaymentForm = ({ setPaymentMethod }: Props) => {
 				type="image"
 				border={"none"}
 				_focusWithin={{ backgroundColor: "teal.50" }}
-				onClick={() => setPaymentMethod("PhonePe App")}
+				onClick={() => {
+					setPaymentMethod("PhonePe App");
+					setPaymentStatus(true);
+				}}
 				objectFit="contain"
 				src="https://logos-download.com/wp-content/uploads/2021/01/PhonePe_Logo_full.png"
 				alt=""
@@ -80,7 +90,10 @@ const PaymentForm = ({ setPaymentMethod }: Props) => {
 				border={"none"}
 				_focusWithin={{ backgroundColor: "teal.50" }}
 				objectFit="contain"
-				onClick={() => setPaymentMethod("Paytm App")}
+				onClick={() => {
+					setPaymentMethod("Paytm App");
+					setPaymentStatus(true);
+				}}
 				src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Paytm_logo.png/640px-Paytm_logo.png"
 				alt=""
 			/>
@@ -90,7 +103,10 @@ const PaymentForm = ({ setPaymentMethod }: Props) => {
 				<AccordionItem
 					border={"none"}
 					_focusWithin={{ backgroundColor: "teal.50" }}
-					onClick={() => setPaymentMethod("Debit Card")}>
+					onClick={() => {
+						setPaymentMethod("Debit Card");
+						setPaymentStatus(true);
+					}}>
 					<AccordionButton padding={"4"}>
 						<Image
 							w={20}
@@ -135,7 +151,10 @@ const PaymentForm = ({ setPaymentMethod }: Props) => {
 				<AccordionItem
 					_focusWithin={{ backgroundColor: "teal.50" }}
 					border={"none"}
-					onClick={() => setPaymentMethod("Credit Card")}>
+					onClick={() => {
+						setPaymentMethod("Credit Card");
+						setPaymentStatus(true);
+					}}>
 					<AccordionButton padding={"4"}>
 						<Image
 							w={20}
@@ -177,7 +196,10 @@ const PaymentForm = ({ setPaymentMethod }: Props) => {
 				</AccordionItem>
 
 				<AccordionItem
-					onClick={() => setPaymentMethod("UPI ID")}
+					onClick={() => {
+						setPaymentMethod("UPI ID");
+						setPaymentStatus(true);
+					}}
 					border={"none"}
 					_focusWithin={{ backgroundColor: "teal.50" }}>
 					<AccordionButton padding={"4"}>
