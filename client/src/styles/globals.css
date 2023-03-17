@@ -123,3 +123,16 @@ button:hover{
     z-index: 1;
 
 }
+
+.search_results{
+    position: absolute;
+    top:110%;
+    left: 0;
+    width: 100%;
+    min-height: 50vh;
+    padding: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    border-radius: 0.3rem;
+    background-color: rgb(255, 255, 255);
+z-index: 1;
+}

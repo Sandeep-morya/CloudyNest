@@ -4,10 +4,22 @@ import Products from "@/components/Product/Products";
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
 import { FinalProductType } from "@/Types";
-import { Flex, Heading, Stack } from "@chakra-ui/react";
+import {
+	Flex,
+	Heading,
+	HStack,
+	IconButton,
+	Image,
+	Spacer,
+	Stack,
+} from "@chakra-ui/react";
 import axios from "axios";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+
+import Carousel from "@/components/Content/Carousel";
+import Pagination from "@/components/Content/Pagination";
+import { FaAngleLeft, FaAngleRight, FaPen } from "react-icons/fa";
 
 const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
 const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
@@ -18,22 +30,31 @@ export default function Home() {
 	const [productList, setProductList] = useState([] as FinalProductType[]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
+	const [page, setPage] = useState(1);
+	const totalPages = useRef(1);
 
-	async function getProducts() {
-		setIsLoading(true);
-		try {
-			const { data } = await axios.get(`${base_url}/product/all`);
-			setProductList(data);
-			setIsLoading(false);
-		} catch (error) {
-			setIsLoading(false);
-			setIsError(true);
-		}
-	}
-
+	const getProducts = useCallback(
+		async function () {
+			setIsLoading(true);
+			try {
+				const { data } = await axios.get(`${base_url}/product/all`, {
+					params: { page: page, limit: 20 },
+				});
+				setProductList(data.products);
+				totalPages.current = data.total_pages;
+				setIsLoading(false);
+			} catch (error) {
+				setIsLoading(false);
+				setIsError(true);
+			}
+		},
+		[page],
+	);
+	console.log(totalPages.current);
 	useEffect(() => {
 		getProducts();
-	}, []);
+	}, [getProducts]);
+
 	return (
 		<>
 			<Head>
@@ -47,13 +68,47 @@ export default function Home() {
 			</Head>
 			<main>
 				<Header cartCount={0} />
-				<Stack spacing={5} w={"75%"} m="auto">
+
+				<Stack
+					spacing={5}
+					w={"100%"}
+					p={{ md: "2rem", xl: "2rem", "2xl": "2rem 15rem" }}
+					m="auto">
 					<Advertisments />
-					<Heading size="xl" as="h2">
-						Products for You
-					</Heading>
-					<Flex justifyContent={"space-between"} alignItems="flex-start">
+
+					<Flex
+						justifyContent={"space-between"}
+						flexDirection="column"
+						gap="1rem"
+						alignItems="flex-start">
 						<Category />
+						<Flex w="100%" justifyContent={"space-between"}>
+							<Heading size="lg" as="h2">
+								Products for You
+							</Heading>
+
+							<HStack>
+								<IconButton
+									colorScheme="teal"
+									variant={"solid"}
+									_hover={{ backgroundColor: "teal", color: "white" }}
+									aria-label="Call Segun"
+									onClick={() => setPage((e) => e - 1)}
+									isDisabled={page === 1}
+									icon={<FaAngleLeft />}
+								/>
+								<IconButton
+									colorScheme="teal"
+									variant={"solid"}
+									_hover={{ backgroundColor: "teal", color: "white" }}
+									isDisabled={page === totalPages.current}
+									aria-label="Call Segun"
+									onClick={() => setPage((e) => e + 1)}
+									icon={<FaAngleRight />}
+								/>
+							</HStack>
+						</Flex>
+
 						<Products products={productList} {...{ isLoading, isError }} />
 					</Flex>
 				</Stack>

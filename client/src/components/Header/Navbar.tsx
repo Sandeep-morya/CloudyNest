@@ -1,5 +1,6 @@
 ﻿import {
 	Badge,
+	Box,
 	Button,
 	Divider,
 	Flex,
@@ -9,6 +10,7 @@
 	Input,
 	InputGroup,
 	InputLeftElement,
+	Grid,
 	Spacer,
 	Stack,
 	Text,
@@ -25,6 +27,11 @@ import jwt from "jsonwebtoken";
 import axios, { AxiosResponse } from "axios";
 import useLogout from "@/hooks/useLogout";
 import useGetCookie from "@/hooks/useGetCookie";
+import useDebounce from "@/hooks/useDebounce";
+import { FinalProductType } from "@/Types";
+import MiniProductCard from "../Product/MiniProductCard";
+import NoResults from "../Misc/NoResults";
+import ResultsLoader from "../Misc/ResultsLoader";
 
 interface Props {
 	cartCount: number;
@@ -41,9 +48,29 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 	const [username, setUsername] = useState("");
 	const router = useRouter();
 	const [cartItems, setCartItems] = useState(cartCount);
+	const query = useDebounce(serachBarText);
+	const [productList, setProductList] = useState([] as FinalProductType[]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [isError, setIsError] = useState(false);
 
 	const logout = useLogout("user_cloudynest_jwt_token");
 	const token = getCookie("user_cloudynest_jwt_token");
+
+	async function getProducts(query: string) {
+		setIsLoading(true);
+		try {
+			const { data } = await axios.get(`${base_url}/product/search`, {
+				params: { q: query, limit: 6 },
+			});
+			setProductList(data);
+			console.log("getProdcut called");
+
+			setIsLoading(false);
+		} catch (error) {
+			setIsLoading(false);
+			setIsError(true);
+		}
+	}
 
 	const getUser = useCallback(
 		async function () {
@@ -86,6 +113,10 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 		getUser();
 	}, [getUser]);
 
+	useEffect(() => {
+		getProducts(query);
+	}, [query]);
+
 	return (
 		<Flex
 			w="100%"
@@ -98,32 +129,47 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 			 * Logo
 			 * SearchBar
 			 */}
-			<HStack w={"100%"}>
+			<HStack w={"100%"} flexGrow="1" gap="2rem">
 				<Image
 					onClick={() => router.replace("/")}
 					width={180}
 					src="/CloudyNest-Logo_Title.png"
 					alt="CloudyNest-Logo_Title.png"
 				/>
-				<Spacer />
-				<Spacer />
-				<Spacer />
 
-				<InputGroup hidden={hideExtras}>
-					<InputLeftElement pointerEvents="none" top="4px">
-						<FiSearch size={18} />
-					</InputLeftElement>
-					<Input
-						focusBorderColor={"teal.500"}
-						size="md"
-						h="3rem"
-						type="text"
-						maxW={"500px"}
-						value={serachBarText}
-						onChange={({ target }) => setSearchBarText(target.value)}
-						placeholder="Type - tshirt jeans or any clothing"
-					/>
-				</InputGroup>
+				<Box position="relative" flexGrow={"2"}>
+					<InputGroup hidden={hideExtras}>
+						<InputLeftElement pointerEvents="none" top="4px">
+							<FiSearch size={18} />
+						</InputLeftElement>
+						<Input
+							focusBorderColor={"teal.500"}
+							size="md"
+							h="3rem"
+							type="text"
+							value={serachBarText}
+							onChange={({ target }) => setSearchBarText(target.value)}
+							placeholder="Type - tshirt jeans or any clothing"
+						/>
+					</InputGroup>
+					{serachBarText.trim() != "" && (
+						<Box className="search_results">
+							{productList.length < 1 && <NoResults />}
+							{isLoading && <ResultsLoader message="results" />}
+							<Grid gridTemplateColumns={"1fr 1fr 1fr"} gap="1rem">
+								{productList.map((product) => (
+									<MiniProductCard
+										key={product._id}
+										id={product._id}
+										title={product.title}
+										price={product.price}
+										src={product.thumbnail}
+									/>
+								))}
+							</Grid>
+						</Box>
+					)}
+				</Box>
 			</HStack>
 
 			{/*
@@ -131,7 +177,7 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 			 *
 			 */}
 
-			<HStack position={"relative"}>
+			<HStack position={"relative"} flexGrow="1">
 				<Button variant={"none"} leftIcon={<GiSmartphone size={22} />}>
 					Download App
 				</Button>

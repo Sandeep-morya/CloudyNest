@@ -13,32 +13,32 @@ type Props = {
 const Products = ({ isLoading, isError, products }: Props) => {
 	if (isLoading) {
 		return (
-			<Stack w={"70%"}>
-				<SimpleGrid columns={4} gap="1.5rem">
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
+			<Stack w={"100%"}>
+				<SimpleGrid columns={5} gap="1.5rem">
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
 				</SimpleGrid>
 			</Stack>
 		);
 	}
 	if (isError) {
-		return <Center w={"70%"}>Server Error</Center>;
+		return <Center w={"100%"}>Server Error</Center>;
 	}
 	return (
-		<Stack w={"70%"}>
-			<SimpleGrid columns={4} gap="1.5rem">
-				{products.map((product) => (
+		<Stack w={"100%"}>
+			<SimpleGrid columns={5} gap="1.5rem">
+				{products.map((product, index) => (
 					<ProductCard key={product._id} product={product} />
 				))}
 			</SimpleGrid>
