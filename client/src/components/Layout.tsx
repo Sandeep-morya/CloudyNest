@@ -1,4 +1,4 @@
-﻿import { Stack } from "@chakra-ui/react";
+﻿import { Box, Stack } from "@chakra-ui/react";
 import React from "react";
 import Footer from "./Content/Footer";
 
@@ -10,7 +10,9 @@ const Layout = ({ children }: Props) => {
 	return (
 		<Stack className="layout" backgroundColor={"#ebebeb"}>
 			{children}
-			<Footer />
+			<Box paddingTop={"10rem"}>
+				<Footer />
+			</Box>
 		</Stack>
 	);
 };

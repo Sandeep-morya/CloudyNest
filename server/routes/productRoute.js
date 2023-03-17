@@ -31,13 +31,20 @@ router.get(
 	asyncHandler(async (req, res) => {
 		const query = { $regex: req.query.q, $options: "i" };
 		const page = +req.query.page || 1;
-		const limit = +req.query.limit || 25;
+		const limit = +req.query.limit || 20;
+		const total_count = await Product.find({
+			tags: { $elemMatch: query },
+		}).count();
 		const products = await Product.find({
 			tags: { $elemMatch: query },
 		})
 			.skip((page - 1) * limit)
 			.limit(limit);
-		res.send(products);
+		res.send({
+			products,
+			total_pages: Math.ceil(total_count / limit),
+			total_count,
+		});
 	}),
 );
 
@@ -49,7 +56,8 @@ router.get(
 		const min = req.query.min || 0;
 		const max = req.query.max || Infinity;
 		const page = +req.query.page || 1;
-		const limit = +req.query.limit || 25;
+		const limit = +req.query.limit || 20;
+		const total_count = await Product.count();
 		const order =
 			req.query.order === "asc"
 				? { [base]: "1" }
@@ -64,7 +72,11 @@ router.get(
 			.sort(order)
 			.skip((page - 1) * limit)
 			.limit(limit);
-		res.send({ total: products.length, products });
+		res.send({
+			products,
+			total_pages: Math.ceil(total_count / limit),
+			total_count,
+		});
 	}),
 );
 
@@ -72,7 +84,7 @@ router.get(
 	"/all",
 	asyncHandler(async (req, res) => {
 		const page = +req.query.page || 1;
-		const limit = +req.query.limit || 2;
+		const limit = +req.query.limit || 20;
 		const total_count = await Product.count();
 		const products = await Product.find()
 			.skip((page - 1) * limit)

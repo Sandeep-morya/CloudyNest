@@ -31,15 +31,15 @@ export default function Home() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [page, setPage] = useState(1);
+	const [url, setUrl] = useState(`/all?page=1`);
 	const totalPages = useRef(1);
+	const [endPoint, setEndPoint] = useState("all?dummy=true");
 
 	const getProducts = useCallback(
 		async function () {
 			setIsLoading(true);
 			try {
-				const { data } = await axios.get(`${base_url}/product/all`, {
-					params: { page: page, limit: 20 },
-				});
+				const { data } = await axios.get(`${base_url}/product${url}`);
 				setProductList(data.products);
 				totalPages.current = data.total_pages;
 				setIsLoading(false);
@@ -48,9 +48,11 @@ export default function Home() {
 				setIsError(true);
 			}
 		},
-		[page],
+		[url],
 	);
 	console.log(totalPages.current);
+	console.log(url);
+	console.log("page", page);
 	useEffect(() => {
 		getProducts();
 	}, [getProducts]);
@@ -81,7 +83,7 @@ export default function Home() {
 						flexDirection="column"
 						gap="1rem"
 						alignItems="flex-start">
-						<Category />
+						<Category {...{ setUrl, setPage, setEndPoint }} />
 						<Flex w="100%" justifyContent={"space-between"}>
 							<Heading size="lg" as="h2">
 								Products for You
@@ -93,7 +95,12 @@ export default function Home() {
 									variant={"solid"}
 									_hover={{ backgroundColor: "teal", color: "white" }}
 									aria-label="Call Segun"
-									onClick={() => setPage((e) => e - 1)}
+									onClick={() =>
+										setPage((e) => {
+											setUrl(`/${endPoint}&page=${e - 1}`);
+											return e - 1;
+										})
+									}
 									isDisabled={page === 1}
 									icon={<FaAngleLeft />}
 								/>
@@ -101,9 +108,16 @@ export default function Home() {
 									colorScheme="teal"
 									variant={"solid"}
 									_hover={{ backgroundColor: "teal", color: "white" }}
-									isDisabled={page === totalPages.current}
+									isDisabled={
+										page === totalPages.current || totalPages.current <= 1
+									}
 									aria-label="Call Segun"
-									onClick={() => setPage((e) => e + 1)}
+									onClick={() =>
+										setPage((e) => {
+											setUrl(`/${endPoint}&page=${e + 1}`);
+											return e + 1;
+										})
+									}
 									icon={<FaAngleRight />}
 								/>
 							</HStack>
