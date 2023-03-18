@@ -5,6 +5,7 @@ import {
 	Flex,
 	Heading,
 	IconButton,
+	Image,
 	Spinner,
 	Stack,
 	useMediaQuery,
@@ -16,6 +17,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { MdAddCircle } from "react-icons/md";
 import SolidButton from "../Header/SolidButton";
+import Nothing from "../Misc/Nothing";
 import OrderCard from "../Order/OrderCard";
 
 type Props = {};
@@ -93,6 +95,7 @@ const AllOrders = () => {
 			{/* All product */}
 
 			<Stack spacing={"1rem"}>
+				{orders.length < 1 && <Nothing />}
 				{orders.map((e) => (
 					<OrderCard key={e._id} order={e} />
 				))}

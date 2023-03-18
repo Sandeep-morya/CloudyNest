@@ -40,6 +40,7 @@ import useToastAlert from "@/hooks/useToastalert";
 import CartPrice from "@/components/Cart/CartPrice";
 import useGetCookie from "@/hooks/useGetCookie";
 import { cartItemType } from "@/Types";
+import Nothing from "@/components/Misc/Nothing";
 
 interface Props {
 	cartList: cartItemType[];
@@ -112,47 +113,49 @@ export default function SingleUserCart({ cartList }: Props) {
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
 						<CartNav state={0} />
 					</Box>
-
-					<Flex
-						p={{ lg: "2rem", xl: "2rem", "2xl": "2rem 15rem" }}
-						w="100%"
-						flexDirection={{
-							base: "column",
-							lg: "column",
-							xl: "row",
-						}}
-						justifyContent={"space-between"}
-						gap="2rem">
-						{/* Cart  */}
-						<Box flex="1" h="100vh">
-							<Cart
-								cartList={cartItemsList}
-								deleteCartItem={deleteCartItem}
-								updateCartItem={updateCartItem}
-							/>
-						</Box>
-						{!smallNav && (
-							<Divider
-								height="auto"
-								marginTop={"3.5rem"}
-								orientation="vertical"
-								borderWidth={".1rem"}
-								borderColor={"rgba(0,0,0,0.1)"}
-							/>
-						)}
-
-						<Stack flex="1" spacing={10} h="100vh">
-							<Heading as="h3" size="md" color="blackAlpha.600">
-								Price Details
-							</Heading>
-							<Box w="100%" h="100%">
-								<CartPrice
+					{cartItemsList.length < 1 && <Nothing />}
+					{cartItemsList.length > 0 && (
+						<Flex
+							p={{ lg: "2rem", xl: "2rem", "2xl": "2rem 15rem" }}
+							w="100%"
+							flexDirection={{
+								base: "column",
+								lg: "column",
+								xl: "row",
+							}}
+							justifyContent={"space-between"}
+							gap="2rem">
+							{/* Cart  */}
+							<Box flex="1" h="100vh">
+								<Cart
 									cartList={cartItemsList}
 									deleteCartItem={deleteCartItem}
+									updateCartItem={updateCartItem}
 								/>
 							</Box>
-						</Stack>
-					</Flex>
+							{!smallNav && (
+								<Divider
+									height="auto"
+									marginTop={"3.5rem"}
+									orientation="vertical"
+									borderWidth={".1rem"}
+									borderColor={"rgba(0,0,0,0.1)"}
+								/>
+							)}
+
+							<Stack flex="1" spacing={10} h="100vh">
+								<Heading as="h3" size="md" color="blackAlpha.600">
+									Price Details
+								</Heading>
+								<Box w="100%" h="100%">
+									<CartPrice
+										cartList={cartItemsList}
+										deleteCartItem={deleteCartItem}
+									/>
+								</Box>
+							</Stack>
+						</Flex>
+					)}
 				</Stack>
 			</main>
 		</>

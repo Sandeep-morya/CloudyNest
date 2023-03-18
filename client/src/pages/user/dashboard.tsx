@@ -1,4 +1,5 @@
 ﻿import Header from "@/components/Header/Header";
+import Nothing from "@/components/Misc/Nothing";
 import OrderCard from "@/components/Order/OrderCard";
 import { FinalOrderType } from "@/Types";
 import { Flex, Grid, Heading, Image, Stack } from "@chakra-ui/react";
@@ -42,6 +43,7 @@ const UserDashboard = ({ orders }: Props) => {
 					</Heading>
 
 					<Stack spacing={"1rem"}>
+						{orders.length < 1 && <Nothing />}
 						{orders.map((e) => (
 							<OrderCard key={e._id} order={e} />
 						))}
