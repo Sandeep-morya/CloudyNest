@@ -29,7 +29,13 @@ const UserDashboard = ({ orders }: Props) => {
 				<Stack
 					spacing={5}
 					w={"100%"}
-					p={{ md: "2rem", xl: "2rem", "2xl": "2rem 15rem" }}
+					p={{
+						base: "1rem",
+						sm: "1rem",
+						md: "2rem",
+						xl: "2rem",
+						"2xl": "2rem 15rem",
+					}}
 					m="auto">
 					<Heading color={"blackAlpha.600"} size="lg">
 						Your orders

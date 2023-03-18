@@ -32,7 +32,6 @@ const ProductCard = ({ product }: Props) => {
 			boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px">
 			<Box
 				w="100%"
-				h="18rem"
 				position={"relative"}
 				cursor="pointer"
 				className="product_card_image_div">
@@ -46,7 +45,13 @@ const ProductCard = ({ product }: Props) => {
 					{product.brand}
 				</Badge>
 
-				<Text h="3rem">{product.title}</Text>
+				<Box
+					h="2rem"
+					whiteSpace={"nowrap"}
+					overflow="hidden"
+					text-overflow="ellipsis">
+					{product.title}
+				</Box>
 
 				<Flex alignItems="center" justifyContent={"space-between"}>
 					<HStack alignItems="baseline">
@@ -77,7 +82,19 @@ const ProductCard = ({ product }: Props) => {
 					borderRadius={"1rem"}
 					borderColor="blackAlpha.400"
 				/>
-				<Flex alignItems="center" justifyContent={"space-between"}>
+				<Flex
+					alignItems={{
+						base: "flex-start",
+						xl: "center",
+						"2xl": "center",
+					}}
+					flexDirection={{
+						base: "column-reverse",
+						xl: "row",
+						"2xl": "row",
+					}}
+					gap="1rem"
+					justifyContent={"space-between"}>
 					<HStack
 						fontSize={"sm"}
 						bgColor="green.400"

@@ -7,8 +7,22 @@ type Props = {};
 const Advertisments = (props: Props) => {
 	return (
 		<VStack gap="3rem">
-			<Image w={"80%"} src="ad1.png" alt="ad1" />
-			<BannerHeading size={"2xl"} title="Top Categories to choose from" />
+			<Image
+				w={{ base: "100%", sm: "95%", "2xl": "80%" }}
+				src="ad1.png"
+				alt="ad1"
+			/>
+			<BannerHeading
+				size={{
+					base: "sm",
+					sm: "sm",
+					md: "md",
+					lg: "lg",
+					xl: "xl",
+					"2xl": "2xl",
+				}}
+				title="Top Categories to choose from"
+			/>
 			{/* <Image
 				w={"80%"}
 				src="https://graphicsfamily.com/wp-content/uploads/edd/2022/06/Free-E-commerce-Product-Banner-Design-with-Green-Colors-scaled.jpg"

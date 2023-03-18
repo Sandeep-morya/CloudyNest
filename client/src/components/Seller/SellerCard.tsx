@@ -17,6 +17,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BsShop } from "react-icons/bs";
 import { FaStar, FaUserCheck } from "react-icons/fa";
 import { MdRateReview, MdListAlt } from "react-icons/md";
+import SolidButton from "../Header/SolidButton";
 import SellerSpecCard from "./SellerSpecCard";
 
 type Props = {
@@ -64,10 +65,20 @@ const SellerCard = ({ seller_id }: Props) => {
 				justifyContent={"space-between"}
 				alignItems="flex-start"
 				p="1rem"
+				flexDirection={{
+					base: "column",
+					md: "column",
+					xl: "row",
+				}}
 				gap="2rem">
 				<Stack
 					maxW={"min-content"}
 					spacing={"1rem"}
+					direction={{
+						base: "row",
+						md: "row",
+						xl: "column",
+					}}
 					textAlign="center"
 					alignItems={"center"}>
 					<Avatar
@@ -96,31 +107,24 @@ const SellerCard = ({ seller_id }: Props) => {
 						<FaStar />
 						<Box> CloudyNest - Users - Ratings</Box>
 					</HStack>
-					<Flex justifyContent={"space-between"} gap="1rem">
+					<Flex justifyContent={"space-between"} flexWrap="wrap" gap="1rem">
 						{/* Reviews */}
 						<SellerSpecCard count="2000+" title="Reviews" Icon={MdRateReview} />
 						<SellerSpecCard count="700+" title="Followers" Icon={FaUserCheck} />
 						<SellerSpecCard count="100+" title="Products" Icon={MdListAlt} />
 					</Flex>
 				</Stack>
-				<Stack>
-					<Button
-						colorScheme={"teal"}
-						boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
-						leftIcon={<BsShop size="22" />}
-						variant="outline">
+				<Stack
+					direction={{
+						base: "row",
+						md: "row",
+						xl: "column",
+					}}>
+					<SolidButton outline leftIcon={<BsShop size="22" />}>
 						View Shop
-					</Button>
-					<Button
-						colorScheme={"teal"}
-						boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
-						_hover={{
-							background: "teal.100",
-						}}
-						leftIcon={<FaUserCheck size="22" />}
-						variant="solid">
-						Follow
-					</Button>
+					</SolidButton>
+
+					<SolidButton leftIcon={<FaUserCheck size="22" />}>Follow</SolidButton>
 				</Stack>
 			</Flex>
 			<Flex gap="1rem">

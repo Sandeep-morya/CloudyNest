@@ -73,14 +73,19 @@ const OrderCard = ({ order }: Props) => {
 
 	return (
 		<Grid
-			gridTemplateColumns={"2fr 1fr 1fr "}
+			gridTemplateColumns={{
+				base: "1fr",
+				md: "1fr",
+				xl: "2fr 1.5fr 0.5fr",
+			}}
+			boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
 			justifyContent="center"
 			alignContent={"center"}
-			bgColor="white"
 			p="1rem"
+			gap="1rem"
 			borderRadius={"0.5rem"}
 			alignItems={"flex-start"}>
-			<Flex gap="1rem" alignItems={"center"}>
+			<Flex gap="1rem" alignItems={"flex-start"}>
 				<Image
 					w="10rem"
 					h="12rem"
@@ -119,11 +124,11 @@ const OrderCard = ({ order }: Props) => {
 				<Text as="b">{`Payment Amount: ₹ ${order.amount}`}</Text>
 			</Stack>
 
-			<Stack alignItems={"flex-end"}>
-				<Button w="10rem" colorScheme={"teal"} variant="solid">
+			<Stack>
+				<Button colorScheme={"teal"} variant="solid">
 					Track Status
 				</Button>
-				<Button w="10rem" colorScheme={"teal"} variant="outline">
+				<Button colorScheme={"teal"} variant="outline">
 					Cancel Order
 				</Button>
 			</Stack>

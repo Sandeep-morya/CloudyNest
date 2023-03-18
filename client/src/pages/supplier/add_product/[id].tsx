@@ -320,7 +320,7 @@ const AddProduct = ({ data }: Props) => {
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
 			</Head>
 			<main>
-				<Stack bgColor={"blackAlpha.100"} w={"100vw"} spacing={0}>
+				<Stack w={"100%"} spacing={0}>
 					<Box
 						position="sticky"
 						top={0}
@@ -333,7 +333,13 @@ const AddProduct = ({ data }: Props) => {
 					</Box>
 
 					<Stack
-						p={{ md: "1rem", xl: "1rem", "2xl": "2rem 15rem" }}
+						p={{
+							base: "1rem",
+							sm: "1rem",
+							md: "1rem",
+							xl: "1rem",
+							"2xl": "2rem 15rem",
+						}}
 						bgColor={"blackAlpha.100"}>
 						<Center>
 							<Image
@@ -352,7 +358,7 @@ const AddProduct = ({ data }: Props) => {
 								gap: "2.5rem",
 								width: "100%",
 								background: "white",
-								padding: "2.5rem",
+								padding: "1rem",
 								borderRadius: "0.5rem",
 								zIndex: "0",
 								boxShadow:
@@ -368,7 +374,11 @@ const AddProduct = ({ data }: Props) => {
 							{/* Title & Brand */}
 							<Flex
 								gap="1rem"
-								flexDirection={"row"}
+								flexDirection={{
+									base: "column",
+									md: "column",
+									xl: "row",
+								}}
 								justifyContent="space-between"
 								alignItems="flex-start">
 								{/* Title */}
@@ -401,7 +411,7 @@ const AddProduct = ({ data }: Props) => {
 							</Flex>
 
 							{/* Price, Quantity, Discount, Rating*/}
-							<SimpleGrid columns={4} gap="1rem">
+							<SimpleGrid columns={[1, 1, 2, 2, 4, 4]} gap="1rem">
 								{/* Price */}
 								<FormControl isInvalid={priceError != ""}>
 									<FormLabel>Product Price</FormLabel>
@@ -475,7 +485,7 @@ const AddProduct = ({ data }: Props) => {
 							</SimpleGrid>
 
 							{/* is_for, for_gender, for_age, size */}
-							<SimpleGrid columns={3} gap="1rem">
+							<SimpleGrid columns={[1, 1, 1, 3, 3]} gap="1rem">
 								{/* for_gender */}
 								<FormControl isRequired>
 									<FormLabel>This Prodouct is For Gender</FormLabel>
@@ -535,6 +545,11 @@ const AddProduct = ({ data }: Props) => {
 							{/* Images and Size */}
 							<Flex
 								gap="1rem"
+								flexDirection={{
+									base: "column",
+									md: "column",
+									xl: "row",
+								}}
 								justifyContent={"space-between"}
 								alignItems="flex-start">
 								<FormControl isRequired isInvalid={thumbnailError != ""}>
@@ -570,6 +585,11 @@ const AddProduct = ({ data }: Props) => {
 
 							<Flex
 								gap="1rem"
+								flexDirection={{
+									base: "column",
+									md: "column",
+									xl: "row",
+								}}
 								justifyContent={"space-between"}
 								alignItems="flex-start">
 								{/* Size */}

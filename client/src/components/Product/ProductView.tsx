@@ -12,8 +12,19 @@ const ProductView = ({ images }: Props) => {
 	const [src, setSrc] = useState(images[0]);
 	const [fullView, setFullView] = useState(true);
 	return (
-		<Flex alignItems={"flex-start"} gap="1rem">
-			<Stack spacing={3}>
+		<Flex
+			flexDirection={{
+				base: "column-reverse",
+				md: "column-reverse",
+				xl: "row",
+			}}
+			w="100%"
+			alignItems={"flex-start"}
+			gap="1rem">
+			<Stack
+				direction={{ base: "row", md: "row", xl: "column" }}
+				flexWrap={"wrap"}
+				gap="1rem">
 				{images.map((e, i) => (
 					<Image
 						outline={e === src ? "0.2rem solid teal" : "none"}
@@ -39,8 +50,12 @@ const ProductView = ({ images }: Props) => {
 				bgColor={"white"}
 				borderRadius="0.3rem">
 				<Image
-					w={500}
-					height={600}
+					w={"100%"}
+					height={{
+						base: 300,
+						md: 300,
+						xl: 600,
+					}}
 					objectFit={fullView ? "contain" : "cover"}
 					objectPosition={"top"}
 					src={src}

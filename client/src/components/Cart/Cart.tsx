@@ -33,7 +33,7 @@ const Cart = ({ cartList, deleteCartItem, updateCartItem }: Props) => {
 			</HStack>
 
 			{/* All Items */}
-			<Stack h="100%" borderRadius="0.5rem">
+			<Stack h="100%" borderRadius="0.5rem" overflowY={"scroll"}>
 				{cartList.map((e) => (
 					<CartItem
 						key={e.id}

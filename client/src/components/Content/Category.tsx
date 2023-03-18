@@ -66,7 +66,7 @@ const Category = ({ setUrl, setPage, setEndPoint }: Props) => {
 			w="100%"
 			borderRadius={"0.5rem"}
 			bgColor={"white"}
-			gap="5rem"
+			gap={{ base: "1rem", sm: "1rem", lg: "3rem", xl: "5rem" }}
 			flexDir={"row"}
 			justifyContent="space-between"
 			alignItems={"flex-start"}
@@ -84,7 +84,7 @@ const Category = ({ setUrl, setPage, setEndPoint }: Props) => {
 				/>
 			</InputGroup>
 			<Select
-				w="30%"
+				w="40%"
 				colorScheme={"teal"}
 				focusBorderColor={"teal.500"}
 				placeholder={`Sort by : Relevance`}

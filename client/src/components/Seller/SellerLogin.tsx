@@ -115,7 +115,13 @@ const SellerLogin = (props: Props) => {
 	return (
 		<Stack
 			spacing={"5"}
-			w="40%"
+			w={{
+				base: "100%",
+				md: "90%",
+				lg: "65%",
+				xl: "50%",
+				"2xl": "40%",
+			}}
 			m="auto"
 			bgColor={"white"}
 			p="2rem"
