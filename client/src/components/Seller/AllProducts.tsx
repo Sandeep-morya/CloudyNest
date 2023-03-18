@@ -20,6 +20,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { FaEye, FaPencilAlt, FaTrash } from "react-icons/fa";
 import { MdAddCircle } from "react-icons/md";
 import SolidButton from "../Header/SolidButton";
+import Nothing from "../Misc/Nothing";
 import ProductCard from "../Product/ProductCard";
 type Props = {
 	seller_id: string;
@@ -96,7 +97,7 @@ const AllProducts = ({ seller_id }: Props) => {
 			</Flex>
 
 			{/* All product */}
-
+			{productList.length < 1 && <Nothing />}
 			<SimpleGrid
 				w="100%"
 				gap="2rem"
