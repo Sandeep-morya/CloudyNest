@@ -16,7 +16,9 @@ const Products = ({ isLoading, isError, products }: Props) => {
 	if (isLoading) {
 		return (
 			<Stack w={"100%"}>
-				<SimpleGrid columns={5} gap="1.5rem">
+				<SimpleGrid
+					columns={{ base: 3, sm: 2, md: 2, lg: 3, xl: 4, "2xl": 5 }}
+					gap="1.5rem">
 					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
 					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
 					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
@@ -39,7 +41,9 @@ const Products = ({ isLoading, isError, products }: Props) => {
 		<Stack w={"100%"} position="relative">
 			{isError && <ServerError />}
 			{products.length < 1 && <NoResults />}
-			<SimpleGrid columns={5} gap="1.5rem">
+			<SimpleGrid
+				columns={{ base: 3, sm: 2, md: 2, lg: 3, xl: 4, "2xl": 5 }}
+				gap="1.5rem">
 				{products.map((product, index) => (
 					<ProductCard key={product._id} product={product} />
 				))}
