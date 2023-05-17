@@ -49,9 +49,9 @@ export default function Home() {
 		},
 		[url],
 	);
-	console.log(totalPages.current);
-	console.log(url);
-	console.log("page", page);
+	// console.log(totalPages.current);
+	// console.log(url);
+	// console.log("page", page);
 	useEffect(() => {
 		getProducts();
 	}, [getProducts]);
@@ -66,7 +66,6 @@ export default function Home() {
 				/>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
-			
 			</Head>
 			<main>
 				<Header cartCount={0} />

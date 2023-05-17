@@ -79,7 +79,7 @@ const Checkout = () => {
 				const { data } = await axios.post(`${base_url}/orders`, orderDetails, {
 					headers: { Authorization: getCookie("user_cloudynest_jwt_token") },
 				});
-				console.log(data);
+				// console.log(data);
 			} catch (error) {
 				setIsLoading(false);
 				router.replace("/");

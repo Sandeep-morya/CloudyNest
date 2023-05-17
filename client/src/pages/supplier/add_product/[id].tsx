@@ -123,7 +123,7 @@ const AddProduct = ({ data }: Props) => {
 			setIsLoading(false);
 			toastAlert("error", "failed in uploading image");
 		}
-		console.log(data);
+		// console.log(data);
 	}
 
 	// :: upload mulitple images ::
@@ -229,7 +229,7 @@ const AddProduct = ({ data }: Props) => {
 			toastAlert("error", "Review form: Some is filled correctly");
 		}
 	}
-	console.log(productDetails);
+	// console.log(productDetails);
 	/* Mangae Errors */
 	function validateError(
 		validation_result: string,
@@ -257,7 +257,7 @@ const AddProduct = ({ data }: Props) => {
 			const data = await axios.post(base_url + "/product/add", productDetails, {
 				headers: { Authorization: getCookie("cloudynest_jwt_token") },
 			});
-			console.log(data);
+			// console.log(data);
 			toastAlert("success", "Product added successfully");
 			setIsLoading(false);
 		} catch {

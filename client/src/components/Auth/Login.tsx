@@ -56,7 +56,6 @@ const Login = (props: Props) => {
 	}
 
 	async function handleFormSubmit() {
-		console.log(formData);
 		const formData: userFormType = { email, password };
 		try {
 			const { data } = await axios.post(`${base_url}/user/login`, formData);

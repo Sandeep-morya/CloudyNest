@@ -67,7 +67,7 @@ export default function SingleUserCart({ cartList }: Props) {
 			});
 			setCartItemsList(data);
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
 		}
 	};
 
@@ -83,7 +83,7 @@ export default function SingleUserCart({ cartList }: Props) {
 				);
 				setCartItemsList(data);
 			} catch (error) {
-				console.log(error);
+				// console.log(error);
 			}
 		},
 		[token],

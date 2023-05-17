@@ -77,7 +77,7 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 				params: { q: query, limit: 6 },
 			});
 			setProductList(data);
-			console.log("getProdcut called");
+			// console.log("getProdcut called");
 
 			setIsLoading(false);
 		} catch (error) {
@@ -99,7 +99,7 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 				});
 				setUsername(data.name);
 			} catch (error) {
-				console.log(error);
+				// console.log(error);
 			}
 		},
 		[token],

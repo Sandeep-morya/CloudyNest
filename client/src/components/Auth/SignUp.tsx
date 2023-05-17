@@ -72,7 +72,7 @@ const SignUp = (props: Props) => {
 	}
 
 	async function handleFormSubmit() {
-		console.log(formData);
+		// console.log(formData);
 		const formData: userFormType = { name, email, password };
 		try {
 			const { data } = await axios.post(`${base_url}/user/register`, formData);

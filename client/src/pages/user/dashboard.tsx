@@ -13,7 +13,7 @@ type Props = {
 };
 
 const UserDashboard = ({ orders }: Props) => {
-	console.log(orders);
+	// console.log(orders);
 	return (
 		<>
 			<Head>

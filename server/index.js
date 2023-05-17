@@ -37,7 +37,7 @@ app.use("/favourites", favouriteRouter);
 // })
 
 app.listen(process.env.PORT, () =>
-	console.log("server in running on " + process.env.PORT),
+	// console.log("server in running on " + process.env.PORT),
 );
 
 /* All API Links

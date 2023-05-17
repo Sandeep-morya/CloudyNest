@@ -53,7 +53,7 @@ const AllProducts = ({ seller_id }: Props) => {
 	async function handleDelete(id: string) {
 		toastAlert("success", id);
 	}
-	console.log("products");
+	// console.log("products");
 	useEffect(() => {
 		getProducts();
 	}, [getProducts]);

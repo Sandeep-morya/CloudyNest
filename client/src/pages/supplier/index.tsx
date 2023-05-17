@@ -116,7 +116,7 @@ export default function Seller() {
 			setIsError(true);
 			setIsLoading(false);
 		}
-		console.log(data);
+		// console.log(data);
 	}
 
 	/* Mangae Errors */

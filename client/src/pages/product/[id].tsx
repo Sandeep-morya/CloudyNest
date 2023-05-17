@@ -49,7 +49,7 @@ export default function SingleProduct({ product }: Props) {
 	const toastAlert = useToastAlert();
 	const [cartItems, setCartItems] = useState([] as cartItemType[]);
 	const token = getCookie("user_cloudynest_jwt_token");
-	console.log({ product });
+	// console.log({ product });
 	async function addToCart() {
 		if (!token) {
 			toastAlert("warning", "redirecting to login page");
@@ -86,7 +86,7 @@ export default function SingleProduct({ product }: Props) {
 			});
 			setCartItems(data);
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
 		}
 	}, [token]);
 

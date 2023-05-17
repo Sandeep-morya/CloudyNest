@@ -60,7 +60,7 @@ const ProfileCard = ({ data }: Props) => {
 			setIsLoading(false);
 			toastAlert("error", "failed in uploading image");
 		}
-		console.log(data);
+		// console.log(data);
 		setIsLoading(false);
 	}
 
