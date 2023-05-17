@@ -29,6 +29,7 @@ import useToastAlert from "@/hooks/useToastalert";
 import useGetCookie from "@/hooks/useGetCookie";
 import useBuyNow from "@/hooks/useBuyNow";
 import SolidButton from "@/components/Header/SolidButton";
+import { log } from "console";
 
 interface Props {
 	product: FinalProductType;
@@ -48,7 +49,7 @@ export default function SingleProduct({ product }: Props) {
 	const toastAlert = useToastAlert();
 	const [cartItems, setCartItems] = useState([] as cartItemType[]);
 	const token = getCookie("user_cloudynest_jwt_token");
-
+	console.log({ product });
 	async function addToCart() {
 		if (!token) {
 			toastAlert("warning", "redirecting to login page");

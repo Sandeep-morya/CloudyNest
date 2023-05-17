@@ -2,6 +2,8 @@
 import React from "react";
 import Footer from "./Content/Footer";
 import { extendTheme } from "@chakra-ui/react";
+import Head from "next/head";
+
 
 interface Props {
 	children: React.ReactNode;
@@ -17,12 +19,18 @@ const theme = extendTheme({ breakpoints });
 const Layout = ({ children }: Props) => {
 	const bgColor = useColorModeValue("#ebebeb", "#112211");
 	return (
-		<Stack className="layout" backgroundColor={bgColor}>
-			{children}
-			<Box paddingTop={"10rem"}>
-				<Footer />
-			</Box>
-		</Stack>
+		<>
+			<Head>
+				<link
+					rel="stylesheet"
+					href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css"
+				/>
+			</Head>
+			<Stack className="layout" backgroundColor={bgColor}>
+				{children}
+				<Box paddingTop={"10rem"}>{/* <Footer /> */}</Box>
+			</Stack>
+		</>
 	);
 };
 

@@ -28,7 +28,7 @@ type Props = {
 const Category = ({ setUrl, setPage, setEndPoint }: Props) => {
 	const [selBox, setSelBox] = useState("");
 	const [query, setQuery] = useState("");
-	// console.log("rendered");
+	console.log("rendered");
 	const debouncedValue = useDebounce(query);
 
 	useEffect(() => {

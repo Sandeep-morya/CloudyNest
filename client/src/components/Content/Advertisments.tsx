@@ -1,17 +1,15 @@
 ﻿import { Image, VStack } from "@chakra-ui/react";
 import React from "react";
 import BannerHeading from "../Misc/BannerHeading";
+import Carousel from "./Carousel";
 
 type Props = {};
 
 const Advertisments = (props: Props) => {
 	return (
 		<VStack gap="3rem">
-			<Image
-				w={{ base: "100%", sm: "95%", "2xl": "80%" }}
-				src="ad1.png"
-				alt="ad1"
-			/>
+			<Carousel />
+
 			<BannerHeading
 				size={{
 					base: "sm",

@@ -1,4 +1,3 @@
-import Advertisments from "@/components/Content/Advertisments";
 import Category from "@/components/Content/Category";
 import Products from "@/components/Product/Products";
 import Header from "@/components/Header/Header";
@@ -19,6 +18,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Carousel from "@/components/Content/Carousel";
 import Pagination from "@/components/Content/Pagination";
 import { FaAngleLeft, FaAngleRight, FaPen } from "react-icons/fa";
+import Advertisments from "@/components/Content/Advertisments";
 
 const upload_url = process.env.NEXT_PUBLIC_UPLOAD_URL as string;
 const uplaod_preset = process.env.NEXT_PUBLIC_UPLOAD_PRESET as string;
@@ -66,6 +66,7 @@ export default function Home() {
 				/>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
+			
 			</Head>
 			<main>
 				<Header cartCount={0} />

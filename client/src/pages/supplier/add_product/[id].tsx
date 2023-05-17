@@ -122,7 +122,8 @@ const AddProduct = ({ data }: Props) => {
 			setIsError(true);
 			setIsLoading(false);
 			toastAlert("error", "failed in uploading image");
-		} // console.log(data);
+		}
+		console.log(data);
 	}
 
 	// :: upload mulitple images ::
