@@ -92,7 +92,7 @@ export default function SingleUserCart({ cartList }: Props) {
 	return (
 		<>
 			<Head>
-				<title>CloudyNest - Become a Supplier</title>
+				<title>CloudyNest - Login as Supplier</title>
 				<meta
 					name="description"
 					content="CloudyNest - An Online Shopping Website"

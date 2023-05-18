@@ -181,12 +181,3 @@ z-index: 1;
 #nprogress .bar {
 background: cyan !important;
 }
-.carousel-container{
-    width: 100%;
-> div{
-    max-height: 700px;
-}
-    & img {
-        width: 100%;
-    }
-}

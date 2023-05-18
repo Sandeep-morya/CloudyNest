@@ -81,7 +81,7 @@ export default function Home() {
 						"2xl": "2rem 15rem",
 					}}
 					m="auto">
-					<Advertisments />
+					<Carousel />
 
 					<Flex
 						justifyContent={"space-between"}

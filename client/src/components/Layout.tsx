@@ -4,7 +4,6 @@ import Footer from "./Content/Footer";
 import { extendTheme } from "@chakra-ui/react";
 import Head from "next/head";
 
-
 interface Props {
 	children: React.ReactNode;
 }
@@ -28,7 +27,7 @@ const Layout = ({ children }: Props) => {
 			</Head>
 			<Stack className="layout" backgroundColor={bgColor}>
 				{children}
-				<Box paddingTop={"10rem"}>{/* <Footer /> */}</Box>
+				<Box paddingTop={"10rem"}>{<Footer />}</Box>
 			</Stack>
 		</>
 	);

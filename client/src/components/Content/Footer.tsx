@@ -44,12 +44,22 @@ const Footer = () => {
 					</Text>
 					<Text></Text>
 					<Text>
-						Scanfcode.com CODE WANTS TO BE SIMPLE is an initiative to help the
-						upcoming programmers with the code. Scanfcode focuses on providing
-						the most efficient code or snippets as the code wants to be simple.
-						We will help programmers build up concepts in different programming
-						languages that include C, C++, Java, HTML, CSS, Bootstrap,
-						JavaScript, PHP, Android, SQL and Algorithm.
+						Cloudynest - Your One-Stop Destination for Seamless Online Shopping.
+						<br /> <br />
+						At Cloudynest, we strive to provide you with an exceptional online
+						shopping experience. With a wide range of products from top brands,
+						competitive prices, and convenient delivery options, we make it easy
+						for you to find exactly what you need. Explore our extensive
+						collection of fashion, electronics, home decor, beauty products, and
+						much more.
+						<br />
+						<br />
+						Stay connected with us through our social media channels to stay
+						up-to-date with the latest product launches, promotions, and
+						exclusive offers.
+						<br /> <br />
+						Thank you for choosing Cloudynest - your trusted online shopping
+						destination.
 					</Text>
 				</Stack>
 				<SimpleGrid columns={2}>

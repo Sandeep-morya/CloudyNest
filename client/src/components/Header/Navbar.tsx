@@ -201,7 +201,7 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 							borderColor={"rgba(0,0,0,0.2)"}
 						/>
 						<Button variant={"none"} onClick={() => router.push("/supplier")}>
-							Become a Supplier
+							Login as Supplier
 						</Button>
 
 						<Divider
@@ -360,7 +360,7 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 									<Button
 										variant={"none"}
 										onClick={() => router.push("/supplier")}>
-										Become a Supplier
+										Login as Supplier
 									</Button>
 
 									<Divider
