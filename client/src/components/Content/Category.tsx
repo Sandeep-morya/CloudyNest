@@ -49,16 +49,18 @@ const Category = ({ setUrl, setPage, setEndPoint }: Props) => {
 			setPage(1);
 			setUrl("/filter/?base=discount&page=1&order=dsc");
 		} else {
-			setEndPoint("all?dummy=true");
+			setEndPoint("filter/?base=discount&order=dsc");
 			setPage(1);
-			setUrl(`/all?page=1`);
+			setUrl("/filter/?base=discount&page=1&order=dsc");
 		}
 	}, [selBox, setEndPoint, setUrl, setPage]);
 
 	useEffect(() => {
-		setEndPoint(`category?q=${debouncedValue}`);
-		setPage(1);
-		setUrl(`/category?q=${debouncedValue}`);
+		if (debouncedValue) {
+			setEndPoint(`category?q=${debouncedValue}`);
+			setPage(1);
+			setUrl(`/category?q=${debouncedValue}`);
+		}
 	}, [debouncedValue, setEndPoint, setPage, setUrl]);
 
 	return (

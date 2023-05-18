@@ -30,7 +30,7 @@ export default function Home() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const [page, setPage] = useState(1);
-	const [url, setUrl] = useState(`/all?page=1`);
+	const [url, setUrl] = useState(`/filter/?base=rating&page=1&order=dsc`);
 	const totalPages = useRef(1);
 	const [endPoint, setEndPoint] = useState("all?dummy=true");
 
