@@ -1,5 +1,4 @@
-﻿import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
+﻿import Header from "@/components/Header/Header";
 import ProductView from "@/components/Product/ProductView";
 import Recommendation from "@/components/Product/Recommendation";
 import {
@@ -20,15 +19,17 @@ import { HiOutlineChevronDoubleRight } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
 import SellerCard from "@/components/Seller/SellerCard";
 import { GetServerSideProps } from "next";
-import { FinalProductType } from "@/Types";
+import { cartItemType, FinalProductType } from "@/Types";
 import axios, { AxiosResponse } from "axios";
 import originalPriceBeforeDiscount from "@/functions/originalPriceBeforeDiscount";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import useThrottle from "@/hooks/useThrottle";
 import useToastAlert from "@/hooks/useToastalert";
 import useGetCookie from "@/hooks/useGetCookie";
 import useBuyNow from "@/hooks/useBuyNow";
+import SolidButton from "@/components/Header/SolidButton";
+import { log } from "console";
 
 interface Props {
 	product: FinalProductType;
@@ -46,9 +47,9 @@ export default function SingleProduct({ product }: Props) {
 	const buyNow = useBuyNow();
 	const throttle = useThrottle();
 	const toastAlert = useToastAlert();
-	const [cartItems, setCartItems] = useState([] as string[]);
+	const [cartItems, setCartItems] = useState([] as cartItemType[]);
 	const token = getCookie("user_cloudynest_jwt_token");
-
+	// console.log({ product });
 	async function addToCart() {
 		if (!token) {
 			toastAlert("warning", "redirecting to login page");
@@ -85,9 +86,21 @@ export default function SingleProduct({ product }: Props) {
 			});
 			setCartItems(data);
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
 		}
 	}, [token]);
+
+	const alreadyInCart = useMemo(() => {
+		for (let items of cartItems) {
+			if (items?.id === undefined) {
+				return true;
+			}
+			if (items.id === product._id) {
+				return true;
+			}
+		}
+		return false;
+	}, [cartItems, product]);
 
 	useEffect(() => {
 		getUserCart();
@@ -110,31 +123,53 @@ export default function SingleProduct({ product }: Props) {
 					p={{ md: "1rem", xl: "1rem", "2xl": "2rem 15rem" }}
 					justifyContent={"space-between"}
 					alignItems="flex-start"
+					flexDirection={{ base: "column", sm: "column", xl: "row" }}
 					padding={"1rem"}
 					gap={"2rem"}>
 					{/* Visual Side */}
 					<Stack spacing={5}>
 						<ProductView images={product.images} />
 
-						<Flex justifyContent={"flex-end"} gap="2rem">
+						<Flex
+							justifyContent={{
+								base: "space-between",
+								lg: "space-between",
+								xl: "flex-end",
+							}}
+							gap="2rem">
 							<Button
-								w="235px"
-								size={"lg"}
+								w={{
+									base: "auto",
+									lg: "5rem",
+									xl: "15rem",
+								}}
+								size={{
+									base: "md",
+									lg: "md",
+									xl: "lg",
+									"2xl": "lg",
+								}}
+								isDisabled={alreadyInCart}
 								colorScheme={"teal"}
 								onClick={() => throttle(addToCart, 2000)}
 								boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
 								leftIcon={<MdOutlineShoppingCart size="22" />}
 								variant="outline">
-								Add to Cart
+								{alreadyInCart ? "Added in Cart" : "Add to Cart"}
 							</Button>
-							<Button
-								w="235px"
-								size={"lg"}
-								colorScheme={"teal"}
-								boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
-								_hover={{
-									background: "teal.100",
+							<SolidButton
+								width={{
+									base: "auto",
+									lg: "5rem",
+									xl: "15rem",
 								}}
+								size={{
+									base: "md",
+									lg: "md",
+									xl: "lg",
+									"2xl": "lg",
+								}}
+								leftIcon={<HiOutlineChevronDoubleRight size="22" />}
 								onClick={() =>
 									buyNow([
 										{
@@ -145,21 +180,18 @@ export default function SingleProduct({ product }: Props) {
 											price: product.price,
 										},
 									])
-								}
-								leftIcon={<HiOutlineChevronDoubleRight size="22" />}
-								variant="solid">
+								}>
 								Buy Now
-							</Button>
+							</SolidButton>
 						</Flex>
 						<Divider
 							borderWidth="0.1rem"
 							borderRadius={"1rem"}
 							borderColor="blackAlpha.300"
 						/>
-						<Recommendation />
 					</Stack>
 					{/* Details Side */}
-					<Stack flexGrow="1" spacing={"2rem"}>
+					<Stack width={{ base: "100%" }} spacing={"2rem"}>
 						{/* Brand Title Price Rating */}
 						<Stack
 							boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"

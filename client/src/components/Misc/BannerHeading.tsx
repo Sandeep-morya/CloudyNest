@@ -13,11 +13,23 @@ interface Props {
 const BannerHeading = ({ size, title }: Props) => {
 	return (
 		<Flex gap={"2rem"} alignItems="center">
-			<Box w="120px" bgColor="teal" h={"1px"}></Box>
+			<Box
+				w={{
+					base: "5rem",
+					md: "10rem",
+				}}
+				bgColor="teal"
+				h={"1px"}></Box>
 			<Heading as={"h1"} size={size}>
 				{title}
 			</Heading>
-			<Box w="120px" bgColor="teal" h={"1px"}></Box>
+			<Box
+				w={{
+					base: "5rem",
+					md: "10rem",
+				}}
+				bgColor="teal"
+				h={"1px"}></Box>
 		</Flex>
 	);
 };

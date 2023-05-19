@@ -10,6 +10,7 @@ import {
 	Text,
 	HStack,
 	Divider,
+	useMediaQuery,
 } from "@chakra-ui/react";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { FaClock, FaPencilAlt } from "react-icons/fa";
@@ -29,6 +30,7 @@ const cloud_name = process.env.NEXT_PUBLIC_CLOUD_NAME as string;
 const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 const ProfileCard = ({ data }: Props) => {
+	const [smallNav] = useMediaQuery("(max-width: 64rem)");
 	const getCookie = useGetCookie();
 	const [imageSrc, setImageSrc] = useState(data.image);
 	const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +59,8 @@ const ProfileCard = ({ data }: Props) => {
 			setIsError(true);
 			setIsLoading(false);
 			toastAlert("error", "failed in uploading image");
-		} // console.log(data);
+		}
+		// console.log(data);
 		setIsLoading(false);
 	}
 
@@ -84,7 +87,17 @@ const ProfileCard = ({ data }: Props) => {
 
 	return (
 		<Stack w="100%" borderRadius={"0.5rem"} overflow="hidden" spacing={0}>
-			<Box position={"relative"} w="100%" h="20rem">
+			<Box
+				position={"relative"}
+				w="100%"
+				h={{
+					base: "10rem",
+					sm: "10rem",
+					md: "10rem",
+					lg: "12rem",
+					xl: "15rem",
+					"2xl": "20rem",
+				}}>
 				<Image
 					w="100%"
 					h="100%"
@@ -97,8 +110,22 @@ const ProfileCard = ({ data }: Props) => {
 					top={"50%"}
 					left={"50%"}
 					transform="translateX(-50%)"
-					w="20rem"
-					h="20rem"
+					w={{
+						base: "10rem",
+						sm: "10rem",
+						md: "10rem",
+						lg: "12rem",
+						xl: "15rem",
+						"2xl": "20rem",
+					}}
+					h={{
+						base: "10rem",
+						sm: "10rem",
+						md: "10rem",
+						lg: "12rem",
+						xl: "15rem",
+						"2xl": "20rem",
+					}}
 					filter="drop-shadow(0 0 0.2rem black)">
 					<FaPencilAlt className="edit_icon_pencil" />
 
@@ -138,33 +165,56 @@ const ProfileCard = ({ data }: Props) => {
 				alignItems={"center"}
 				bgColor="white"
 				w="100%"
-				h="20rem"
+				h={{
+					base: "10rem",
+					sm: "10rem",
+					md: "10rem",
+					lg: "12rem",
+					xl: "15rem",
+					"2xl": "20rem",
+				}}
 				gap="1rem"
-				pb="3rem"
+				pb={{
+					base: "1rem",
+					md: "1rem",
+					xl: "2.5rem",
+					"2xl": "3rem",
+				}}
 				flexDirection={"column-reverse"}>
-				<Flex gap="2rem">
-					<HStack title="Joining Date" gap="0.5rem">
-						<FcCalendar size="25" />
-						<Text fontWeight={600} color="gray.500" letterSpacing="0.05rem">
-							{date.toDateString()}
-						</Text>
-					</HStack>
-					<Divider orientation="vertical" borderColor={"rgba(0,0,0,0,5)"} />
-					<HStack title="Email ID" gap="0.5rem">
-						<FcAddressBook size="25" />
-						<Text fontWeight={600} color="gray.500" letterSpacing="0.05rem">
-							{data.email}
-						</Text>
-					</HStack>
-					<Divider orientation="vertical" borderColor={"rgba(0,0,0,0,5)"} />
-					<HStack title="Mobile Number" gap="0.5rem">
-						<FcPhone size="25" />
-						<Text fontWeight={600} color="gray.500" letterSpacing="0.05rem">
-							{data.mobile}
-						</Text>
-					</HStack>
-				</Flex>
-				<Heading as="h1" size="3xl" letterSpacing="0.2rem" color={"gray"}>
+				{!smallNav && (
+					<Flex gap="2rem">
+						<HStack title="Joining Date" gap="0.5rem">
+							<FcCalendar size="25" />
+							<Text fontWeight={600} color="gray.500" letterSpacing="0.05rem">
+								{date.toDateString()}
+							</Text>
+						</HStack>
+						<Divider orientation="vertical" borderColor={"rgba(0,0,0,0,5)"} />
+						<HStack title="Email ID" gap="0.5rem">
+							<FcAddressBook size="25" />
+							<Text fontWeight={600} color="gray.500" letterSpacing="0.05rem">
+								{data.email}
+							</Text>
+						</HStack>
+						<Divider orientation="vertical" borderColor={"rgba(0,0,0,0,5)"} />
+						<HStack title="Mobile Number" gap="0.5rem">
+							<FcPhone size="25" />
+							<Text fontWeight={600} color="gray.500" letterSpacing="0.05rem">
+								{data.mobile}
+							</Text>
+						</HStack>
+					</Flex>
+				)}
+				<Heading
+					as="h1"
+					size={{
+						base: "xl",
+						md: "xl",
+						xl: "2xl",
+						"2xl": "3xl",
+					}}
+					letterSpacing="0.2rem"
+					color={"gray"}>
 					{data.name}
 				</Heading>
 			</Stack>

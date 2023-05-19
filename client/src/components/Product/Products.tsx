@@ -2,6 +2,8 @@
 import { Center, SimpleGrid, Skeleton, Spinner, Stack } from "@chakra-ui/react";
 import React from "react";
 import { FaSadCry } from "react-icons/fa";
+import NoResults from "../Misc/NoResults";
+import ServerError from "../Misc/ServerError";
 import ProductCard from "./ProductCard";
 
 type Props = {
@@ -13,32 +15,36 @@ type Props = {
 const Products = ({ isLoading, isError, products }: Props) => {
 	if (isLoading) {
 		return (
-			<Stack w={"70%"}>
-				<SimpleGrid columns={4} gap="1.5rem">
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
-					<Skeleton h="28rem" />
+			<Stack w={"100%"}>
+				<SimpleGrid
+					columns={{ base: 2, sm: 2, md: 2, lg: 3, xl: 4, "2xl": 5 }}
+					gap="1.5rem">
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
+					<Skeleton boxShadow={"0 0 2px gray"} h="28rem" />
 				</SimpleGrid>
 			</Stack>
 		);
 	}
-	if (isError) {
-		return <Center w={"70%"}>Server Error</Center>;
-	}
+
 	return (
-		<Stack w={"70%"}>
-			<SimpleGrid columns={4} gap="1.5rem">
-				{products.map((product) => (
+		<Stack w={"100%"} position="relative">
+			{isError && <ServerError />}
+			{products.length < 1 && <NoResults />}
+			<SimpleGrid
+				columns={{ base: 2, sm: 2, md: 2, lg: 3, xl: 4, "2xl": 5 }}
+				gap="1.5rem">
+				{products.map((product, index) => (
 					<ProductCard key={product._id} product={product} />
 				))}
 			</SimpleGrid>

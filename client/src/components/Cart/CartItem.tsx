@@ -53,7 +53,7 @@ const CartItem = ({
 				);
 				setProduct(data);
 			} catch (error) {
-				console.log(error);
+				// console.log(error);
 			}
 		},
 		[id],
@@ -73,7 +73,11 @@ const CartItem = ({
 			{/* Box - 1 */}
 			<Grid
 				p="1rem"
-				gridTemplateColumns={"2fr 1.5fr 0.5fr"}
+				gridTemplateColumns={{
+					base: "1fr",
+					md: "1fr",
+					xl: "2fr 1.5fr 0.5fr",
+				}}
 				gap="1.5rem"
 				justifyContent={"center"}>
 				<Flex gap="1rem">

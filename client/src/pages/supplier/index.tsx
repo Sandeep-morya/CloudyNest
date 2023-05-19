@@ -247,7 +247,7 @@ export default function Seller() {
 	return (
 		<>
 			<Head>
-				<title>CloudyNest - Become a Supplier</title>
+				<title>CloudyNest - Login as Supplier</title>
 				<meta
 					name="description"
 					content="CloudyNest - An Online Shopping Website"
@@ -256,7 +256,7 @@ export default function Seller() {
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
 			</Head>
 			<main>
-				<Stack bgColor={"white"} w={"100vw"} spacing={0}>
+				<Stack w={"100%"} spacing={0}>
 					<Box
 						position="sticky"
 						top={0}
@@ -272,40 +272,40 @@ export default function Seller() {
 
 					<form>
 						{showLogin ? (
-							<Stack
-								h="100%"
-								w={"100%"}
-								bgColor="blackAlpha.100"
-								display="flex"
-								pb="6rem"
-								spacing={"0"}
-								justifyContent={"center"}
-								alignItems="center">
-								<Stack w="75%" m="auto" bgColor={"teal.300"} p="2rem">
-									<SellerLogin />
-								</Stack>
-								<Image
-									w="75%"
-									m="auto"
-									filter={"sepia(37%) brightness(43%) ;"}
-									src="https://en.keruilai.com/images/product/associate-banner.jpg"
-									alt="ad4"
-								/>
-							</Stack>
+							<Box
+								padding={{
+									base: "1rem",
+									md: "1rem",
+									xl: "2rem 15rem",
+									"2xl": "5rem 25rem",
+								}}>
+								<SellerLogin />
+							</Box>
 						) : (
 							/* Signup */
 							<Stack
 								h="100%"
 								w={"100%"}
-								bgColor="teal.50"
 								display="flex"
 								pt="3rem"
 								pb="6rem"
+								pl="1rem"
+								pr="1rem"
 								spacing={"10"}
 								justifyContent={"center"}
 								alignItems="center">
 								<Box color="teal.500">
-									<BannerHeading size="2xl" title={"Join As a Seller"} />
+									<BannerHeading
+										size={{
+											base: "sm",
+											sm: "sm",
+											md: "md",
+											lg: "lg",
+											xl: "xl",
+											"2xl": "2xl",
+										}}
+										title={"Join As a Seller"}
+									/>
 								</Box>
 
 								{/* Form */}
@@ -314,11 +314,24 @@ export default function Seller() {
 									borderRadius={"0.5rem"}
 									bgColor={"white"}
 									spacing={"2"}
-									w="40%"
+									w={{
+										base: "100%",
+										md: "90%",
+										lg: "65%",
+										xl: "50%",
+										"2xl": "40%",
+									}}
 									m="auto">
 									<Stack spacing={"3"} p="2rem">
 										{/* Name Field */}
-										<Flex gap="1rem" justifyContent={"space-between"}>
+										<Flex
+											flexDirection={{
+												base: "column",
+												md: "column",
+												xl: "row",
+											}}
+											gap="1rem"
+											justifyContent={"space-between"}>
 											{/* First name */}
 											<FormControl isInvalid={fnameError != ""} isRequired>
 												<FormLabel>First name</FormLabel>
@@ -346,7 +359,14 @@ export default function Seller() {
 											</FormControl>
 										</Flex>
 
-										<Flex gap="1rem" justifyContent={"space-between"}>
+										<Flex
+											flexDirection={{
+												base: "column",
+												md: "column",
+												xl: "row",
+											}}
+											gap="1rem"
+											justifyContent={"space-between"}>
 											{/* Email */}
 											<FormControl isInvalid={emailError != ""} isRequired>
 												<FormLabel>Email</FormLabel>
@@ -382,7 +402,14 @@ export default function Seller() {
 											</FormControl>
 										</Flex>
 
-										<Flex gap="1rem" justifyContent={"space-between"}>
+										<Flex
+											flexDirection={{
+												base: "column",
+												md: "column",
+												xl: "row",
+											}}
+											gap="1rem"
+											justifyContent={"space-between"}>
 											{/* Password */}
 											<FormControl isInvalid={passwordError != ""} isRequired>
 												<FormLabel>Password</FormLabel>

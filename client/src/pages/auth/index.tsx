@@ -11,6 +11,7 @@ import {
 	Image,
 	Stack,
 	Text,
+	useColorModeValue,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState } from "react";
@@ -19,6 +20,7 @@ import jwt from "jsonwebtoken";
 
 export default function UserAuthentication() {
 	const [showlogin, setShowLogin] = useState(true);
+	const bgColor = useColorModeValue("white", "#112211");
 	return (
 		<>
 			<Head>
@@ -31,32 +33,40 @@ export default function UserAuthentication() {
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
 			</Head>
 			<main>
-				<Stack bgColor={"white"} w={"100vw"} spacing={0}>
+				<Stack w={"100vw"} spacing={0}>
 					<Box
 						position="sticky"
 						top={0}
-						bgColor={"white"}
+						bgColor={bgColor}
 						pt="0.5rem"
 						pb="1rem"
+						zIndex={2}
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
 						<Navbar cartCount={0} hideExtras={true} />
 					</Box>
 					<Box
 						h="100%"
 						w={"100%"}
-						bgColor="teal.50"
 						display="flex"
 						pt="3rem"
 						pb="6rem"
+						zIndex={1}
 						justifyContent={"center"}
 						alignItems="center">
 						<Stack
-							bgColor={"white"}
 							boxShadow="rgba(149, 157, 165, 0.2) 0px 8px 24px"
-							w={"25%"}
+							w={{
+								base: "100%",
+								sm: "95%",
+								md: "70%",
+								lg: "50%",
+								xl: "35%",
+								"2xl": "25%",
+							}}
 							m="auto"
 							pb="2rem"
 							spacing={"5"}
+							bgColor={bgColor}
 							alignItems="center"
 							borderRadius={"0.3rem"}
 							overflow="hidden">

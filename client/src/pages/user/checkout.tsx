@@ -79,7 +79,7 @@ const Checkout = () => {
 				const { data } = await axios.post(`${base_url}/orders`, orderDetails, {
 					headers: { Authorization: getCookie("user_cloudynest_jwt_token") },
 				});
-				console.log(data);
+				// console.log(data);
 			} catch (error) {
 				setIsLoading(false);
 				router.replace("/");
@@ -139,7 +139,7 @@ const Checkout = () => {
 	return (
 		<>
 			<Head>
-				<title>CloudyNest - Become a Supplier</title>
+				<title>CloudyNest - Login as Supplier</title>
 				<meta
 					name="description"
 					content="CloudyNest - An Online Shopping Website"
@@ -160,7 +160,7 @@ const Checkout = () => {
 						/>
 					</div>
 				)}
-				<Stack w={"100vw"} h="100vh" spacing={0} alignItems={"center"}>
+				<Stack w={"100vw"} spacing={0} alignItems={"center"}>
 					<Box
 						w="100%"
 						position="sticky"
@@ -173,9 +173,21 @@ const Checkout = () => {
 						<CartNav state={state} />
 					</Box>
 					<Stack
-						w="50%"
+						w={{
+							base: "100%",
+							sm: "95%",
+							md: "70%",
+							lg: "50%",
+							xl: "35%",
+						}}
 						spacing={5}
-						p={{ md: "2rem 0", xl: "2rem 0", "2xl": "2rem 15rem" }}>
+						p={{
+							base: "1rem",
+							sm: "1rem",
+							md: "2rem 0",
+							xl: "2rem 0",
+							"2xl": "2rem 5rem",
+						}}>
 						{state < 70 && (
 							<Flex
 								bgColor={"white"}

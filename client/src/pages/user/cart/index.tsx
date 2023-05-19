@@ -22,6 +22,7 @@ import {
 	Progress,
 	Stack,
 	Text,
+	useMediaQuery,
 	VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
@@ -39,6 +40,7 @@ import useToastAlert from "@/hooks/useToastalert";
 import CartPrice from "@/components/Cart/CartPrice";
 import useGetCookie from "@/hooks/useGetCookie";
 import { cartItemType } from "@/Types";
+import Nothing from "@/components/Misc/Nothing";
 
 interface Props {
 	cartList: cartItemType[];
@@ -47,6 +49,7 @@ const base_url = process.env.NEXT_PUBLIC_BASE_URL as string;
 
 export default function SingleUserCart({ cartList }: Props) {
 	const [cartItemsList, setCartItemsList] = useState(cartList);
+	const [smallNav] = useMediaQuery("(max-width: 64rem)");
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
@@ -64,7 +67,7 @@ export default function SingleUserCart({ cartList }: Props) {
 			});
 			setCartItemsList(data);
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
 		}
 	};
 
@@ -80,7 +83,7 @@ export default function SingleUserCart({ cartList }: Props) {
 				);
 				setCartItemsList(data);
 			} catch (error) {
-				console.log(error);
+				// console.log(error);
 			}
 		},
 		[token],
@@ -89,7 +92,7 @@ export default function SingleUserCart({ cartList }: Props) {
 	return (
 		<>
 			<Head>
-				<title>CloudyNest - Become a Supplier</title>
+				<title>CloudyNest - Login as Supplier</title>
 				<meta
 					name="description"
 					content="CloudyNest - An Online Shopping Website"
@@ -98,7 +101,7 @@ export default function SingleUserCart({ cartList }: Props) {
 				<link rel="icon" href="/CloudyNest-Logo-Image.png" />
 			</Head>
 			<main>
-				<Stack bgColor={"white"} w={"100vw"} spacing={0} alignItems={"center"}>
+				<Stack w={"100vw"} spacing={0} alignItems={"center"}>
 					<Box
 						w="100%"
 						position="sticky"
@@ -110,36 +113,37 @@ export default function SingleUserCart({ cartList }: Props) {
 						boxShadow="0px 20px 5px -20px rgba(0, 0, 0, 0.45)">
 						<CartNav state={0} />
 					</Box>
-
-					<Stack
-						w={"100%"}
-						spacing={5}
-						h={"100vh"}
-						bgColor={"blackAlpha.100"}
-						p={{ md: "2rem 0", xl: "2rem 0", "2xl": "2rem 15rem" }}
-						alignItems={"center"}>
+					{cartItemsList.length < 1 && <Nothing />}
+					{cartItemsList.length > 0 && (
 						<Flex
+							p={{ lg: "2rem", xl: "2rem", "2xl": "2rem 15rem" }}
 							w="100%"
+							flexDirection={{
+								base: "column",
+								lg: "column",
+								xl: "row",
+							}}
 							justifyContent={"space-between"}
-							gap="2rem"
-							h={"75%"}>
+							gap="2rem">
 							{/* Cart  */}
-							<Box flex="1">
+							<Box flex="1" h="100vh">
 								<Cart
 									cartList={cartItemsList}
 									deleteCartItem={deleteCartItem}
 									updateCartItem={updateCartItem}
 								/>
 							</Box>
-							<Divider
-								height="auto"
-								marginTop={"3.5rem"}
-								orientation="vertical"
-								borderWidth={".1rem"}
-								borderColor={"rgba(0,0,0,0.1)"}
-							/>
+							{!smallNav && (
+								<Divider
+									height="auto"
+									marginTop={"3.5rem"}
+									orientation="vertical"
+									borderWidth={".1rem"}
+									borderColor={"rgba(0,0,0,0.1)"}
+								/>
+							)}
 
-							<Stack flex="1" spacing={10}>
+							<Stack flex="1" spacing={10} h="100vh">
 								<Heading as="h3" size="md" color="blackAlpha.600">
 									Price Details
 								</Heading>
@@ -151,7 +155,7 @@ export default function SingleUserCart({ cartList }: Props) {
 								</Box>
 							</Stack>
 						</Flex>
-					</Stack>
+					)}
 				</Stack>
 			</main>
 		</>

@@ -31,7 +31,7 @@ const CartPrice = ({ cartList, deleteCartItem }: Props) => {
 
 	return (
 		<Stack w="100%" h="100%" bgColor={"white"} borderRadius="0.5rem" p="1rem">
-			<Stack w="100%" h="50%" spacing={3}>
+			<Stack w="100%" h="50%" spacing={3} p="1rem" overflowY={"scroll"}>
 				{cartList.map((item, index) => (
 					<Grid
 						key={item.id + index}
