@@ -190,7 +190,15 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 					 */}
 
 					<HStack position={"relative"} flexGrow="1">
-						<Button variant={"none"} leftIcon={<GiSmartphone size={22} />}>
+						<Button
+							onClick={() =>
+								window.open(
+									"https://expo.dev/accounts/sandeepmaurya13/projects/CloudyNest/builds/065e327a-1b4a-46fa-9b24-59635ea79f13",
+									"_blank",
+								)
+							}
+							variant={"none"}
+							leftIcon={<GiSmartphone size={22} />}>
 							Download App
 						</Button>
 
@@ -348,6 +356,12 @@ const Navbar = ({ cartCount, hideExtras }: Props) => {
 								</Box>
 								<VStack position={"relative"} flexGrow="1">
 									<Button
+										onClick={() =>
+											window.open(
+												"https://expo.dev/accounts/sandeepmaurya13/projects/CloudyNest/builds/065e327a-1b4a-46fa-9b24-59635ea79f13",
+												"_blank",
+											)
+										}
 										variant={"none"}
 										leftIcon={<GiSmartphone size={22} />}>
 										Download App
